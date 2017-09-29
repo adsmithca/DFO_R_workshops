@@ -1,0 +1,253 @@
+The Tidyverse: tools for data wrangling
+========================================================
+author: Eric Pederson and Keith Lewis
+date: 2017-09-25
+autosize: true
+incremental: true
+width: 1440
+height: 900
+
+```{r setup, echo=FALSE}
+knitr::opts_knit$set(root.dir = '../')
+```
+
+What is data wrangling?
+========================================================
+>- "The process of transforming and mapping data from one "raw" data form into another format with the intent of making it more appropriate and valuable for a variety of downstream purposes such as analytics." 
+https://en.wikipedia.org/wiki/Data_wrangling
+
+- or
+
+>- "The art of getting your data into R in a useful form for visualisation and modelling." (http://r4ds.had.co.nz/wrangle-intro.html)
+
+- The tidyverse helps you to data wrangle (http://tidyr.tidyverse.org/)
+
+
+About tidyr
+========================================================
+What is tidyr?
+  - A package that helps make tidy data (column = variable, row = observation, value = cell)
+
+Why is it useful?
+Tidyr changes the fundamental format of the data
+- long data (model based format)
+- wide data (tabular: easy for humans to read)
+- Similar to: 
+  - spreadsheets: pivot tables
+  - databases: crosstab querries
+  
+
+Long to wide: a closer look
+========================================================
+![Long to Wide](Slide5.png)
+
+```{r,results="hide",echo=FALSE}
+#Example #1: 
+#Gathering the dune data into long format
+
+#Loading the packages and getting data ready
+```
+
+
+
+Example: gather() and spread() the dune_sp data 
+========================================================
+```{r echo = FALSE}
+library(readr)
+library(tidyr)
+library(dplyr)
+library(vegan)
+dune_sp = read_csv("data/dune.csv")
+dune_sp
+``````
+
+"Gather"" the dune_sp data
+========================================================
+
+```{r,results="hide",echo=FALSE}
+
+#gathering the data up into the long format
+```
+
+```{r echo = TRUE}
+gather(dune_sp, key=species, value = "cover_class", Achimill:Callcusp) 
+```
+
+"Spread" the dune data
+========================================================
+```{r echo = TRUE}
+dune_sp_gath <- gather(dune_sp, key=species, value = "cover_class", Achimill:Callcusp) 
+
+spread(dune_sp_gath, species, cover_class)
+```
+
+The dune_env data
+========================================================
+```{r echo = TRUE}
+dune_env = read_csv("data/dune.env.csv")
+dune_env
+```
+
+"Spread" the dune_env data
+========================================================
+```{r echo = TRUE}
+spread(dune_env, Use, Moisture)
+```
+
+Exercise:
+=======================================================
+- Try spreading the trawl_abiotic data (may want to subset or filter rows and reduce # of columns) 
+- Try gathering the trawl_biomass
+
+
+Pipes
+========================================================
+The tidyverse has a number of packages that make programming easier
+- purrr() - functional programming
+- rlang() - 
+- glue() - like paste()
+
+-magrittr() - for "pipes"
+http://magrittr.tidyverse.org/
+
+What are pipes?
+========================================================
+From UNIX
+
+Pipes make it easier to program and easier to read your code!
+
+- data operations become left-to-right
+- avoid nested function calls
+- make it easy to add steps in sequence of operations
+
+Code: "%>%"
+
+Examples: Pipes in action: spread data after subsetting
+========================================================
+
+```{r,results="hide",echo=FALSE}
+
+# Example #3: using pipes
+```
+```{r echo = TRUE}
+dune_new <- dune_env %>%
+  subset(Management == "HF") %>%
+  spread(Use, Moisture)
+dune_new
+```
+
+
+Exercise:
+=======================================================
+- Try using pipes to first subset the trawl_abiotic data and then spread
+- Try using pipes to first subset the trawl_biomass before gathering
+
+dplyr
+========================================================
+- summarize data
+- mutate new variables
+- group data by a variable
+- join data sets
+
+summarize()
+========================================================
+- Turns multiple rows into a single
+
+![Long to Wide](Slide6.png)
+
+
+```{r,results="hide",echo=FALSE}
+
+# Example #4: using summarise
+```
+
+Exampe: summarise()
+========================================================
+```{r echo = TRUE}
+dune_long <- gather(dune_sp, key=species, value = "cover_class", Achimill:Callcusp) 
+
+dune_summary <- dune_long %>%
+  group_by(species) %>%
+  summarise(mean = mean(cover_class))
+
+dune_summary
+```
+
+Exampe: summarise() continued
+========================================================
+```{r,results="hide",echo=FALSE}
+
+```
+```{r echo = TRUE}
+dune_summary <- dune_env %>%
+  group_by(Management, Use) %>%
+  summarise(count = n())
+dune_summary
+```
+
+mutate()
+========================================================
+- creates new column from existing columns
+
+![Long to Wide](Slide7.png)
+
+```{r,results="hide",echo=FALSE}
+
+# Example #5: using mutate
+```
+Exampe: mutate() - Create a new variable
+========================================================
+```{r echo = TRUE}
+## examples
+dune_mutate <- dune_sp %>%
+    mutate(sum_sp = Achimill + Agrostol)  
+
+dune_mutate[c("Achimill", "Agrostol", "sum_sp")]
+```
+
+Exampe: mutate() - Create a new variable continued
+========================================================
+```{r,results="hide",echo=FALSE}
+
+```
+```{r echo = TRUE}
+dune_mutate <- dune_sp %>%
+    mutate(test = between(Achimill, 2, 3))
+dune_mutate[c("Achimill", "test")]
+```
+
+Exercise:
+=======================================================
+
+Try: 
+- counting the number of observations in each year in each nafo division 
+- going to the cheat sheet and pick 1-2 functions for summarising or mutating the data in the manner of your choice
+
+
+Help 
+========================================================
+For tidyr():
+- extract() or unite()
+- vignette("tidy-data")
+- demo(package = "tidyr")
+- cheatsheet (see RStudio -> Help -> Cheatsheets)
+
+Help 
+========================================================
+For pipes:
+- Note: you don't HAVE to use pipes
+Tidyverse webiste: http://magrittr.tidyverse.org/
+
+"R for Data Science" http://r4ds.had.co.nz/pipes.html
+
+When not to use pipes (according to Hadley)
+- Pipes of more than 10 steps (hard to debug)
+
+- Multiple inputs and outputs
+
+- Complex graphs
+
+Help 
+========================================================
+For dplyr:
+- cheatsheet (see RStudio -> Help -> Cheatsheets)

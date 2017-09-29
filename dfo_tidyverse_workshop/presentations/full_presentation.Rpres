@@ -1,0 +1,838 @@
+Introduction  to the tidyverse
+========================================================
+author: Eric Pedersen and Keith Lewis
+date: September 28, 2017
+autosize: true
+width: 1440
+height: 900
+<div align="center">
+<img src="tidyverse_hex.jpeg" width=500 height=500>
+</div>
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_knit$set(root.dir = '../')
+# 1. Introduction to the tidyverse ####
+
+
+```
+
+Getting started 
+========================================================
+
+Before we go:
+
+1. Have you got R installed? 
+2. Were you able to download the scripts and data we sent?
+3. Does the following code run without errors? 
+
+```{r startup, echo=TRUE, results='hide'}
+# setwd("c:/where_the_folder_is/")
+
+library(readr)
+library(tidyr)
+library(dplyr)
+
+file.exists("data/dune.csv")
+file.exists("data/dune.env.csv")
+file.exists("data/trawl_abiotic.csv")
+file.exists("data/trawl_biomass.csv")
+
+```
+
+What we'll cover today
+========================================================
+
+- What is tidy data, and what is the tidyverse?
+- loading data with `readr`
+- switching between different ways of representing data with `tidyr`
+- manipulating data with `dplyr`
+
+What is tidy data? 
+========================================================
+incremental: true
+Data organized into tables where:
+
+
+### 1. Every column is a different variable
+
+### 2. Every row is a single observation
+
+### 3. Each type of observation is in its own table
+
+
+What is tidy data? 
+========================================================
+incremental: true
+### Untidy data
+```{r tidyexample1, echo=FALSE}
+untidy_data  = data.frame(day = c(1,2), 
+                          M_1cm = c(0.5,0.8), 
+                          M_5cm = c(1.2,1.5),
+                          F_1cm = c(0.4, 0.6),
+                          F_5cm =c(2,3))
+untidy_data
+
+
+
+```
+
+
+### Tidy data
+```{r tidyexample2, echo=FALSE}
+
+tidy_data = data.frame(day = c(1,2,1,2), 
+                       sex= c("M","M","F","F"),
+                       length = c(1,5,1,5),
+                       weigth =c(0.5,0.8,1.2,1.5,0.4,0.6, 2,3))
+tidy_data
+
+```
+
+
+Question:
+==============================================
+
+What would be needed to make this data set tidy?
+
+```{r tidyexample3, echo=FALSE}
+
+untidy_data2 = data.frame(year = c(2005,2007,2009),
+                          eggs_200m = c(10,20,2),
+                          juv_200m = c(20,4,12),
+                          eggs_500m = c(20,0,37),
+                          juv_500m = c(2,1,4))
+print(untidy_data2,row.names=F)
+
+```
+
+
+What is the Tidyverse?
+========================================================
+incremental: true 
+
+* R packages for working with tidy data
+* Workflow based on functions that:
+  * Are all simple verbs that do one thing (arrange, mutate, summarize, etc.)
+  * Take a data frame as their first argument
+  * Let you refer to the columns in that data frame by name
+  * Return a data frame
+  * **Play well with each other**
+
+
+
+What is the Tidyverse?
+========================================================
+incremental: true
+
+
+
+![](hadley.jpg) 
+
+(although Hadley $\ne$ tidyverse)
+
+
+The basic idea
+========================
+incremental: true
+
+```{r test_tidyverse}
+head(CO2,n=3)
+```
+
+
+```{r test_tidyverse2}
+CO2_lowconc = filter(CO2, conc<100)
+
+head(CO2_lowconc,n=3)
+```
+
+Opening data with readr
+========================================================
+type: section
+<div align="center">
+<img src="readr_hex.png" width=500 height=500>
+</div>
+
+```{r echo=FALSE, results="hide"}
+
+
+# 2. Opening data with readr ####
+
+
+```
+
+
+What is readr? 
+========================================================
+incremental: true
+Package for reading flat files into R
+
+Benefits over read.csv / read.fwf:
+* Fast for big files
+* Doesn't force strings into factors
+* Lets you specify the type of data in each column
+* Creates "tibbles" instead of simple data frames
+
+
+```{r,results="hide",echo=FALSE}
+
+#This loads the package
+```
+
+```{r load_package}
+library(readr)
+```
+
+
+A simple example
+========================================================
+Dune species data
+<div align="center">
+<img src="dune_data.png" width=767 height=267>
+</div>
+
+***
+
+Dune environmental data
+<div align="center">
+<img src="dune_env_data.png" width=430*1.2 height=223*1.2>
+</div>
+
+A simple example
+========================================================
+
+```{r,results="hide",echo=FALSE}
+
+#Loading the dune data
+```
+```{r load_dune,message=TRUE}
+dune_sp = read_csv("data/dune.csv")
+dune_env = read_csv("data/dune.env.csv")
+```
+
+
+A simple example
+========================================================
+
+```{r,results="hide",echo=FALSE}
+
+#Viewing the dune data set
+```
+```{r show_dune,message=TRUE}
+head(dune_sp) 
+```
+
+
+A simple example
+========================================================
+
+```{r show_dune2, message=TRUE}
+head(dune_env)
+```
+
+
+Exercise:
+=======================================================
+
+In the data folder there are two data files:
+* trawl_abiotic.csv
+* trawl_biomass.csv
+
+
+### For these two data files:
+
+1. Load the data as `trawl_abiotic` and `trawl_sp_biomass` using `readr`
+2. Identify the column types
+3. Identify any issues loading with loading this data
+
+
+```{r,results="hide",echo=FALSE}
+
+#### Exercise 1: 
+# In the data folder there are two data files:
+# * trawl_abiotic.csv
+# * trawl_biomass.csv
+# 
+# For these two data files:
+# 1. Load the data as `trawl_abiotic` and `trawl_sp_biomass` using `readr`
+# 2. Identify the column types 
+```
+
+
+Dealing with data types with readr
+========================================
+incremental: true
+
+
+* By default `readr` looks at the start of the data to figure out types
+* Errors come from wrong guesses
+* You can increase the number of rows used to guess:
+
+```{r,results="hide",echo=FALSE}
+
+# Increasing the number of rows used to guess:
+```
+
+```{r dune_col_types1, message=FALSE}
+dune_env = read_csv("data/dune.env.csv",
+                         guess_max=5000)
+```
+
+
+* Generally best to specify column types yourself: 
+
+
+```{r,results="hide",echo=FALSE}
+
+# Specifying column types:
+```
+
+```{r dune_col_types2, message=FALSE}
+dune_env = read_csv("data/dune.env.csv",
+                         col_types = cols(Moisture = "d"))
+```
+
+
+Dealing with data types with readr
+========================================
+Type abbreviations:
+
+* `"c"`: character (e.g. "abc")
+* `"i"`: integer (e.g. 1,2,3)
+* `"d"`: double (e.g. 1.2, 2.3, 3)
+* `"l"`: logical (TRUE or FALSE) 
+* `"D"`: dates (e.g. "2017-09-26", "02-05-1995")
+
+
+
+
+
+
+Exercise:
+=======================================================
+
+Try loading the trawl abiotic dataset again by:
+
+1. Increasing the number of columns read in
+2. Specifying depth as a "double" instead of an integer
+
+```{r,results="hide",echo=FALSE}
+
+#### Exercise 2: 
+# Try loading the trawl abiotic dataset again, specifying depth as a "double" instead of an integer
+
+```
+
+
+
+
+
+Other useful options for readr:
+=====================================
+incremental: true
+Specifying NA values:
+
+
+
+```{r,results="hide",echo=FALSE}
+
+# other useful options:
+```
+
+
+```{r readr_na}
+dune_env = read_csv("data/dune.env.csv",
+                         na = c("NA","."))
+```
+
+Opening other types of data:
+
+* `read_fwf` to read fixed width files
+* `read_tsf` for tab-seperated files
+* `read_delim` for other seperators
+* see `?readr` of other types
+
+
+
+Changing the shape of data with tidyr
+========================================================
+type: section
+<div align="center">
+<img src="tidyr_hex.png" width=500 height=500>
+</div>
+
+```{r echo=FALSE, results="hide"}
+
+
+# 3. Changing the shape of data with tidyr ####
+
+
+```
+
+About tidyr
+========================================================
+incremental: true
+What is tidyr?
+  - A package that helps make tidy data (column = variable, row = observation, value = cell)
+
+Why is it useful?
+Tidyr changes the fundamental format of the data
+- long data (model based format)
+- wide data (tabular: easy for humans to read)
+- Similar to: 
+  - spreadsheets: pivot tables
+  - databases: crosstab querries
+  
+
+Long to wide: a closer look
+========================================================
+incremental: true
+![Long to Wide](Slide5.png)
+
+```{r,results="hide",echo=FALSE}
+#Example #1: 
+#Gathering the dune data into long format
+
+#Loading the packages and getting data ready
+```
+
+
+
+Example: gather() and spread() the dune_sp data 
+========================================================
+incremental: true
+```{r echo = FALSE}
+library(readr)
+library(tidyr)
+library(dplyr)
+library(vegan)
+dune_sp = read_csv("data/dune.csv")
+dune_sp
+``````
+
+"Gather"" the dune_sp data
+========================================================
+incremental: true
+```{r,results="hide",echo=FALSE}
+
+#gathering the data up into the long format
+```
+
+```{r echo = TRUE}
+gather(dune_sp, key=species, value = "cover_class", Achimill:Callcusp) 
+```
+
+"Spread" the dune data
+========================================================
+incremental: true
+```{r echo = TRUE}
+dune_sp_gath <- gather(dune_sp, key=species, value = "cover_class", Achimill:Callcusp) 
+
+spread(dune_sp_gath, species, cover_class)
+```
+
+The dune_env data
+========================================================
+incremental: true
+```{r echo = TRUE}
+dune_env = read_csv("data/dune.env.csv")
+dune_env
+```
+
+"Spread" the dune_env data
+========================================================
+incremental: true
+```{r echo = TRUE}
+spread(dune_env, Use, Moisture)
+```
+
+Exercise:
+=======================================================
+incremental: true
+- Try spreading the trawl_abiotic data (may want to subset or filter rows and reduce # of columns) 
+- Try gathering the trawl_biomass
+
+
+Connecting operations with pipes
+========================================================
+type: section
+<div align="center">
+<img src="pipes_hex.png" width=500 height=500>
+</div>
+
+```{r echo=FALSE, results="hide"}
+
+
+# 4. Connecting operations with pipes ####
+
+
+```
+Pipes
+========================================================
+The tidyverse has a number of packages that make programming easier
+- purrr() - functional programming
+- rlang() - 
+- glue() - like paste()
+
+-magrittr() - for "pipes"
+http://magrittr.tidyverse.org/
+
+What are pipes?
+========================================================
+From UNIX
+
+Pipes make it easier to program and easier to read your code!
+
+- data operations become left-to-right
+- avoid nested function calls
+- make it easy to add steps in sequence of operations
+
+Code: "%>%"
+
+Examples: Pipes in action: spread data after subsetting
+========================================================
+
+```{r,results="hide",echo=FALSE}
+
+# Example #3: using pipes
+```
+```{r echo = TRUE}
+dune_new <- dune_env %>%
+  subset(Management == "HF") %>%
+  spread(Use, Moisture)
+dune_new
+```
+
+
+Exercise:
+=======================================================
+- Try using pipes to first subset the trawl_abiotic data and then spread
+- Try using pipes to first subset the trawl_biomass before gathering
+
+
+
+dplyr: filtering, selecting, grouping, and connecting tibbles
+========================================================
+type: section
+<div align="center">
+<img src="dplyr_hex.png" width=500 height=500>
+</div>
+
+```{r,results="hide",echo=FALSE}
+
+
+#5. dplyr: filtering, selecting, grouping, and connecting tibbles ####
+
+```
+
+Starting up:
+========================================================
+To make sure everyone's on the same page, run this block of code:
+
+
+```{r,results="hide",echo=FALSE}
+
+#Loading the packages and getting data ready
+```
+
+```{r startup_dplyr}
+library(readr)
+library(tidyr)
+library(dplyr)
+
+
+dune_env = read_csv("data/dune.env.csv")
+
+dune_cover = read_csv("data/dune.csv") %>%
+  gather(key = species,value = cover_class, Achimill:Callcusp)
+
+head(dune_cover,n = 3)
+```
+
+
+
+Starting up:
+========================================================
+To make sure everyone's on the same page, run this block of code:
+
+
+```{r startup2}
+
+trawl_abiotic = read_csv("data/trawl_abiotic.csv",col_types = cols(depth="d"))
+
+trawl_biomass = read_csv("data/trawl_biomass.csv")%>%
+  gather(key = species, value = biomass, shrimp:redfish)
+
+head(trawl_biomass, n=3)
+```
+
+
+
+What is dplyr?
+==============
+incremental: true
+Manipulates data within a data frame
+
+Basic verbs: 
+* select
+* join
+* group_by
+* filter
+* mutate
+* summarize
+
+
+What is dplyr?
+==============
+Manipulates data within a data frame
+
+Basic verbs: 
+* **select**
+* **join**
+* **group_by**
+* **filter**
+* mutate
+* summarize
+
+
+
+
+select(): Removing columns
+========================================================
+incremental: true
+
+<div align="center">
+<img src="select.png" width=550>
+</div>
+
+* Removes columns
+* Can use just column names to keep, column names to remove
+* Can also use ranges of either (`select(data, A:C)`, `select(data, -(C:D)`)
+
+
+left_join(): Adds columns from one data frame to another
+========================================================
+
+
+<div align="center">
+<img src="left_join.png" width=550>
+</div>
+
+
+Using this on the dune data set
+=================================
+incremental: true
+
+
+
+```{r,results="hide",echo=FALSE}
+
+#Trying joins and select on the dune data
+```
+
+
+```{r mergedune}
+dune_moisture = dune_cover %>%
+  left_join(dune_env) %>%
+  select(site, species, cover_class, Moisture)
+
+head(dune_moisture)
+```
+
+Exercise:
+=================================
+
+
+### using the trawl survey data:
+1. join the environmental data to biomass data set
+2. create a new tibble that only includes the year, species name, and bottom temperature
+3. create a second tibble that excludes longitude, latitude, and depth
+
+```{r,results="hide",echo=FALSE}
+
+#Exercise: 
+
+# using the trawl survey data:
+# 1. join the environmental data to biomass data set
+# 2. create a new tibble that only includes the year, species name, and bottom temperature
+# 3. create a second tibble that excludes longitude, latitude, and depth
+```
+
+
+
+
+group_by(): grouping related observations
+============================
+incremental:true
+
+
+<div align="center">
+<img src="group_by.png" width=600>
+</div>
+
+* Does not change data
+* Grouping passes on to other verbs
+* undo it with ungroup(data)
+
+filter(): Filtering out observations based on values
+========================================================
+incremental:true
+
+<div align="center">
+<img src="filter.png" width=550>
+</div>
+
+* removes rows
+* keeps the number of columns and their values the same
+
+
+
+
+
+
+Using this on the dune data set
+=================================
+incremental: true
+
+```{r,results="hide",echo=FALSE}
+
+#Trying grouping and filtering on the dune data
+```
+
+Without grouping:
+
+```{r dune_filter}
+dune_high_moisture = dune_moisture %>%
+  filter(Moisture > 3)
+
+head(dune_moisture) 
+```
+
+Using this on the dune data set
+=================================
+incremental: true
+
+
+With grouping:
+
+```{r dune_grpfilter}
+dune_moisture_tolerant = dune_moisture %>%
+  filter(Moisture>3) %>%
+  group_by(species) %>%
+  filter(mean(count)>2)
+
+head(dune_moisture_tolerant) 
+```
+
+
+
+Exercise:
+=================================
+
+
+### using the joined the data set you created above:
+1. Create a new tibble that only includes trawls collected in NAFO division 2J,  and are deeper than 400 meters
+2. Create a new tibble, grouped by species and strata, that only includes observations taken after 2000 and have a maximum biomass greater than 1 kg.
+
+
+summarize()
+========================================================
+- Turns multiple rows into a single
+
+![Long to Wide](Slide6.png)
+
+
+```{r,results="hide",echo=FALSE}
+
+# Example #4: using summarise
+```
+
+Exampe: summarise()
+========================================================
+```{r echo = TRUE}
+dune_long <- gather(dune_sp, key=species, value = "cover_class", Achimill:Callcusp) 
+
+dune_summary <- dune_long %>%
+  group_by(species) %>%
+  summarise(mean = mean(cover_class))
+
+dune_summary
+```
+
+Exampe: summarise() continued
+========================================================
+```{r,results="hide",echo=FALSE}
+
+```
+```{r echo = TRUE}
+dune_summary <- dune_env %>%
+  group_by(Management, Use) %>%
+  summarise(count = n())
+dune_summary
+```
+
+mutate()
+========================================================
+- creates new column from existing columns
+
+![Long to Wide](Slide7.png)
+
+```{r,results="hide",echo=FALSE}
+
+# Example #5: using mutate
+```
+Exampe: mutate() - Create a new variable
+========================================================
+```{r echo = TRUE}
+## examples
+dune_mutate <- dune_sp %>%
+    mutate(sum_sp = Achimill + Agrostol)  
+
+dune_mutate[c("Achimill", "Agrostol", "sum_sp")]
+```
+
+Exampe: mutate() - Create a new variable continued
+========================================================
+```{r,results="hide",echo=FALSE}
+
+```
+```{r echo = TRUE}
+dune_mutate <- dune_sp %>%
+    mutate(test = between(Achimill, 2, 3))
+dune_mutate[c("Achimill", "test")]
+```
+
+Exercise:
+=======================================================
+
+Try: 
+- counting the number of observations in each year in each nafo division 
+- going to the cheat sheet and pick 1-2 functions for summarising or mutating the data in the manner of your choice
+
+
+Help 
+========================================================
+For tidyr():
+- extract() or unite()
+- vignette("tidy-data")
+- demo(package = "tidyr")
+- cheatsheet (see RStudio -> Help -> Cheatsheets)
+
+Help 
+========================================================
+For pipes:
+- Note: you don't HAVE to use pipes
+Tidyverse webiste: http://magrittr.tidyverse.org/
+
+"R for Data Science" http://r4ds.had.co.nz/pipes.html
+
+When not to use pipes (according to Hadley)
+- Pipes of more than 10 steps (hard to debug)
+
+- Multiple inputs and outputs
+
+- Complex graphs
+
+Help 
+========================================================
+For dplyr:
+- cheatsheet (see RStudio -> Help -> Cheatsheets)
