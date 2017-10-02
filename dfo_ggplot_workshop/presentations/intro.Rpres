@@ -1,0 +1,91 @@
+Plotting in the tidyverse: ggplot2
+========================================================
+author: Paul Regular and Keith Lewis  
+date: 2017-10-01
+width: 1540
+height: 900
+<div align="center">
+<img src="ggplot2_hex.png" width=500 height=500>
+</div>
+
+```{r setup, echo=FALSE, results="hide"}
+knitr::opts_knit$set(root.dir = '../')
+# 1. Introduction to the tidyverse ####
+```
+
+Outline
+========================================================
+- plotting options
+- grammar of graphics
+- ggplot2: the basics
+- ggplot2: publication quality
+- ggplot2: advanced stuff
+
+
+the grammar of graphics
+========================================================
+- data
+- mappings (aesthetics)
+- geometry (points, lines, polygons)
+- scales (colour, size, shape, axes)
+- coordinates (e.g. Cartesian)
+- faceting (multiple subsets; lattice)
+- layers ()
+
+ggplot2: the basics
+========================================================
+Some sort of introduction??
+ggplot v qplot?
+
+ggplot2: the basics - scatterplot
+========================================================
+```{r, echo=TRUE}
+View(mtcars)
+library(tidyr)
+library(ggplot2)
+ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
+```
+
+ggplot2: the basics - box-whisker plot
+========================================================
+```{r, echo=TRUE}
+str(mtcars)
+mtcars$cyl <- as.factor(mtcars$cyl)
+ggplot(data=mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
+
+```
+
+ggplot2: the basics - some other graph
+========================================================
+```{r, echo=TRUE}
+
+
+```
+
+Basic exercises
+========================================================
+take the trawl data and make the following?????
+
+ggplot2: publication quality
+========================================================
+
+Publication quality exercises
+========================================================
+
+ggplot2: advanced stuff
+========================================================
+ - tidyverse
+ - maps
+ - working with layers
+ 
+Advanced exercises
+========================================================
+
+Help
+========================================================
+Books:
+- R Graphics Cookbook
+- ggplot2: elegant graphics for data analysis
+
+Websites:
+http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
