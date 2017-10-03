@@ -13,20 +13,35 @@ knitr::opts_knit$set(root.dir = '../')
 # 1. Introduction to the tidyverse ####
 ```
 
+Rstudio tips
+========================================================
+- Arguements - label
+- Use the editor and pass to consol with Ctrl-enter
+
 Outline
 ========================================================
 - plotting options
 - grammar of graphics
 - ggplot2: the basics
-- ggplot2: publication quality
+- ggplot2: intermediate
 - ggplot2: advanced stuff
 
+Plotting options
+========================================================
+- Excel sucks
+- Sigma plot
+- R
+  - base
+  - various functions
+  - ggplot2
+  - qplot
 
 the grammar of graphics
 ========================================================
 - data
 - mappings (aesthetics)
 - geometry (points, lines, polygons)
+- statistics (binning)
 - scales (colour, size, shape, axes)
 - coordinates (e.g. Cartesian)
 - faceting (multiple subsets; lattice)
@@ -44,6 +59,7 @@ View(mtcars)
 library(tidyr)
 library(ggplot2)
 ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
+# show with object and w/o
 ```
 
 ggplot2: the basics - box-whisker plot
@@ -66,8 +82,11 @@ Basic exercises
 ========================================================
 take the trawl data and make the following?????
 
-ggplot2: publication quality
+ggplot2: intermediate
 ========================================================
+- axes
+- legends
+- colours
 
 Publication quality exercises
 ========================================================
@@ -75,9 +94,10 @@ Publication quality exercises
 ggplot2: advanced stuff
 ========================================================
  - tidyverse
+ - facets
  - maps
  - working with layers
- 
+ - multiple plots
 Advanced exercises
 ========================================================
 
@@ -86,6 +106,8 @@ Help
 Books:
 - R Graphics Cookbook
 - ggplot2: elegant graphics for data analysis
+- Tufte, E.R. The visual display of quantitative information (theoretical foundation)
 
 Websites:
 http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+
