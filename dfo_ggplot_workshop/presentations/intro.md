@@ -5,25 +5,40 @@ date: 2017-10-01
 width: 1540
 height: 900
 <div align="center">
-<img src="ggplot2_hex.png" width=500 height=500>
+<img src="ggplot2_hex.png" width=500 height=400>
 </div>
 
 
 
+Rstudio tips
+========================================================
+- Arguements - label
+- Use the editor and pass to consol with Ctrl-enter
+
 Outline
 ========================================================
-- plotting options
-- grammar of graphics
+- Plotting options
+- Grammar of graphics
 - ggplot2: the basics
-- ggplot2: publication quality
+- ggplot2: intermediate
 - ggplot2: advanced stuff
 
+Plotting options
+========================================================
+- Excel (hint: it sucks!)
+- Sigma plot
+- R
+  - base
+  - various functions
+  - ggplot2
+  - qplot
 
 the grammar of graphics
 ========================================================
 - data
 - mappings (aesthetics)
 - geometry (points, lines, polygons)
+- statistics (binning)
 - scales (colour, size, shape, axes)
 - coordinates (e.g. Cartesian)
 - faceting (multiple subsets; lattice)
@@ -38,7 +53,6 @@ ggplot2: the basics - scatterplot
 ========================================================
 
 ```r
-View(mtcars)
 library(tidyr)
 library(ggplot2)
 ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
@@ -68,41 +82,106 @@ str(mtcars)
  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...
 ```
 
+ggplot2: the basics - box-whisker plot
+========================================================
+
 ```r
 mtcars$cyl <- as.factor(mtcars$cyl)
 ggplot(data=mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
 ```
 
-![plot of chunk unnamed-chunk-2](intro-figure/unnamed-chunk-2-1.png)
+![plot of chunk unnamed-chunk-3](intro-figure/unnamed-chunk-3-1.png)
 
-ggplot2: the basics - some other graph
+ggplot2: the basics - stacked bargraph
 ========================================================
 
+```r
+mtcars$am <- as.factor(mtcars$am)
+ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
+  geom_bar(stat="identity") # statistics modifies geom
+```
+
+![plot of chunk unnamed-chunk-4](intro-figure/unnamed-chunk-4-1.png)
 
 Basic exercises
 ========================================================
-take the trawl data and make the following?????
+With the trawl data, make the following (note, you may need to use data manipulation concepts from last week):
 
-ggplot2: publication quality
+
+ggplot2: intermediate
+========================================================
+- change size, colour, and shape
+- axes
+- legends
+
+ggplot2: intermediate - make an object
 ========================================================
 
-Publication quality exercises
+```r
+p <- ggplot(data=mtcars, aes(x = mpg, y = disp)) 
+p + geom_point()
+```
+
+![plot of chunk unnamed-chunk-5](intro-figure/unnamed-chunk-5-1.png)
+
+ggplot2: intermediate - make an object....then add more grammar
+========================================================
+
+```r
+p <- ggplot(data=mtcars, aes(x = mpg, y = disp)) 
+p + geom_point(shape=21, size=1.5, colour = "red")  # change the scales
+```
+
+![plot of chunk unnamed-chunk-6](intro-figure/unnamed-chunk-6-1.png)
+
+ggplot2: intermediate - make an object....then add more grammar
+========================================================
+
+```r
+p <- ggplot(data=mtcars, aes(x = mpg, y = disp, colour = cyl)) 
+p + geom_point(shape=21, size=1.5) +  # change the object
+  ylab("Displacement (cu. in)") +     # change label of y-axis
+  xlab("Miles per gallon") +          # change label of x-axis
+  labs(fill = "Number of cylinders")  # change label of legend
+```
+
+![plot of chunk unnamed-chunk-7](intro-figure/unnamed-chunk-7-1.png)
+
+ggplot2: intermediate - stacked bargraph
+========================================================
+
+```r
+ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
+  geom_bar(stat="identity") + 
+  ylab("Number of cylinders") +     
+  xlab("Miles per gallon") +          
+  labs(fill = "Automatic/\nManual") +     # note that \n moves everything after to next line
+  scale_fill_brewer(palette= "Pastel1") + # change colour of bars
+  theme_bw()                              # change background
+```
+
+![plot of chunk unnamed-chunk-8](intro-figure/unnamed-chunk-8-1.png)
+
+Intermediate exercises
 ========================================================
 
 ggplot2: advanced stuff
 ========================================================
  - tidyverse
+ - facets
  - maps
  - working with layers
- 
+ - multiple plots
 Advanced exercises
 ========================================================
 
 Help
 ========================================================
-Books:
+Books
 - R Graphics Cookbook
 - ggplot2: elegant graphics for data analysis
+- Tufte, E.R. The visual display of quantitative information (theoretical foundation)
 
 Websites:
 http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+
