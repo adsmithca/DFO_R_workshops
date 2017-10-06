@@ -5,12 +5,12 @@ date: 2017-10-01
 width: 1540
 height: 900
 <div align="center">
-<img src="ggplot2_hex.png" width=500 height=500>
+<img src="ggplot2_hex.png" width=500 height=400>
 </div>
 
 ```{r setup, echo=FALSE, results="hide"}
 knitr::opts_knit$set(root.dir = '../')
-# 1. Introduction to the tidyverse ####
+# 1. Introduction to ggplot ####
 ```
 
 Rstudio tips
@@ -20,15 +20,15 @@ Rstudio tips
 
 Outline
 ========================================================
-- plotting options
-- grammar of graphics
+- Plotting options
+- Grammar of graphics
 - ggplot2: the basics
 - ggplot2: intermediate
 - ggplot2: advanced stuff
 
 Plotting options
 ========================================================
-- Excel sucks
+- Excel (hint: it sucks!)
 - Sigma plot
 - R
   - base
@@ -55,40 +55,85 @@ ggplot v qplot?
 ggplot2: the basics - scatterplot
 ========================================================
 ```{r, echo=TRUE}
-View(mtcars)
 library(tidyr)
 library(ggplot2)
 ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
-# show with object and w/o
 ```
 
 ggplot2: the basics - box-whisker plot
 ========================================================
 ```{r, echo=TRUE}
 str(mtcars)
+```
+
+ggplot2: the basics - box-whisker plot
+========================================================
+```{r, echo=TRUE}
 mtcars$cyl <- as.factor(mtcars$cyl)
 ggplot(data=mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
 
 ```
 
-ggplot2: the basics - some other graph
+ggplot2: the basics - stacked bargraph
 ========================================================
 ```{r, echo=TRUE}
-
+mtcars$am <- as.factor(mtcars$am)
+ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
+  geom_bar(stat="identity") # statistics modifies geom
 
 ```
 
 Basic exercises
 ========================================================
-take the trawl data and make the following?????
+With the trawl data, make the following (note, you may need to use data manipulation concepts from last week):
+
 
 ggplot2: intermediate
 ========================================================
+- change size, colour, and shape
 - axes
 - legends
-- colours
 
-Publication quality exercises
+ggplot2: intermediate - make an object
+========================================================
+```{r, echo=TRUE}
+p <- ggplot(data=mtcars, aes(x = mpg, y = disp)) 
+p + geom_point()
+```
+
+ggplot2: intermediate - make an object....then add more grammar
+========================================================
+```{r, echo=TRUE}
+p <- ggplot(data=mtcars, aes(x = mpg, y = disp)) 
+p + geom_point(shape=21, size=1.5, colour = "red")  # change the scales
+
+```
+
+ggplot2: intermediate - make an object....then add more grammar
+========================================================
+```{r, echo=TRUE}
+p <- ggplot(data=mtcars, aes(x = mpg, y = disp, colour = cyl)) 
+p + geom_point(shape=21, size=1.5) +  # change the object
+  ylab("Displacement (cu. in)") +     # change label of y-axis
+  xlab("Miles per gallon") +          # change label of x-axis
+  labs(fill = "Number of cylinders")  # change label of legend
+```
+
+ggplot2: intermediate - stacked bargraph
+========================================================
+```{r, echo=TRUE}
+ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
+  geom_bar(stat="identity") + 
+  ylab("Number of cylinders") +     
+  xlab("Miles per gallon") +          
+  labs(fill = "Automatic/\nManual") +     # note that \n moves everything after to next line
+  scale_fill_brewer(palette= "Pastel1") + # change colour of bars
+  theme_bw()                              # change background
+  
+
+```
+
+Intermediate exercises
 ========================================================
 
 ggplot2: advanced stuff
@@ -103,7 +148,7 @@ Advanced exercises
 
 Help
 ========================================================
-Books:
+Books
 - R Graphics Cookbook
 - ggplot2: elegant graphics for data analysis
 - Tufte, E.R. The visual display of quantitative information (theoretical foundation)
