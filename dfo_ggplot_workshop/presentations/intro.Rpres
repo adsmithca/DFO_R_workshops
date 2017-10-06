@@ -56,6 +56,7 @@ ggplot2: the basics - scatterplot
 ========================================================
 ```{r, echo=TRUE}
 library(tidyr)
+library(dplyr)
 library(ggplot2)
 ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
 ```
@@ -129,8 +130,6 @@ ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) +
   labs(fill = "Automatic/\nManual") +     # note that \n moves everything after to next line
   scale_fill_brewer(palette= "Pastel1") + # change colour of bars
   theme_bw()                              # change background
-  
-
 ```
 
 Intermediate exercises
@@ -143,6 +142,44 @@ ggplot2: advanced stuff
  - maps
  - working with layers
  - multiple plots
+
+ggplot2 and the tidyverse
+========================================================
+```{r, echo=TRUE}
+data(diamonds)
+View(diamonds)
+```
+
+ggplot2 and the tidyverse
+========================================================
+```{r, echo=TRUE}
+diamonds %>%                                        # Start with the 'diamonds' dataset
+  filter(cut == "Ideal") %>%                        # Then, filter down to rows where cut == Ideal
+  ggplot(aes(price)) +                            # Then, plot using ggplot
+    geom_histogram()                              # and plot histograms
+```
+
+ggplot2 and the tidyverse and facets
+========================================================
+```{r, echo=TRUE}
+diamonds %>%                                        # Start with the 'diamonds' dataset
+  filter(cut == "Ideal") %>%                        # Then, filter down to rows where cut == Ideal
+  ggplot(aes(price)) +                            # Then, plot using ggplot
+    geom_histogram() +                              # and plot histograms
+    facet_wrap(~ color)                             # in a 'small multiple' plot, broken out by 'color' 
+```
+
+ggplot2 and layers
+========================================================
+```{r, echo=TRUE}
+
+```
+
+ggplot2 and multiple plots
+========================================================
+```{r, echo=TRUE}
+
+```
 Advanced exercises
 ========================================================
 
