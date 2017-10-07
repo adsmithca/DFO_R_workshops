@@ -4,6 +4,7 @@ author: Paul Regular and Keith Lewis
 date: 2017-10-01
 width: 1540
 height: 900
+autosize: true
 <div align="center">
 <img src="ggplot2_hex.png" width=500 height=400>
 </div>
@@ -12,29 +13,36 @@ height: 900
 
 Rstudio tips
 ========================================================
+incremental: true
+Needs work
 - Arguements - label
 - Use the editor and pass to consol with Ctrl-enter
 
 Outline
 ========================================================
+incremental: true
 - Plotting options
 - Grammar of graphics
 - ggplot2: the basics
 - ggplot2: intermediate
 - ggplot2: advanced stuff
 
+- Cookbook for R
+
 Plotting options
 ========================================================
-- Excel (hint: it sucks!)
-- Sigma plot
+incremental: true
+- spreadsheets, e.g., Excel (hint: it sucks!)
+- stand alone packages, e.g., Sigma Plot
 - R
   - base
   - various functions
-  - ggplot2
+  - ggplot2 (part of the tidyverse)
   - qplot
 
 the grammar of graphics
 ========================================================
+incremental: true
 - data
 - mappings (aesthetics)
 - geometry (points, lines, polygons)
@@ -46,21 +54,15 @@ the grammar of graphics
 
 ggplot2: the basics
 ========================================================
+incremental: true
 Some sort of introduction??
 ggplot v qplot?
+- scatterplot
+- boxplot
+- stacked bar
+- saving the output
 
-ggplot2: the basics - scatterplot
-========================================================
-
-```r
-library(tidyr)
-library(ggplot2)
-ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
-```
-
-![plot of chunk unnamed-chunk-1](intro-figure/unnamed-chunk-1-1.png)
-
-ggplot2: the basics - box-whisker plot
+ggplot2: the basics - mtcars
 ========================================================
 
 ```r
@@ -82,34 +84,58 @@ str(mtcars)
  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...
 ```
 
+```r
+mtcars$am <- as.factor(mtcars$am)
+mtcars$cyl <- as.factor(mtcars$cyl)
+```
+
+ggplot2: the basics - scatterplot
+========================================================
+
+```r
+ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
+```
+
+<img src="intro-figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" width="1040px" height="650px" />
+
 ggplot2: the basics - box-whisker plot
 ========================================================
 
 ```r
-mtcars$cyl <- as.factor(mtcars$cyl)
 ggplot(data=mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
 ```
 
-![plot of chunk unnamed-chunk-3](intro-figure/unnamed-chunk-3-1.png)
+<img src="intro-figure/unnamed-chunk-3-1.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" width="1040px" height="650px" />
 
 ggplot2: the basics - stacked bargraph
 ========================================================
 
 ```r
-mtcars$am <- as.factor(mtcars$am)
 ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
   geom_bar(stat="identity") # statistics modifies geom
 ```
 
-![plot of chunk unnamed-chunk-4](intro-figure/unnamed-chunk-4-1.png)
+<img src="intro-figure/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" width="1040px" height="650px" />
+
+ggplot2: the basics - saving the figure
+========================================================
+
+```r
+pdf("plots.pdf")
+ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
+  geom_bar(stat="identity") # statistics modifies geom
+dev.off()
+```
 
 Basic exercises
 ========================================================
 With the trawl data, make the following (note, you may need to use data manipulation concepts from last week):
+- save the file as a pdf
 
 
-ggplot2: intermediate
+ggplot2: intermediate - move away from defaults to publication quality
 ========================================================
+incremental: true
 - change size, colour, and shape
 - axes
 - legends
@@ -122,7 +148,7 @@ p <- ggplot(data=mtcars, aes(x = mpg, y = disp))
 p + geom_point()
 ```
 
-![plot of chunk unnamed-chunk-5](intro-figure/unnamed-chunk-5-1.png)
+<img src="intro-figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="1040px" height="650px" />
 
 ggplot2: intermediate - make an object....then add more grammar
 ========================================================
@@ -132,9 +158,9 @@ p <- ggplot(data=mtcars, aes(x = mpg, y = disp))
 p + geom_point(shape=21, size=1.5, colour = "red")  # change the scales
 ```
 
-![plot of chunk unnamed-chunk-6](intro-figure/unnamed-chunk-6-1.png)
+<img src="intro-figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="1040px" height="650px" />
 
-ggplot2: intermediate - make an object....then add more grammar
+ggplot2: intermediate - then add more grammar
 ========================================================
 
 ```r
@@ -145,9 +171,9 @@ p + geom_point(shape=21, size=1.5) +  # change the object
   labs(fill = "Number of cylinders")  # change label of legend
 ```
 
-![plot of chunk unnamed-chunk-7](intro-figure/unnamed-chunk-7-1.png)
+<img src="intro-figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" width="1040px" height="650px" />
 
-ggplot2: intermediate - stacked bargraph
+ggplot2: intermediate - and still more grammar
 ========================================================
 
 ```r
@@ -155,33 +181,169 @@ ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) +
   geom_bar(stat="identity") + 
   ylab("Number of cylinders") +     
   xlab("Miles per gallon") +          
-  labs(fill = "Automatic/\nManual") +     # note that \n moves everything after to next line
-  scale_fill_brewer(palette= "Pastel1") + # change colour of bars
+  labs(fill = "Automatic/\nManual") +     # \n ~ "return"
+  scale_fill_brewer(palette= "Pastel1") + # change bar colours
   theme_bw()                              # change background
 ```
 
-![plot of chunk unnamed-chunk-8](intro-figure/unnamed-chunk-8-1.png)
+<img src="intro-figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" width="1040px" height="650px" />
 
 Intermediate exercises
 ========================================================
+This needs work
 
 ggplot2: advanced stuff
 ========================================================
+incremental: true
  - tidyverse
  - facets
  - maps
  - working with layers
  - multiple plots
+
+ggplot2 and the tidyverse
+========================================================
+
+```r
+data(diamonds)
+View(diamonds)
+```
+
+ggplot2 and the tidyverse
+========================================================
+
+```r
+diamonds %>%                  # Start with the 'diamonds' dataset
+  filter(cut == "Ideal") %>%  # Then, filter down to rows where cut == Ideal
+  ggplot(aes(price)) +        # Then, determine aes
+    geom_histogram()          # plot histograms
+```
+
+<img src="intro-figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="1040px" height="650px" />
+
+ggplot2 and the tidyverse and facets
+========================================================
+
+```r
+diamonds %>%                   # Start with the 'diamonds' dataset
+  filter(cut == "Ideal") %>%   # Then, filter down to rows where cut == Ideal
+  ggplot(aes(price)) +         # Then, determine aes
+    geom_histogram() +         # plot histograms
+    facet_wrap(~ color)        # in plots by 'color' 
+```
+
+<img src="intro-figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" width="1040px" height="650px" />
+
+ggplot2 and layers
+========================================================
+
+```r
+# no layers
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
+```
+
+<img src="intro-figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" width="1040px" height="650px" />
+
+ggplot2 and layers
+========================================================
+
+```r
+# one layer
+ggplot(data = diamonds,                           # the data and mapping/aesthetics
+       aes(x = carat, y = price, colour = cut)) + 
+  geom_point()                                    # the point layer
+```
+
+<img src="intro-figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="1040px" height="650px" />
+
+
+```r
+# one layer but with data specific to layer
+ggplot() +                              # the data and mapping/aesthetics
+  geom_point(data = diamonds,           # the point layer
+             aes(x = carat, y = price, colour = cut))                                                   # 
+```
+
+<img src="intro-figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" width="1040px" height="650px" />
+
+ggplot2 and layers
+========================================================
+
+```r
+# two layers
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) + # the data and mapping/aesthetics
+  geom_point() +                                                    # the point layer
+  geom_smooth()                                                    # the line layer
+```
+
+<img src="intro-figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="1040px" height="650px" />
+
+ggplot2 and layers
+========================================================
+
+```r
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
+```
+
+<img src="intro-figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="1040px" height="650px" />
+
+```r
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) + # the data and mapping/aesthetics
+  geom_point() +                                                    # the point layer
+  geom_smooth()                                                    # the line layer
+```
+
+<img src="intro-figure/unnamed-chunk-17-2.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="1040px" height="650px" />
+
+```r
+#note that the point and line layer use the diamond data - they don't have to.
+# show caribou graph
+```
+
+ggplot2 and layers
+========================================================
+this is not the right code
+p <- ggplot (dfs.sa2, aes(x=Year, y=s, group=StudyArea, fill=StudyArea)) #data and aes
+
+p +  geom_errorbar(position = pd, width=0.1, colour="black", aes(ymin=sLL, ymax=sUL)) + 	#plot bars
+geom_point (aes(fill=StudyArea), position = pd, shape=22, size=4) + #plot points
+scale_fill_manual (name = "Study Area", values=cols, breaks = c("Middle Ridge 	North", "Middle Ridge South", "La Poile", "Northern Peninsula"), 	labels=studyarea, limits=c("Middle Ridge North", "Middle Ridge South", "La 	Poile", "Northern Peninsula")) + #specify colours
+ylab("Survival rate") + #label y-axis
+scale_y_continuous(limits=c(0,1)) + # set limits to y-axis
+theme_bw() + #change background to white
+opts(legend.justification=c(1,0), legend.position=c(.25,.75)) + #position legend
+ylim(0,1)  + # set limits to y-axis
+opts(axis.title.x = theme_text(size=16)) + #adjust the axis title
+opts(axis.title.y = theme_text(angle = 90, size=16)) + #adjust the axis title
+geom_text(aes(x=Year, y=sUL+0.05, label=n.animals), size=4, position = pd) 
+# numbers over bars
+
+caribou graph
+========================================================
+#type: section
+#<div align="center">
+#<img src="readr_hex.png" width=500 height=500>
+#</div>
+
+
+ggplot2 and multiple plots
+========================================================
+
 Advanced exercises
 ========================================================
+Needs work
 
 Help
 ========================================================
 Books
-- R Graphics Cookbook
-- ggplot2: elegant graphics for data analysis
-- Tufte, E.R. The visual display of quantitative information (theoretical foundation)
+- Chang, W. 2013. R Graphics Cookbook. O'Reilly
+- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer.
+- Tufte, E.R. The visual display of quantitative information.  (theoretical foundation)
 
 Websites:
 http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+
+Papers:
+Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601.
+https://rpubs.com/hadley/ggplot2-layers
 

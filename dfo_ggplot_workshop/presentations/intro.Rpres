@@ -4,40 +4,53 @@ author: Paul Regular and Keith Lewis
 date: 2017-10-01
 width: 1540
 height: 900
+autosize: true
 <div align="center">
 <img src="ggplot2_hex.png" width=500 height=400>
 </div>
 
 ```{r setup, echo=FALSE, results="hide"}
+library(knitr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 knitr::opts_knit$set(root.dir = '../')
+opts_chunk$set(fig.width=9, fig.height=5.5, dpi=300, out.width="1040px", out.height="650px")
 # 1. Introduction to ggplot ####
 ```
 
 Rstudio tips
 ========================================================
+incremental: true
+Needs work
 - Arguements - label
 - Use the editor and pass to consol with Ctrl-enter
 
 Outline
 ========================================================
+incremental: true
 - Plotting options
 - Grammar of graphics
 - ggplot2: the basics
 - ggplot2: intermediate
 - ggplot2: advanced stuff
 
+- Cookbook for R
+
 Plotting options
 ========================================================
-- Excel (hint: it sucks!)
-- Sigma plot
+incremental: true
+- spreadsheets, e.g., Excel (hint: it sucks!)
+- stand alone packages, e.g., Sigma Plot
 - R
   - base
   - various functions
-  - ggplot2
+  - ggplot2 (part of the tidyverse)
   - qplot
 
 the grammar of graphics
 ========================================================
+incremental: true
 - data
 - mappings (aesthetics)
 - geometry (points, lines, polygons)
@@ -49,48 +62,59 @@ the grammar of graphics
 
 ggplot2: the basics
 ========================================================
+incremental: true
 Some sort of introduction??
 ggplot v qplot?
+- scatterplot
+- boxplot
+- stacked bar
+- saving the output
+
+ggplot2: the basics - mtcars
+========================================================
+```{r, echo=TRUE}
+str(mtcars)
+mtcars$am <- as.factor(mtcars$am)
+mtcars$cyl <- as.factor(mtcars$cyl)
+```
 
 ggplot2: the basics - scatterplot
 ========================================================
 ```{r, echo=TRUE}
-library(tidyr)
-library(dplyr)
-library(ggplot2)
 ggplot(data=mtcars, aes(x = mpg, y = disp)) + geom_point()
 ```
 
 ggplot2: the basics - box-whisker plot
 ========================================================
 ```{r, echo=TRUE}
-str(mtcars)
-```
-
-ggplot2: the basics - box-whisker plot
-========================================================
-```{r, echo=TRUE}
-mtcars$cyl <- as.factor(mtcars$cyl)
 ggplot(data=mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
-
 ```
 
 ggplot2: the basics - stacked bargraph
 ========================================================
 ```{r, echo=TRUE}
-mtcars$am <- as.factor(mtcars$am)
 ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
   geom_bar(stat="identity") # statistics modifies geom
+```
 
+ggplot2: the basics - saving the figure
+========================================================
+```{r, results = "hide", echo=TRUE}
+pdf("plots.pdf")
+ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
+  geom_bar(stat="identity") # statistics modifies geom
+dev.off()
 ```
 
 Basic exercises
 ========================================================
 With the trawl data, make the following (note, you may need to use data manipulation concepts from last week):
+- save the file as a pdf
 
 
-ggplot2: intermediate
+ggplot2: intermediate - move away from defaults to publication quality
 ========================================================
+incremental: true
 - change size, colour, and shape
 - axes
 - legends
@@ -107,10 +131,9 @@ ggplot2: intermediate - make an object....then add more grammar
 ```{r, echo=TRUE}
 p <- ggplot(data=mtcars, aes(x = mpg, y = disp)) 
 p + geom_point(shape=21, size=1.5, colour = "red")  # change the scales
-
 ```
 
-ggplot2: intermediate - make an object....then add more grammar
+ggplot2: intermediate - then add more grammar
 ========================================================
 ```{r, echo=TRUE}
 p <- ggplot(data=mtcars, aes(x = mpg, y = disp, colour = cyl)) 
@@ -120,23 +143,25 @@ p + geom_point(shape=21, size=1.5) +  # change the object
   labs(fill = "Number of cylinders")  # change label of legend
 ```
 
-ggplot2: intermediate - stacked bargraph
+ggplot2: intermediate - and still more grammar
 ========================================================
 ```{r, echo=TRUE}
 ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
   geom_bar(stat="identity") + 
   ylab("Number of cylinders") +     
   xlab("Miles per gallon") +          
-  labs(fill = "Automatic/\nManual") +     # note that \n moves everything after to next line
-  scale_fill_brewer(palette= "Pastel1") + # change colour of bars
+  labs(fill = "Automatic/\nManual") +     # \n ~ "return"
+  scale_fill_brewer(palette= "Pastel1") + # change bar colours
   theme_bw()                              # change background
 ```
 
 Intermediate exercises
 ========================================================
+This needs work
 
 ggplot2: advanced stuff
 ========================================================
+incremental: true
  - tidyverse
  - facets
  - maps
@@ -145,7 +170,7 @@ ggplot2: advanced stuff
 
 ggplot2 and the tidyverse
 ========================================================
-```{r, echo=TRUE}
+```{r, resuls = "hide", echo=TRUE}
 data(diamonds)
 View(diamonds)
 ```
@@ -153,27 +178,92 @@ View(diamonds)
 ggplot2 and the tidyverse
 ========================================================
 ```{r, echo=TRUE}
-diamonds %>%                                        # Start with the 'diamonds' dataset
-  filter(cut == "Ideal") %>%                        # Then, filter down to rows where cut == Ideal
-  ggplot(aes(price)) +                            # Then, plot using ggplot
-    geom_histogram()                              # and plot histograms
+diamonds %>%                  # Start with the 'diamonds' dataset
+  filter(cut == "Ideal") %>%  # Then, filter down to rows where cut == Ideal
+  ggplot(aes(price)) +        # Then, determine aes
+    geom_histogram()          # plot histograms
 ```
 
 ggplot2 and the tidyverse and facets
 ========================================================
 ```{r, echo=TRUE}
-diamonds %>%                                        # Start with the 'diamonds' dataset
-  filter(cut == "Ideal") %>%                        # Then, filter down to rows where cut == Ideal
-  ggplot(aes(price)) +                            # Then, plot using ggplot
-    geom_histogram() +                              # and plot histograms
-    facet_wrap(~ color)                             # in a 'small multiple' plot, broken out by 'color' 
+diamonds %>%                   # Start with the 'diamonds' dataset
+  filter(cut == "Ideal") %>%   # Then, filter down to rows where cut == Ideal
+  ggplot(aes(price)) +         # Then, determine aes
+    geom_histogram() +         # plot histograms
+    facet_wrap(~ color)        # in plots by 'color' 
 ```
 
 ggplot2 and layers
 ========================================================
 ```{r, echo=TRUE}
-
+# no layers
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
 ```
+
+ggplot2 and layers
+========================================================
+```{r, echo=TRUE}
+# one layer
+ggplot(data = diamonds,                           # the data and mapping/aesthetics
+       aes(x = carat, y = price, colour = cut)) + 
+  geom_point()                                    # the point layer
+  
+```
+
+```{r, echo=TRUE}
+# one layer but with data specific to layer
+ggplot() +                              # the data and mapping/aesthetics
+  geom_point(data = diamonds,           # the point layer
+             aes(x = carat, y = price, colour = cut))                                                   # 
+```
+
+ggplot2 and layers
+========================================================
+```{r, echo=TRUE}
+# two layers
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) + # the data and mapping/aesthetics
+  geom_point() +                                                    # the point layer
+  geom_smooth()                                                    # the line layer
+```
+
+ggplot2 and layers
+========================================================
+```{r, echo=TRUE}
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
+
+ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) + # the data and mapping/aesthetics
+  geom_point() +                                                    # the point layer
+  geom_smooth()                                                    # the line layer
+#note that the point and line layer use the diamond data - they don't have to.
+# show caribou graph
+```
+
+ggplot2 and layers
+========================================================
+this is not the right code
+p <- ggplot (dfs.sa2, aes(x=Year, y=s, group=StudyArea, fill=StudyArea)) #data and aes
+
+p +  geom_errorbar(position = pd, width=0.1, colour="black", aes(ymin=sLL, ymax=sUL)) + 	#plot bars
+geom_point (aes(fill=StudyArea), position = pd, shape=22, size=4) + #plot points
+scale_fill_manual (name = "Study Area", values=cols, breaks = c("Middle Ridge 	North", "Middle Ridge South", "La Poile", "Northern Peninsula"), 	labels=studyarea, limits=c("Middle Ridge North", "Middle Ridge South", "La 	Poile", "Northern Peninsula")) + #specify colours
+ylab("Survival rate") + #label y-axis
+scale_y_continuous(limits=c(0,1)) + # set limits to y-axis
+theme_bw() + #change background to white
+opts(legend.justification=c(1,0), legend.position=c(.25,.75)) + #position legend
+ylim(0,1)  + # set limits to y-axis
+opts(axis.title.x = theme_text(size=16)) + #adjust the axis title
+opts(axis.title.y = theme_text(angle = 90, size=16)) + #adjust the axis title
+geom_text(aes(x=Year, y=sUL+0.05, label=n.animals), size=4, position = pd) 
+# numbers over bars
+
+caribou graph
+========================================================
+#type: section
+#<div align="center">
+#<img src="readr_hex.png" width=500 height=500>
+#</div>
+
 
 ggplot2 and multiple plots
 ========================================================
@@ -182,14 +272,19 @@ ggplot2 and multiple plots
 ```
 Advanced exercises
 ========================================================
+Needs work
 
 Help
 ========================================================
 Books
-- R Graphics Cookbook
-- ggplot2: elegant graphics for data analysis
-- Tufte, E.R. The visual display of quantitative information (theoretical foundation)
+- Chang, W. 2013. R Graphics Cookbook. O'Reilly
+- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer.
+- Tufte, E.R. The visual display of quantitative information.  (theoretical foundation)
 
 Websites:
 http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+
+Papers:
+Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601.
+https://rpubs.com/hadley/ggplot2-layers
 
