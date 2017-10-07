@@ -25,6 +25,7 @@ incremental: true
 Needs work
 - Arguements - label
 - Use the editor and pass to consol with Ctrl-enter
+- show tidyverse cheatsheets and incorporate into lecture
 
 Outline
 ========================================================
@@ -283,6 +284,7 @@ Books
 
 Websites:
 http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+http://ggplot.yhathq.com/
 
 Papers:
 Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601.
