@@ -14,9 +14,11 @@ autosize: true
 Rstudio tips
 ========================================================
 incremental: true
-Needs work
-- Arguements - label
+- Arguements
+  - gather(data = dune_sp, key=species, value = "cover_class", Achimill:Callcusp) or
+  - gather(dune_sp, species, "cover_class", Achimill:Callcusp) 
 - Use the editor and pass to consol with Ctrl-enter
+- The cheatsheets
 
 Outline
 ========================================================
@@ -34,29 +36,29 @@ Plotting options
 incremental: true
 - spreadsheets, e.g., Excel (hint: it sucks!)
 - stand alone packages, e.g., Sigma Plot
+- other stats packages, e.g., SAS
 - R
   - base
   - various functions
   - ggplot2 (part of the tidyverse)
-  - qplot
+    - qplot
 
 the grammar of graphics
 ========================================================
 incremental: true
-- data
-- mappings (aesthetics)
-- geometry (points, lines, polygons)
-- statistics (binning)
+- layer
+  - data
+  - mappings (aesthetics)
+  - geometry (points, lines, polygons)
+  - statistics (binning)
+  - position
 - scales (colour, size, shape, axes)
 - coordinates (e.g. Cartesian)
 - faceting (multiple subsets; lattice)
-- layers ()
 
 ggplot2: the basics
 ========================================================
 incremental: true
-Some sort of introduction??
-ggplot v qplot?
 - scatterplot
 - boxplot
 - stacked bar
@@ -121,15 +123,17 @@ ggplot2: the basics - saving the figure
 ========================================================
 
 ```r
-pdf("plots.pdf")
+pdf("plots.pdf")            # saves to working directory
 ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) + 
-  geom_bar(stat="identity") # statistics modifies geom
-dev.off()
+  geom_bar(stat="identity") 
+dev.off()                   # turns graphing device off
 ```
 
 Basic exercises
 ========================================================
-With the trawl data, make the following (note, you may need to use data manipulation concepts from last week):
+- Load the trawl biomass data using readr.
+- Remove three of the species
+- Make a boxplot of biomass by year
 - save the file as a pdf
 
 
@@ -155,7 +159,7 @@ ggplot2: intermediate - make an object....then add more grammar
 
 ```r
 p <- ggplot(data=mtcars, aes(x = mpg, y = disp)) 
-p + geom_point(shape=21, size=1.5, colour = "red")  # change the scales
+p + geom_point(shape=20, size=2.5, colour = "red")  # change the scales
 ```
 
 <img src="intro-figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="1040px" height="650px" />
@@ -165,7 +169,7 @@ ggplot2: intermediate - then add more grammar
 
 ```r
 p <- ggplot(data=mtcars, aes(x = mpg, y = disp, colour = cyl)) 
-p + geom_point(shape=21, size=1.5) +  # change the object
+p + geom_point(shape=20, size=2.5) +  # change the object
   ylab("Displacement (cu. in)") +     # change label of y-axis
   xlab("Miles per gallon") +          # change label of x-axis
   labs(fill = "Number of cylinders")  # change label of legend
@@ -190,7 +194,11 @@ ggplot(data=mtcars, aes(x= cyl, y=mpg, fill=am)) +
 
 Intermediate exercises
 ========================================================
-This needs work
+- Use either the trawl abiotic or biomass data and create a chart
+- Then, make it publication quality 
+  - change the axis label
+  - change the background
+- save it as a pdf or other file type
 
 ggplot2: advanced stuff
 ========================================================
@@ -204,13 +212,6 @@ incremental: true
 ggplot2 and the tidyverse
 ========================================================
 
-```r
-data(diamonds)
-View(diamonds)
-```
-
-ggplot2 and the tidyverse
-========================================================
 
 ```r
 diamonds %>%                  # Start with the 'diamonds' dataset
@@ -249,13 +250,15 @@ ggplot2 and layers
 
 ```r
 # one layer
-ggplot(data = diamonds,                           # the data and mapping/aesthetics
+ggplot(data = diamonds,               # the data and mapping/aesthetics
        aes(x = carat, y = price, colour = cut)) + 
-  geom_point()                                    # the point layer
+        geom_point()                  # the point layer
 ```
 
 <img src="intro-figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" width="1040px" height="650px" />
 
+ggplot2 and layers
+========================================================
 
 ```r
 # one layer but with data specific to layer
@@ -277,28 +280,6 @@ ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) + # the data an
 ```
 
 <img src="intro-figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" width="1040px" height="650px" />
-
-ggplot2 and layers
-========================================================
-
-```r
-ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
-```
-
-<img src="intro-figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="1040px" height="650px" />
-
-```r
-ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) + # the data and mapping/aesthetics
-  geom_point() +                                                    # the point layer
-  geom_smooth()                                                    # the line layer
-```
-
-<img src="intro-figure/unnamed-chunk-17-2.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="1040px" height="650px" />
-
-```r
-#note that the point and line layer use the diamond data - they don't have to.
-# show caribou graph
-```
 
 ggplot2 and layers
 ========================================================
@@ -329,19 +310,26 @@ caribou graph
 ggplot2 and multiple plots
 ========================================================
 
+
 Advanced exercises
 ========================================================
-Needs work
+ - Using one of the trawl data sets, use pipes to modify the data and make a figure with at least two layers
+ - Trying adding layers in two different ways
 
 Help
 ========================================================
-Books
+Books on ggplot:
 - Chang, W. 2013. R Graphics Cookbook. O'Reilly
 - Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer.
-- Tufte, E.R. The visual display of quantitative information.  (theoretical foundation)
+
+Theoretical foundation:
+- Tufte, E.R. The visual display of quantitative information.  
+- Wilkinson, L. 2005. The grammar of graphics. Springer.
 
 Websites:
 http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+http://ggplot.yhathq.com/
+https://rpubs.com/hadley/ggplot2-layers [for understanding layers]
 
 Papers:
 Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601.
