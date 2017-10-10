@@ -15,11 +15,15 @@ library(knitr)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+suppressWarnings(library(plotly))
+data(mtcars)
+data(diamonds)
+data(mpg)
 knitr::opts_knit$set(root.dir = '../')
 knitr::opts_chunk$set(cache = TRUE, 
                       fig.align = "center", 
-                      fig.height = 3.7, 
-                      fig.width = 8,
+                      fig.height = 4.5, 
+                      fig.width = 7.5,
                       dev = "svg")
 # 1. Introduction to ggplot ####
 ```
@@ -30,29 +34,33 @@ knitr::opts_chunk$set(cache = TRUE,
 - Arguements
     - `gather(data = dune_sp, key=species, value = "cover_class", Achimill:Callcusp)` or
     - `gather(dune_sp, species, "cover_class", Achimill:Callcusp)`
-- Use the editor and pass to consol with Ctrl-enter
+- Use the editor and pass to consol with Ctrl-Enter
 - The cheatsheets
 
 
 ## Outline
-- Plotting options
-- Grammar of graphics
-- ggplot2: the basics
-- ggplot2: intermediate
-- ggplot2: advanced stuff
-- Cookbook for R
+
+>- Plotting options
+>- Grammar of graphics
+>- ggplot2: the basics
+>- ggplot2: intermediate
+>- ggplot2: advanced stuff
+>- Cookbook for R
 
 ## Plotting options
+
+*"The greatest value of a picture is when it forces us to notice what we never expected to see."* — John Tukey
+
 - spreadsheets, e.g., Excel (hint: it sucks!)
-- stand alone packages, e.g., Sigma Plot
-- other stats packages, e.g., SAS
+- stand alone program, e.g., Sigma Plot
+- other stats programs, e.g., SAS
 - R
     - base
     - various functions
     - ggplot2 (part of the tidyverse)
-        - qplot
 
-## the grammar of graphics
+## Grammar of graphics
+
 - layer
     - data
     - mappings (aesthetics)
@@ -64,67 +72,82 @@ knitr::opts_chunk$set(cache = TRUE,
 - faceting (multiple subsets; lattice)
 
 ## ggplot2: the basics
-- scatterplot
-- boxplot
-- stacked bar
-- saving the output
 
-## ggplot2: the basics - mtcars
-```{r, echo=TRUE}
+>- data (e.g. mtcars)
+>- scatterplot
+>- boxplot
+>- stacked bar
+>- saving the output
+>- exercises
+
+## ggplot2: the basics - data  {.smaller}
+
+```{r}
 str(mtcars)
 mtcars$am <- as.factor(mtcars$am)
 mtcars$cyl <- as.factor(mtcars$cyl)
 ```
 
 ## ggplot2: the basics - scatterplot
-```{r, echo=TRUE}
+
+```{r}
 ggplot(data = mtcars, aes(x = mpg, y = disp)) + geom_point()
 ```
 
 ## ggplot2: the basics - box-whisker plot
-```{r, fig.align="center"}
+
+```{r}
 ggplot(data = mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
 ```
 
 ## ggplot2: the basics - stacked bargraph
-```{r, echo=TRUE}
+
+```{r}
 ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
   geom_bar(stat = "identity") # statistics modifies geom
 ```
 
 ## ggplot2: the basics - saving the figure
-```{r, results = "hide", echo=TRUE}
-pdf("plots.pdf")            # saves to working directory
+
+```{r, eval=FALSE}
 ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
   geom_bar(stat = "identity")
-dev.off()                   # turns graphing device off
+ggsave("plot.pdf")               # saves to working directory
 ```
 
-## Basic exercises
-- Load the trawl biomass data using readr.
-- Remove three of the species
-- Make a boxplot of biomass by year
-- save the file as a pdf
+## ggplot2: the basics - exercises
 
-## ggplot2: intermediate - move away from defaults to publication quality
+>- Load the trawl biomass data using readr.
+>- Make a boxplot of biomass by year
+>- save the file as a pdf
+
+## ggplot2: intermediate
+
+Move away from defaults to publication quality
+
+- build upon an object
 - change size, colour, and shape
 - axes
 - legends
+- themes
 
 ## ggplot2: intermediate - make an object
-```{r, echo=TRUE}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 p <- ggplot(data = mtcars, aes(x = mpg, y = disp))
 p + geom_point()
 ```
 
-## ggplot2: intermediate - make an object....then add more grammar
-```{r, echo=TRUE}
+## ggplot2: intermediate - object + more grammar
+
+```{r, fig.height=3.5, fig.width = 6.5}
 p <- ggplot(data = mtcars, aes(x = mpg, y = disp))
 p + geom_point(shape = 20, size = 2.5, colour = "red")  # change the scales
 ```
 
-## ggplot2: intermediate - then add more grammar
-```{r, echo=TRUE}
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 p <- ggplot(data = mtcars, aes(x = mpg, y = disp, colour = cyl))
 p + geom_point(shape = 20, size = 2.5) +  # change the object
   ylab("Displacement (cu. in)") +         # change label of y-axis
@@ -132,45 +155,45 @@ p + geom_point(shape = 20, size = 2.5) +  # change the object
   labs(fill = "Number of cylinders")      # change label of legend
 ```
 
-## ggplot2: intermediate - and still more grammar
-```{r, results = "hide", echo=TRUE}
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
   geom_bar(stat = "identity") +
   ylab("Number of cylinders") +
   xlab("Miles per gallon") +
   labs(fill = "Automatic/\nManual") +      # \n ~ "return"
   scale_fill_brewer(palette = "Pastel1") + # change bar colours
-  theme_bw()                               # change background
+  theme_bw()                               # change theme
 ```
 
-## Intermediate exercises
-- Use either the trawl abiotic or biomass data and create a chart
-- Then, make it publication quality
-     - change the axis label
-     - change the background
-- save it as a pdf or other file type
+## ggplot2: intermediate - exercises
+
+>- Use either the trawl abiotic or biomass data and create a chart
+>- Then, make it publication quality (change the axis label, theme, etc.)
+>- save it as a pdf or other file type
 
 ## ggplot2: advanced stuff
-- tidyverse
-- facets
-- maps
-- working with layers
-- multiple plots
 
-## ggplot2 and the tidyverse
-```{r, resuls = "hide", echo=FALSE}
-data(diamonds)
-View(diamonds)
-```
-```{r, echo=TRUE}
+>- tidyverse
+>- facets
+>- maps
+>- working with layers
+>- multiple plots
+>- interactive plots
+
+## ggplot2: advanced stuff - the tidyverse {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 diamonds %>%                  # Start with the 'diamonds' dataset
   filter(cut == "Ideal") %>%  # Then, filter down to rows where cut == Ideal
   ggplot(aes(price)) +        # Then, determine aes
     geom_histogram()          # plot histograms
 ```
 
-## ggplot2 and the tidyverse and facets
-```{r, echo=TRUE}
+## ggplot2: advanced stuff - tidyverse and facets {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 diamonds %>%                   # Start with the 'diamonds' dataset
   filter(cut == "Ideal") %>%   # Then, filter down to rows where cut == Ideal
   ggplot(aes(price)) +         # Then, determine aes
@@ -178,14 +201,16 @@ diamonds %>%                   # Start with the 'diamonds' dataset
     facet_wrap(~ color)        # in plots by 'color'
 ```
 
-## ggplot2 and layers
-```{r, echo=TRUE}
+## ggplot2: advanced stuff - layers
+
+```{r, fig.height=3.5, fig.width = 6.5}
 # no layers
 ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
 ```
 
-## ggplot2 and layers
-```{r, echo=TRUE}
+## ggplot2: advanced stuff - layers {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 # one layer
 ggplot(data = diamonds,               # the data and mapping/aesthetics
        aes(x = carat, y = price, colour = cut)) +
@@ -193,23 +218,26 @@ ggplot(data = diamonds,               # the data and mapping/aesthetics
 
 ```
 
-## ggplot2 and layers
-```{r, echo=TRUE}
+## ggplot2: advanced stuff - layers {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 # one layer but with data specific to layer
 ggplot() +                              # the data and mapping/aesthetics
   geom_point(data = diamonds,           # the point layer
              aes(x = carat, y = price, colour = cut))                                                   #
 ```
 
-## ggplot2 and layers
-```{r, echo=TRUE}
+## ggplot2: advanced stuff - layers {.smaller}
+
+```{r, fig.height=3.5, fig.width = 6.5}
 # two layers
 ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) +  # the data and mapping/aesthetics
   geom_point() +                                                    # the point layer
   geom_smooth()                                                     # the line layer
 ```
 
-## ggplot2 and layers
+## ggplot2: advanced stuff - layers
+
 this is not the right code
 p <- ggplot (dfs.sa2, aes(x=Year, y=s, group=StudyArea, fill=StudyArea)) #data and aes
 
@@ -234,30 +262,45 @@ type: section
 </div>
 
 
-## ggplot2 and multiple plots
-```{r, echo=TRUE}
+## ggplot2: advanced stuff - multiple plots
+
+```{r}
 
 ```
 
-## Advanced exercises
-- Using one of the trawl data sets, use pipes to modify the data and make a figure with at least two layers
-- Trying adding layers in two different ways
 
-## Help
+## ggplot2: advanced stuff - interactive plots
+
+```{r}
+p <- ggplot(data = mtcars, aes(x = mpg, y = disp, colour = cyl)) + geom_point()
+ggplotly(p)
+```
+
+
+## ggplot2: advanced stuff - exercises
+
+>- Using one of the trawl data sets, use pipes to modify the data and make a figure with at least two layers
+>- Trying adding layers in two different ways
+
+## Help {.smaller}
+
 Books on ggplot:
-- Chang, W. 2013. R Graphics Cookbook. O'Reilly
-- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer.
+
+>- Chang, W. 2013. R Graphics Cookbook. O'Reilly
+>- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer.
 
 Theoretical foundation:
-- Tufte, E.R. The visual display of quantitative information.
-- Wilkinson, L. 2005. The grammar of graphics. Springer.
+
+>- Tufte, E.R. The visual display of quantitative information.
+>- Wilkinson, L. 2005. The grammar of graphics. Springer.
 
 Websites:
-http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
-http://ggplot.yhathq.com/
-https://rpubs.com/hadley/ggplot2-layers [for understanding layers]
+
+>- http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
+>- http://ggplot.yhathq.com/
+>- https://rpubs.com/hadley/ggplot2-layers [for understanding layers]
 
 Papers:
-Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601.
-https://rpubs.com/hadley/ggplot2-layers
+
+>- Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601. https://rpubs.com/hadley/ggplot2-layers
 
