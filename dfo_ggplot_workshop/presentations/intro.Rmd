@@ -10,16 +10,11 @@ output:
 ---
 
 
-```{r setup, echo=FALSE, results="hide", message=FALSE, warnings=FALSE}
+```{r setup, echo=FALSE, results="hide", message=FALSE}
 library(knitr)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
-library(cowplot)
-suppressWarnings(library(plotly))
-data(mtcars)
-data(diamonds)
-data(mpg)
 knitr::opts_knit$set(root.dir = '../')
 knitr::opts_chunk$set(cache = TRUE, 
                       fig.align = "center", 
@@ -94,54 +89,65 @@ file.exists("data/trawl_biomass.csv")
 
 ## ggplot2: the basics
 
->- data (e.g. mtcars)
+>- data
 >- scatterplot
 >- boxplot
 >- stacked bar
 >- saving the output
 >- exercises
 
-## ggplot2: the basics - data  {.smaller}
+## ggplot2: the basics - data {.build}
 
-```{r}
-str(mtcars)
-mtcars$am <- as.factor(mtcars$am)
-mtcars$cyl <- as.factor(mtcars$cyl)
+>- A prerequisite for plotting in R is reading your data into R
+
+```{r, message=FALSE}
+
+library(readr)
+abiotic <- read_csv("data/trawl_abiotic.csv", guess_max = 5000)
+head(abiotic)
+
 ```
 
-## ggplot2: the basics - scatterplot
+## ggplot2: the basics - scatterplot  {.build}
 
-```{r}
-ggplot(data = mtcars, aes(x = mpg, y = disp)) + geom_point()
+```{r, warning=FALSE, fig.width=4.5}
+ggplot(data = abiotic, aes(x = temp_bottom, y = depth)) + geom_point()
 ```
 
-## ggplot2: the basics - box-whisker plot
+## ggplot2: the basics - box-whisker plot  {.build}
 
-```{r}
-ggplot(data = mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
+```{r, warning = FALSE}
+ggplot(data = abiotic, aes(x = nafo_div, y = temp_bottom)) + geom_boxplot()
 ```
 
-## ggplot2: the basics - stacked bargraph
+## ggplot2: the basics - stacked bargraph  {.build}
 
 ```{r}
-ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
-  geom_bar(stat = "identity") # statistics modifies geom
+ggplot(data = abiotic, aes(x = year, fill = nafo_div)) +
+  geom_bar(stat = "count") # statistics modifies geom
 ```
 
-## ggplot2: the basics - saving the figure
+## ggplot2: the basics - saving the figure 
 
 ```{r, eval=FALSE}
-ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
-  geom_bar(stat = "identity")
-ggsave("plot.pdf")               # saves to working directory
+ggplot(data = abiotic, aes(x = year, fill = nafo_div)) +
+  geom_bar(stat = "count")     # statistics modifies geom
+ggsave("plot.pdf")             # saves to working directory
+ggsave("plot.png", dpi = 600)
 ```
 
-## ggplot2: the basics - exercises
+>- Easy to export publication quality vector (e.g. "pdf") or high-resolution raster (e.g. "png") figures
 
->- Load the trawl biomass data using readr.
->- Select year, trawl_id, and one species
->- Make a boxplot of biomass by year
->- save the file as a pdf
+
+## ggplot2: the basics - exercises 
+
+>- Load the trawl biomass data using readr
+>- Replicate the plot below and save the file as a pdf
+
+```{r, message=FALSE, echo=FALSE}
+biomass <- read_csv("data/trawl_biomass.csv")
+ggplot(data = biomass, aes(x = factor(year), y = shrimp)) + geom_boxplot()
+```
 
 ## ggplot2: intermediate
 
@@ -153,40 +159,39 @@ Move away from defaults to publication quality
 - legends
 - themes
 
-## ggplot2: intermediate - make an object
+## ggplot2: intermediate - object + geom {.build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
-p <- ggplot(data = mtcars, aes(x = mpg, y = disp))
-p + geom_point()
+```{r, fig.height=4.5, fig.width = 4, warning=FALSE}
+p <- ggplot(data = abiotic)
+p + geom_point(aes(x = temp_bottom, y = depth))
 ```
 
-## ggplot2: intermediate - object + more grammar
+## ggplot2: intermediate - object + alternate aes {.build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
-p <- ggplot(data = mtcars, aes(x = mpg, y = disp))
-p + geom_point(shape = 20, size = 2.5, colour = "red")  # change the scales
+```{r, fig.height=4.5, fig.width = 4, warning=FALSE}
+p + geom_point(aes(x = temp_bottom, y = depth, colour = nafo_div))
 ```
 
-## ggplot2: intermediate - object + more grammar {.smaller}
+## ggplot2: intermediate - object + more grammar {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
-p <- ggplot(data = mtcars, aes(x = mpg, y = disp, colour = cyl))
-p + geom_point(shape = 20, size = 2.5) +  # change the object
-  ylab("Displacement (cu. in)") +         # change label of y-axis
-  xlab("Miles per gallon") +              # change label of x-axis
-  labs(fill = "Number of cylinders")      # change label of legend
+```{r, fig.height=3.5, fig.width = 4, warning=FALSE}
+p <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))
+p + geom_point(shape = 16, size = 1, alpha = 0.5) +  # change the geom
+  ylab("Depth (m)") +                                # change label of y-axis
+  xlab("Temperature (°C)") +                         # change label of x-axis
+  labs(colour = "NAFO")                              # change label of legend
 ```
 
-## ggplot2: intermediate - object + more grammar {.smaller}
+## ggplot2: intermediate - object + more grammar {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
-ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
-  geom_bar(stat = "identity") +
-  ylab("Number of cylinders") +
-  xlab("Miles per gallon") +
-  labs(fill = "Automatic/\nManual") +      # \n ~ "return"
-  scale_fill_brewer(palette = "Pastel1") + # change bar colours
-  theme_bw()                               # change theme
+```{r, fig.height=3.5, fig.width = 4, warning=FALSE}
+p <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))
+p + geom_point(shape = 16, size = 1, alpha = 0.5) +                      # change the geom
+  ylab("Depth (m)") + xlab("Temperature (°C)") + labs(colour = "NAFO") + # change labels
+  scale_y_reverse(limits = c(750, 0)) +                                  # reverse y-axis and impose limits
+  scale_x_continuous(position = "top") +                                 # place x-axis on top of plot
+  scale_colour_brewer(palette = "Set1") +                                # change the colour palette
+  theme_bw()                                                             # change the theme
 ```
 
 ## ggplot2: intermediate - exercises
@@ -200,58 +205,56 @@ ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
 >- tidyverse & facets
 >- working with layers - the true power of ggplot!
 
-## ggplot2: advanced stuff - the tidyverse {.smaller}
+## ggplot2: advanced stuff - the tidyverse {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
-diamonds %>%                  # Start with the 'diamonds' dataset
-  filter(cut == "Ideal") %>%  # Then, filter down to rows where cut == Ideal
-  ggplot(aes(price)) +        # Then, determine aes
-    geom_histogram()          # plot histograms
+```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE}
+abiotic %>%                        # Start with the 'abiotic' dataset
+  filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J
+  ggplot(aes(temp_bottom)) +       # Then, determine aes
+    geom_histogram()               # plot histograms
 ```
 
-## ggplot2: advanced stuff - tidyverse and facets {.smaller}
+## ggplot2: advanced stuff - tidyverse and facets {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
-diamonds %>%                   # Start with the 'diamonds' dataset
-  filter(cut == "Ideal") %>%   # Then, filter down to rows where cut == Ideal
-  ggplot(aes(price)) +         # Then, determine aes
-    geom_histogram() +         # plot histograms
-    facet_wrap(~ color)        # in plots by 'color'
+```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE}
+abiotic %>%                        # Start with the 'abiotic' dataset
+  filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J
+  ggplot(aes(temp_bottom)) +       # Then, determine aes
+    geom_histogram() +             # plot histograms
+    facet_wrap(~ year)             # facet by year
 ```
 
-## ggplot2: advanced stuff - layers
+## ggplot2: advanced stuff - layers  {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
+```{r, fig.height=4, fig.width = 4, warning=FALSE}
 # no layers
-ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) # run this line - what happens?
+ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) # run this line - what happens?
 ```
 
-## ggplot2: advanced stuff - layers {.smaller}
+## ggplot2: advanced stuff - layers {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
+```{r, fig.height=4, fig.width = 4, warning=FALSE}
 # one layer
-ggplot(data = diamonds,               # the data and mapping/aesthetics
-       aes(x = carat, y = price, colour = cut)) +
-        geom_point()                  # the point layer
-
+ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) + # the data and aes
+  geom_point()                                                               # the point layer
 ```
 
-## ggplot2: advanced stuff - layers {.smaller}
+## ggplot2: advanced stuff - layers {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
+```{r, fig.height=4, fig.width = 4, warning=FALSE}
 # one layer but with data specific to layer
-ggplot() +                              
-  geom_point(data = diamonds,          # the data and mapping/aesthetics
-             aes(x = carat, y = price, colour = cut))   # the point layer                                 
+ggplot() +
+  geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))  # geom, data, aes 
+
 ```
 
-## ggplot2: advanced stuff - layers {.smaller}
+## ggplot2: advanced stuff - layers {.smaller .build}
 
-```{r, fig.height=3.5, fig.width = 6.5}
+```{r, fig.height=4, fig.width = 4, warning=FALSE}
 # two layers
-ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) +  # the data and mapping/aesthetics
-  geom_point() +                                                    # the point layer
-  geom_smooth()                                                     # the line layer
+ggplot() +
+  geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) +
+  geom_vline(aes(xintercept = 0), linetype = 2)
 ```
 
 ## ggplot2: advanced stuff - layers
@@ -267,11 +270,23 @@ Use Ale's example
 >- multiple plots
 >- maps
 
-## ggplot2: advanced stuff - interactive plots
+## ggplot2: advanced stuff - exercises
+
+>- Using one of the trawl data sets, use pipes to modify the data and make a figure with at least two layers
+>- Trying adding layers in two different ways
+
+## ggplot2: extensions
+
+>- multiple plots
+>- interactive plots
+>- maps
+
+
+## ggplot2: extensions - multiple plots
 
 ```{r}
-p <- ggplot(data = mtcars, aes(x = mpg, y = disp, colour = cyl)) + geom_point()
-ggplotly(p)
+
+
 ```
 
 ## ggplot2: advanced stuff - multiple plots
@@ -280,13 +295,51 @@ ggplotly(p)
 p1 <- ggplot(data = mtcars, aes(x = mpg, y = disp)) + geom_point()
 p2 <- ggplot(data = mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
 plot_grid(p1, p2, labels = c("A", "B"))
+## ggplot2: extensions - interactive plots  {.smaller .build}
+
+```{r, warning=FALSE, fig.height=3}
+p <- abiotic %>% 
+  left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data
+  ggplot(aes(x = depth, y = cod, colour = temp_bottom)) +  # set-up aes
+  geom_point(alpha = 0.5) + scale_y_sqrt() +               # sqrt scale to help see the data
+  scale_colour_viridis_c() + theme_minimal()               # set colour and theme
+p                                                          # print static plot
+
 ```
 
-## ggplot2: advanced stuff - maps
+## ggplot2: extensions - interactive plots {.smaller .build}
 
-```{r}
+```{r, warning=FALSE, fig.width=10}
+library(plotly)
+ggplotly(p)       # print interactive plot
+```
+
+
+
+## ggplot2: extensions - maps  {.smaller .build}
+
+```{r, warning=FALSE, message=FALSE}
+library(sf)
+strata <- read_sf("data/strata_boundaries/all_strata.shp", 
+                  layer = "all_strata")                     # import shapefile
+p <- abiotic %>%                                            # process abiotic data
+  filter(year == 2010) %>%                                  # filter to 2010 data
+  group_by(nafo_div, strata) %>%                            # set-up groups
+  summarise(sets = n()) %>%                                 # calculate number of sets by strat
+  left_join(strata, by = "strata") %>%                      # merge with sf object
+  filter(nafo_div == "3L") %>%                              # filter to 3L
+  ggplot(aes(fill = sets)) + geom_sf() +                    # start mapping
+  ggtitle("Sets conducted in 2010 in 3L by strata") +       # plot title
+  scale_fill_viridis_c() + theme_bw()                       # set colour and theme
 
 ```
+
+## ggplot2: extensions - maps  {.smaller .build}
+
+```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height = 4}
+p # print map
+```
+
 
 ## Help {.smaller}
 
