@@ -26,19 +26,18 @@ knitr::opts_chunk$set(cache = TRUE,
 
 
 ## Rstudio tips
-
 - Arguements
     - `gather(data = dune_sp, key=species, value = "cover_class", Achimill:Callcusp)` or
     - `gather(dune_sp, species, "cover_class", Achimill:Callcusp)`
 - Use the editor and pass to consol with Ctrl-Enter
 - The cheatsheets
 
-## Getting started 
+
+## Getting started {.build}
 Before we go:
 
-1. Have you got R installed? 
-2. Were you able to download the scripts and data we sent?
-3. Does the following code run without errors? 
+1. Were you able to download the scripts and data we sent?
+2. Does the following code run without errors? 
 
 ```{r startup, echo=TRUE, results='hide'}
 # setwd("c:/where_the_folder_is/")
@@ -47,11 +46,8 @@ library(readr)
 library(tidyr)
 library(dplyr)
 
-file.exists("data/mtcars.csv")
-file.exists("data/diamonds.csv")
 file.exists("data/trawl_abiotic.csv")
 file.exists("data/trawl_biomass.csv")
-
 ```
 
 ## Outline
@@ -61,6 +57,7 @@ file.exists("data/trawl_biomass.csv")
 >- ggplot2: the basics
 >- ggplot2: intermediate
 >- ggplot2: advanced stuff
+>- ggplot2: extensions
 >- Cookbook for R
 
 ## Plotting options
@@ -99,6 +96,7 @@ file.exists("data/trawl_biomass.csv")
 ## ggplot2: the basics - data {.build}
 
 >- A prerequisite for plotting in R is reading your data into R
+>- ggplot2 is built for tidy data
 
 ```{r, message=FALSE}
 
@@ -153,11 +151,11 @@ ggplot(data = biomass, aes(x = factor(year), y = shrimp)) + geom_boxplot()
 
 Move away from defaults to publication quality
 
-- build upon an object
-- change size, colour, and shape
-- axes
-- legends
-- themes
+>- build upon an object
+>- change size, colour, and shape
+>- axes
+>- legends
+>- themes
 
 ## ggplot2: intermediate - object + geom {.build}
 
@@ -257,23 +255,23 @@ ggplot() +
   geom_vline(aes(xintercept = 0), linetype = 2)
 ```
 
-## ggplot2: advanced stuff - layers
+## ggplot2: advanced stuff - layers {.smaller .build}
 
-Use Ale's example
+```{r}
+load("data/wdata.Rdata")
+w <- ggplot(adf, aes(length, weight, colour = as.factor(month)))
+w <- w + geom_point(alpha = 0.5)
+w <- w + geom_line(data = pdata, aes(length, predw, colour = as.factor(month)), size = 1.5)
+w <- w + labs(x = 'Length (cm)', y = 'Weight (kg)')
+w <- w + scale_colour_discrete(name = "",
+                               breaks = c("12", "1", "2"),
+                               labels = c("December", "January", "February"))
+w
+```
 
 ## ggplot2: advanced stuff - exercises
 
 >- Using the trawl data sets, use pipes to join the two data sets, modify the data, and make a figure with at least two layers
-
-## More advanced, really cool stuff!!!!!!
->- interactive plots
->- multiple plots
->- maps
-
-## ggplot2: advanced stuff - exercises
-
->- Using one of the trawl data sets, use pipes to modify the data and make a figure with at least two layers
->- Trying adding layers in two different ways
 
 ## ggplot2: extensions
 
@@ -282,22 +280,15 @@ Use Ale's example
 >- maps
 
 
-## ggplot2: extensions - multiple plots
-
-```{r}
-
-
+## ggplot2: extensions - multiple plots {.smaller .build}
+```{r, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth)) + geom_point()
+p2 <- ggplot(data = abiotic, aes(x = nafo_div, y = temp_bottom)) + geom_boxplot()
+cowplot::plot_grid(p1, p2, labels = c("A", "B"))
 ```
 
-## ggplot2: advanced stuff - multiple plots
-
-```{r}
-p1 <- ggplot(data = mtcars, aes(x = mpg, y = disp)) + geom_point()
-p2 <- ggplot(data = mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
-plot_grid(p1, p2, labels = c("A", "B"))
-## ggplot2: extensions - interactive plots  {.smaller .build}
-
-```{r, warning=FALSE, fig.height=3}
+## ggplot2: extensions - interactive plots {.smaller .build}
+```{r, warning=FALSE, message = FALSE, fig.height=3}
 p <- abiotic %>% 
   left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data
   ggplot(aes(x = depth, y = cod, colour = temp_bottom)) +  # set-up aes
@@ -308,7 +299,6 @@ p                                                          # print static plot
 ```
 
 ## ggplot2: extensions - interactive plots {.smaller .build}
-
 ```{r, warning=FALSE, fig.width=10}
 library(plotly)
 ggplotly(p)       # print interactive plot
@@ -331,7 +321,6 @@ p <- abiotic %>%                                            # process abiotic da
   ggplot(aes(fill = sets)) + geom_sf() +                    # start mapping
   ggtitle("Sets conducted in 2010 in 3L by strata") +       # plot title
   scale_fill_viridis_c() + theme_bw()                       # set colour and theme
-
 ```
 
 ## ggplot2: extensions - maps  {.smaller .build}
