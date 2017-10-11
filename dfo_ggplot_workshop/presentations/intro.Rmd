@@ -15,6 +15,7 @@ library(knitr)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+library(cowplot)
 suppressWarnings(library(plotly))
 data(mtcars)
 data(diamonds)
@@ -37,6 +38,26 @@ knitr::opts_chunk$set(cache = TRUE,
 - Use the editor and pass to consol with Ctrl-Enter
 - The cheatsheets
 
+## Getting started 
+Before we go:
+
+1. Have you got R installed? 
+2. Were you able to download the scripts and data we sent?
+3. Does the following code run without errors? 
+
+```{r startup, echo=TRUE, results='hide'}
+# setwd("c:/where_the_folder_is/")
+
+library(readr)
+library(tidyr)
+library(dplyr)
+
+file.exists("data/mtcars.csv")
+file.exists("data/diamonds.csv")
+file.exists("data/trawl_abiotic.csv")
+file.exists("data/trawl_biomass.csv")
+
+```
 
 ## Outline
 
@@ -118,6 +139,7 @@ ggsave("plot.pdf")               # saves to working directory
 ## ggplot2: the basics - exercises
 
 >- Load the trawl biomass data using readr.
+>- Select year, trawl_id, and one species
 >- Make a boxplot of biomass by year
 >- save the file as a pdf
 
@@ -175,12 +197,8 @@ ggplot(data = mtcars, aes(x = cyl, y = mpg, fill = am)) +
 
 ## ggplot2: advanced stuff
 
->- tidyverse
->- facets
->- maps
->- working with layers
->- multiple plots
->- interactive plots
+>- tidyverse & facets
+>- working with layers - the true power of ggplot!
 
 ## ggplot2: advanced stuff - the tidyverse {.smaller}
 
@@ -222,9 +240,9 @@ ggplot(data = diamonds,               # the data and mapping/aesthetics
 
 ```{r, fig.height=3.5, fig.width = 6.5}
 # one layer but with data specific to layer
-ggplot() +                              # the data and mapping/aesthetics
-  geom_point(data = diamonds,           # the point layer
-             aes(x = carat, y = price, colour = cut))                                                   #
+ggplot() +                              
+  geom_point(data = diamonds,          # the data and mapping/aesthetics
+             aes(x = carat, y = price, colour = cut))   # the point layer                                 
 ```
 
 ## ggplot2: advanced stuff - layers {.smaller}
@@ -238,36 +256,16 @@ ggplot(data = diamonds, aes(x = carat, y = price, colour = cut)) +  # the data a
 
 ## ggplot2: advanced stuff - layers
 
-this is not the right code
-p <- ggplot (dfs.sa2, aes(x=Year, y=s, group=StudyArea, fill=StudyArea)) #data and aes
+Use Ale's example
 
-p +  geom_errorbar(position = pd, width=0.1, colour="black", aes(ymin=sLL, ymax=sUL)) + 	#plot bars
-geom_point (aes(fill=StudyArea), position = pd, shape=22, size=4) + #plot points
-scale_fill_manual (name = "Study Area", values=cols, breaks = c("Middle Ridge 	North", "Middle Ridge South", "La Poile", "Northern Peninsula"), 	labels=studyarea, limits=c("Middle Ridge North", "Middle Ridge South", "La 	Poile", "Northern Peninsula")) + #specify colours
-ylab("Survival rate") + #label y-axis
-scale_y_continuous(limits=c(0,1)) + # set limits to y-axis
-theme_bw() + #change background to white
-opts(legend.justification=c(1,0), legend.position=c(.25,.75)) + #position legend
-ylim(0,1)  + # set limits to y-axis
-opts(axis.title.x = theme_text(size=16)) + #adjust the axis title
-opts(axis.title.y = theme_text(angle = 90, size=16)) + #adjust the axis title
-geom_text(aes(x=Year, y=sUL+0.05, label=n.animals), size=4, position = pd)
+## ggplot2: advanced stuff - exercises
 
-numbers over bars
+>- Using the trawl data sets, use pipes to join the two data sets, modify the data, and make a figure with at least two layers
 
-caribou graph
-type: section
-<div align="center">
-<img src="readr_hex.png" width=500 height=500>
-</div>
-
-
-## ggplot2: advanced stuff - multiple plots
-
-```{r}
-
-```
-
+## More advanced, really cool stuff!!!!!!
+>- interactive plots
+>- multiple plots
+>- maps
 
 ## ggplot2: advanced stuff - interactive plots
 
@@ -276,11 +274,19 @@ p <- ggplot(data = mtcars, aes(x = mpg, y = disp, colour = cyl)) + geom_point()
 ggplotly(p)
 ```
 
+## ggplot2: advanced stuff - multiple plots
 
-## ggplot2: advanced stuff - exercises
+```{r}
+p1 <- ggplot(data = mtcars, aes(x = mpg, y = disp)) + geom_point()
+p2 <- ggplot(data = mtcars, aes(x = cyl, y = mpg)) + geom_boxplot()
+plot_grid(p1, p2, labels = c("A", "B"))
+```
 
->- Using one of the trawl data sets, use pipes to modify the data and make a figure with at least two layers
->- Trying adding layers in two different ways
+## ggplot2: advanced stuff - maps
+
+```{r}
+
+```
 
 ## Help {.smaller}
 
@@ -299,6 +305,7 @@ Websites:
 >- http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
 >- http://ggplot.yhathq.com/
 >- https://rpubs.com/hadley/ggplot2-layers [for understanding layers]
+>- https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html
 
 Papers:
 
