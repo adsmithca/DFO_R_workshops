@@ -1,12 +1,14 @@
 ---
-title: "Plotting in the tidyverse: ggplot2"
+title: 'Plotting in the tidyverse: ggplot2'
 author: "Keith Lewis and Paul Regular"
 date: "NAFC | Fisheries and Oceans Canada | October 12, 2017"
-output: 
+output:
+  beamer_presentation:
+    incremental: yes
   ioslides_presentation:
-    incremental: true
-    widescreen: true
+    incremental: yes
     logo: ggplot2_hex.png
+    widescreen: yes
 ---
 
 
