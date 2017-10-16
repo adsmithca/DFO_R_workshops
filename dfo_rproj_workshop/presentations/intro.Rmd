@@ -1,0 +1,43 @@
+---
+title: "Project management: How to effectively organize a project in R"
+author: "Paul Regular and Keith Lewis"
+date: "NAFC | Fisheries and Oceans Canada | October 26, 2017"
+output: 
+  ioslides_presentation:
+    incremental: true
+    widescreen: true
+    logo: rproj.png
+---
+
+
+```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+knitr::opts_knit$set(root.dir = '../')
+knitr::opts_chunk$set(cache = TRUE, 
+                      fig.align = "center", 
+                      fig.height = 4.5, 
+                      fig.width = 7.5,
+                      dev = "svg")
+```
+
+
+## Objectives {.build}
+
+- Introduce the concept of a Research Compendium
+- Demonstrate the set-up and workflow of a compendium
+- Give a brief teaser of git and Rmarkdown
+
+## Research Compendium
+
+- What is it?
+    - A compendium is a convention for how to organize key files for a project (data, code, text, etc.) into directories
+- Why use one?
+    - Simplifies file management
+    - Streamlines analytical workflows
+    - More efficient for you, future you and your collaborators
+    - Reproducible and extensible
+
+## References
+
+- This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
+- For more details on building R packages, see: [Wickham, Hadley, R Packages: Organise, test, document, and share your code. O’Reilly.](http://r-pkgs.had.co.nz/)
+
