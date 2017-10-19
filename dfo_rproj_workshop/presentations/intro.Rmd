@@ -35,9 +35,135 @@ knitr::opts_chunk$set(cache = TRUE,
     - Streamlines analytical workflows
     - More efficient for you, future you and your collaborators
     - Reproducible and extensible
+- How should files be organized?
+    - Apply the conventions used for building an R package
+    
+## Getting started {.smaller}
+
+Use the `devtools` package to set-up the structure
+
+```{r, eval=FALSE}
+
+## Project path and name
+root_dir <- "examples"                                  # path to your project
+proj_name <- "skeleton"                                 # project name
+
+## Metadata for the project
+proj_metadata <- list("Title" = "Project title",
+                      "Authors@R" = person("First", "Last", 
+                                          email = "first.last@example.com", 
+                                          role = c("aut", "cre")),
+                      "Description" = "This is a research compendium for...",
+                      "License" = "NA")
+
+## Generate the skeleton for the project
+devtools::create(file.path(root_dir, proj_name),
+                 description = proj_metadata)           # generates a minimum R package skeleton
+devtools::use_git(pkg = file.path(root_dir, proj_name)) # Initalize local git repository
+dir.create(file.path(root_dir, proj_name, "data"))      # adds a data folder to the directory
+dir.create(file.path(root_dir, proj_name, "analysis"))  # adds an analysis folder to the directory
+
+```
+
+
+## Core structure {.smaller}
+
+Code on the last slide generates a structure similar to the one reccomended here: https://github.com/ropensci/rrrpkg
+
+```
+skeleton
+|
+|- skeleton.Rproj       # RStudio Rproj file; one file to rule them all
+|
+|- DESCRIPTION          # project metadata and dependencies 
+|
+|- data/                # raw data, not changed once created
+|  +- my_data.csv       # data files in open formats such as TXT, CSV, TSV, etc.
+|
+|- R/                   # reusable code
+|  +- my_functions.R    # custom R functions that are used more than once in the project
+|
+|- analysis/            # any programmatic code 
+|  +- my_scripts.R      # R code or R markdown files used to analyse and visualise data 
+
+```
+
+## Workflow - step 1 {.smaller}
+
+Setup the compendium
+
+```{r, eval=FALSE}
+
+## Project path and name
+root_dir <- "examples"                                  # path to your project
+proj_name <- "strat"                                    # project name
+
+## Metadata for the project
+proj_metadata <- list("Title" = "Stratified analysis of shrimp, cod, halibut and redfish population trends",
+                      "Authors@R" = c(person("Paul", "Regular", 
+                                             email = "Paul.Regular@dfo-mpo.gc.ca", 
+                                             role = c("aut", "cre")),
+                                      person("Keith", "Lewis", 
+                                             email = "Keith.Lewis@dfo-mpo.gc.ca", 
+                                             role = "aut")),
+                                      "Description" = "This is a research compendium for stratified
+                                                       analysis of shrimp population trends.",
+                                      "License" = "NA")
+
+## Generate the skeleton for the project
+devtools::create(file.path(root_dir, proj_name),
+                 description = proj_metadata)           # generates a minimum R package skeleton
+devtools::use_git(pkg = file.path(root_dir, proj_name)) # Initalize local git repository
+dir.create(file.path(root_dir, proj_name, "data"))      # adds a data folder to the directory
+dir.create(file.path(root_dir, proj_name, "analysis"))  # adds an analysis folder to the directory
+
+```
+
+## Workflow - step 2 {.build}
+
+Add the data
+
+```
+|- data/
+|-  +- trawl_abiotic.csv
+|-  +- trawl_biotic.csv
+
+```
+- These data should ramin static
+
+
+## Workflow - step 3
+
+Open `strat.Rproj` in RStudio
+- Workinig directory will automatically = project directory
+
+## Workflow - step 4 {.build}
+
+Save an R scritp in the analysis folder and start writing code to manipulate, visualize and model the data
+```
+|- analysis/
+|-   +- strat_analysis.R
+```
+- Work from the project directory (e.g. `read.csv("data/trawl_biotic.csv")`)
+- If your script grows too long, it may be useful to split and number scripts
+    ```
+    |- analysis/
+    |-   +- 001_manipulate.R
+    |-   +- 002_visualize.R
+    |-   +- 003_model.R
+    ```
+
+## Workflow - conditional steps
+
+- Functions (+ taking advantage of an R package setup)
+- Rmarkdown
+- git
+- TODO: add teaser slides on these topics
+
 
 ## References
 
-- This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
-- For more details on building R packages, see: [Wickham, Hadley, R Packages: Organise, test, document, and share your code. O’Reilly.](http://r-pkgs.had.co.nz/)
+> - This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
+> - For more details on building R packages, see: [Wickham, Hadley, R Packages: Organise, test, document, and share your code. O'Reilly.](http://r-pkgs.had.co.nz/)
+> - Keep an eye on in development packages to simplify reproducable research in R: https://github.com/benmarwick/rrtools
 
