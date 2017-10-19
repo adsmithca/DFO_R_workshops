@@ -19,6 +19,28 @@ knitr::opts_chunk$set(cache = TRUE,
                       dev = "svg")
 ```
 
+## Examples of what not to do!!!
+- uncommented code; write for yourself 6 mo. from now
+- long chunks of code
+- all files in one folder
+- don't use functions
+- lots of versions of a file
+- no metadata
+- no documentation of file/folder structure
+- cut/paste results into MS WORD
+Note: may want to add screenshots of above
+## Best practices
+- uncommented code; write for yourself 6 mo. from now
+- long chunks of code; split code into tasks
+- all files in one folder; folder for similar file types
+- don't use functions; use'em
+- lots of versions of a file; version control
+- no metadata; make metadata
+- no documentation of file/folder structure; README files
+- cut/paste results into MS WORD; use markdown
+
+## Outline of next 4 weeks
+use figure
 
 ## Objectives {.build}
 
@@ -161,6 +183,14 @@ Save an R scritp in the analysis folder and start writing code to manipulate, vi
 - TODO: add teaser slides on these topics
 
 
+
+## Exercises
+- Create a project folder and an RProj
+- Add subfolders
+- Write a script to:
+  - subset some data
+  - make some figures
+  - save to a folder
 ## References
 
 > - This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
