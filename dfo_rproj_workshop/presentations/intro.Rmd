@@ -191,6 +191,8 @@ Save an R scritp in the analysis folder and start writing code to manipulate, vi
   - subset some data
   - make some figures
   - save to a folder
+  
+
 ## References
 
 > - This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
