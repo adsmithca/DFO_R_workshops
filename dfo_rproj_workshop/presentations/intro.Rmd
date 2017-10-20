@@ -24,60 +24,35 @@ knitr::opts_chunk$set(cache = TRUE,
 
 ## Uncommented code
 
-```{r, echo=FALSE, fig.align="left", out.width="50%"}
-knitr::include_graphics("screenshots/uncommented.png")
-```
+<img src="screenshots/uncommented.png" width="55%" />
 
 ## Long chunks of code
 
-```{r, echo=FALSE, fig.align="left", out.width="22%"}
-knitr::include_graphics("screenshots/LONG.png")
-```
+<img src="screenshots/LONG.png" width="22%" />
 
 ## Inconsistent style
 
-```{r, echo=FALSE, fig.align="left", out.width="100%"}
-knitr::include_graphics("screenshots/poor_style.png")
-```
+<img src="screenshots/poor_style.png" width="100%" />
 
 ## All files in one folder
 
-```{r, echo=FALSE, fig.align="left"}
-knitr::include_graphics("screenshots/many_files.png")
-```
+<img src="screenshots/many_files.png" width="65%" />
 
 ## No metadata and/or project description
 
-```{r, echo=FALSE, fig.align="left", out.width="85%"}
-knitr::include_graphics("screenshots/no_metadata.png")
-```
+<img src="screenshots/no_metadata.png" width="85%" />
 
 ## Repeating yourself (copy/paste, copy/paste, ...)
 
-```{r, echo=FALSE, fig.align="left", out.width="100%"}
-knitr::include_graphics("screenshots/repeat.png")
-```
+<img src="screenshots/repeat.png" width="100%" />
 
 ## Copy/paste results into MS WORD
 
-```{r, echo=FALSE, fig.align="left", out.width="85%"}
-knitr::include_graphics("screenshots/word_whoops.png")
-```
+<img src="screenshots/word_whoops.png" width="85%" />
 
 ## Lots of versions of a file
 
-<div class="columns-2">
-
-```{r, echo=FALSE, fig.align="left", out.width="100%"}
-knitr::include_graphics("screenshots/many_versions.png")
-```
-
-
-```{r, echo=FALSE, fig.align="center", out.width="70%"}
-knitr::include_graphics("http://phdcomics.com/comics/archive/phd101212s.gif")
-```
-
-</div>
+<img src="screenshots/many_versions.png" width="52%" />  <img src="http://phdcomics.com/comics/archive/phd101212s.gif" width="37%" />
 
 ## Best practices
 
@@ -122,7 +97,7 @@ Use the `devtools` package to set-up the structure
 ```{r, eval=FALSE}
 
 ## Project path and name
-root_dir <- "examples"                                  # path to your project
+root_dir <- "."                                         # path to your project
 proj_name <- "skeleton"                                 # project name
 
 ## Metadata for the project
@@ -145,7 +120,7 @@ dir.create(file.path(root_dir, proj_name, "analysis"))  # adds an analysis folde
 
 ## Core structure {.smaller}
 
-Code on the last slide generates a structure similar to the one reccomended here: https://github.com/ropensci/rrrpkg
+Code on the last slide generates a structure similar to the one recommended here: https://github.com/ropensci/rrrpkg
 
 ```
 skeleton
@@ -165,6 +140,7 @@ skeleton
 
 ```
 
+
 ## Workflow - step 1 {.smaller}
 
 Setup the compendium
@@ -172,16 +148,14 @@ Setup the compendium
 ```{r, eval=FALSE}
 
 ## Project path and name
-root_dir <- "examples"                                  # path to your project
+root_dir <- "."                                         # path to your project
 proj_name <- "strat"                                    # project name
 
 ## Metadata for the project
 proj_metadata <- list("Title" = "Stratified analysis of shrimp, cod, halibut and redfish population trends",
-                      "Authors@R" = c(person("Paul", "Regular", 
-                                             email = "Paul.Regular@dfo-mpo.gc.ca", 
+                      "Authors@R" = c(person("Paul", "Regular", email = "Paul.Regular@dfo-mpo.gc.ca", 
                                              role = c("aut", "cre")),
-                                      person("Keith", "Lewis", 
-                                             email = "Keith.Lewis@dfo-mpo.gc.ca", 
+                                      person("Keith", "Lewis", email = "Keith.Lewis@dfo-mpo.gc.ca", 
                                              role = "aut")),
                                       "Description" = "This is a research compendium for stratified
                                                        analysis of shrimp population trends.",
@@ -196,7 +170,7 @@ dir.create(file.path(root_dir, proj_name, "analysis"))  # adds an analysis folde
 
 ```
 
-## Workflow - step 2 {.build}
+## Workflow - step 2
 
 Add the data
 
@@ -206,17 +180,18 @@ Add the data
 |-  +- trawl_biotic.csv
 
 ```
-- These data should ramin static
+- These data should remain static
 
 
 ## Workflow - step 3
 
 Open `strat.Rproj` in RStudio
-- Workinig directory will automatically = project directory
 
-## Workflow - step 4 {.build}
+- Working directory will automatically = project directory
 
-Save an R scritp in the analysis folder and start writing code to manipulate, visualize and model the data
+## Workflow - step 4
+
+Save an R script in the analysis folder and start writing code
 ```
 |- analysis/
 |-   +- strat_analysis.R
@@ -230,7 +205,7 @@ Save an R scritp in the analysis folder and start writing code to manipulate, vi
     |-   +- 003_model.R
     ```
 
-## Workflow - conditional steps
+## Extras
 
 - Functions (+ taking advantage of an R package setup)
 - Rmarkdown
@@ -238,15 +213,16 @@ Save an R scritp in the analysis folder and start writing code to manipulate, vi
 - TODO: add teaser slides on these topics
 
 
-
 ## Exercises
-- Create a project folder and an RProj
-- Add subfolders
-- Write a script to:
-  - subset some data
-  - make some figures
-  - save to a folder
-  
+
+- Set-up a research compendium for an analysis of habitat (depth and/or temperature) associations for shrimp, cod, halibut and/or redfish
+    - Modify the metadata
+    - Add the the biotic and abiotic csv files to the data folder
+    - Write a script to:
+        - Merge biotic and abiotic datasets
+        - Make and export some figures
+- For the adventurous: convert one of your projects to a compendium
+
 
 ## References
 
