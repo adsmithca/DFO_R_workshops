@@ -19,34 +19,89 @@ knitr::opts_chunk$set(cache = TRUE,
                       dev = "svg")
 ```
 
-## Examples of what not to do!!!
-- uncommented code; write for yourself 6 mo. from now
-- long chunks of code
-- all files in one folder
-- don't use functions
-- lots of versions of a file
-- no metadata
-- no documentation of file/folder structure
-- cut/paste results into MS WORD
-Note: may want to add screenshots of above
-## Best practices
-- uncommented code; write for yourself 6 mo. from now
-- long chunks of code; split code into tasks
-- all files in one folder; folder for similar file types
-- don't use functions; use'em
-- lots of versions of a file; version control
-- no metadata; make metadata
-- no documentation of file/folder structure; README files
-- cut/paste results into MS WORD; use markdown
 
-## Outline of next 4 weeks
-use figure
+# Examples of what not to do!!!
+
+## Uncommented code
+
+```{r, echo=FALSE, fig.align="left", out.width="50%"}
+knitr::include_graphics("screenshots/uncommented.png")
+```
+
+## Long chunks of code
+
+```{r, echo=FALSE, fig.align="left", out.width="22%"}
+knitr::include_graphics("screenshots/LONG.png")
+```
+
+## Inconsistent style
+
+```{r, echo=FALSE, fig.align="left", out.width="100%"}
+knitr::include_graphics("screenshots/poor_style.png")
+```
+
+## All files in one folder
+
+```{r, echo=FALSE, fig.align="left"}
+knitr::include_graphics("screenshots/many_files.png")
+```
+
+## No metadata and/or project description
+
+```{r, echo=FALSE, fig.align="left", out.width="85%"}
+knitr::include_graphics("screenshots/no_metadata.png")
+```
+
+## Repeating yourself (copy/paste, copy/paste, ...)
+
+```{r, echo=FALSE, fig.align="left", out.width="100%"}
+knitr::include_graphics("screenshots/repeat.png")
+```
+
+## Copy/paste results into MS WORD
+
+```{r, echo=FALSE, fig.align="left", out.width="85%"}
+knitr::include_graphics("screenshots/word_whoops.png")
+```
+
+## Lots of versions of a file
+
+<div class="columns-2">
+
+```{r, echo=FALSE, fig.align="left", out.width="100%"}
+knitr::include_graphics("screenshots/many_versions.png")
+```
+
+
+```{r, echo=FALSE, fig.align="center", out.width="70%"}
+knitr::include_graphics("http://phdcomics.com/comics/archive/phd101212s.gif")
+```
+
+</div>
+
+## Best practices
+
+- Uncommented code; *Write for yourself 6 mo. from now*
+- Long chunks of code; *Split code into tasks*
+- Inconsistent style; *Suscribe to a style guide*
+- All files in one folder; *Nest similar file types in folders*
+- No metadata and/or project description; *Make a DESCRIPTION and README file*
+- Repeating yourself; *Use functions*
+- Copy/paste results into MS WORD; *Use Rmarkdown*
+- Lots of versions of a file; *Use a version control system (e.g. git)*
+
+## Workshop outline of next 4 weeks
+
+> - Today: Project management: how to effectively organize a project in R
+> - November 9th: The very basics of programming in R: functions, debugging, warnings and errors, tests, data types
+> - November 23rd: Rmarkdown and reproducible research
+> - December 7: Keeping track of your work using version control with git (not just for R users!)
 
 ## Objectives {.build}
 
 - Introduce the concept of a Research Compendium
 - Demonstrate the set-up and workflow of a compendium
-- Give a brief teaser of git and Rmarkdown
+- Give a brief teaser of custom functions, Rmarkdown and git
 
 ## Research Compendium
 
@@ -198,4 +253,5 @@ Save an R scritp in the analysis folder and start writing code to manipulate, vi
 > - This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
 > - For more details on building R packages, see: [Wickham, Hadley, R Packages: Organise, test, document, and share your code. O'Reilly.](http://r-pkgs.had.co.nz/)
 > - Keep an eye on in development packages to simplify reproducable research in R: https://github.com/benmarwick/rrtools
+> - Hadley Wickham's R style guide: http://adv-r.had.co.nz/Style.html
 
