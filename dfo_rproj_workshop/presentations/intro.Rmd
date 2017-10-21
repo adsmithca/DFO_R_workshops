@@ -97,14 +97,14 @@ Use the `devtools` package to set-up the structure
 ```{r, eval=FALSE}
 
 ## Project path and name
-root_dir <- "."                                         # path to your project
+root_dir <- "examples"                                  # path to your project
 proj_name <- "skeleton"                                 # project name
 
 ## Metadata for the project
 proj_metadata <- list("Title" = "Project title",
-                      "Authors@R" = person("First", "Last", 
-                                          email = "first.last@example.com", 
-                                          role = c("aut", "cre")),
+                      "Authors@R" = 'person("First", "Last", 
+                                            email = "first.last@example.com", 
+                                            role = c("aut", "cre"))',
                       "Description" = "This is a research compendium for...",
                       "License" = "NA")
 
@@ -148,18 +148,19 @@ Setup the compendium
 ```{r, eval=FALSE}
 
 ## Project path and name
-root_dir <- "."                                         # path to your project
-proj_name <- "strat"                                    # project name
+root_dir <- "examples"                                  # path to your project
+proj_name <- "basic"                                    # project name
 
 ## Metadata for the project
-proj_metadata <- list("Title" = "Stratified analysis of shrimp, cod, halibut and redfish population trends",
-                      "Authors@R" = c(person("Paul", "Regular", email = "Paul.Regular@dfo-mpo.gc.ca", 
-                                             role = c("aut", "cre")),
-                                      person("Keith", "Lewis", email = "Keith.Lewis@dfo-mpo.gc.ca", 
-                                             role = "aut")),
-                                      "Description" = "This is a research compendium for stratified
-                                                       analysis of shrimp population trends.",
-                                      "License" = "NA")
+proj_metadata <- list("Title" = "Trends in mean catch of redfish in the trawl survey",
+                      "Authors@R" = 'c(person("Paul", "Regular", email = "Paul.Regular@dfo-mpo.gc.ca", 
+                                              role = c("aut", "cre")),
+                                       person("Keith", "Lewis", email = "Keith.Lewis@dfo-mpo.gc.ca", 
+                                              role = "aut"))',
+                      "Description" = "This is a research compendium for the analysis of trends in 
+                                       mean catch of redfish in the trawl survey.",
+                      "License" = "NA",
+                      "Imports" = c("readr", "dplyr", "ggplot2"))
 
 ## Generate the skeleton for the project
 devtools::create(file.path(root_dir, proj_name),
@@ -177,7 +178,7 @@ Add the data
 ```
 |- data/
 |-  +- trawl_abiotic.csv
-|-  +- trawl_biotic.csv
+|-  +- trawl_biomass.csv
 
 ```
 - These data should remain static
@@ -194,9 +195,9 @@ Open `strat.Rproj` in RStudio
 Save an R script in the analysis folder and start writing code
 ```
 |- analysis/
-|-   +- strat_analysis.R
+|-   +- trend_analysis.R
 ```
-- Work from the project directory (e.g. `read.csv("data/trawl_biotic.csv")`)
+- Work from the project directory (e.g. `read.csv("data/trawl_biomass.csv")`)
 - If your script grows too long, it may be useful to split and number scripts
     ```
     |- analysis/
@@ -217,9 +218,9 @@ Save an R script in the analysis folder and start writing code
 
 - Set-up a research compendium for an analysis of habitat (depth and/or temperature) associations for shrimp, cod, halibut and/or redfish
     - Modify the metadata
-    - Add the the biotic and abiotic csv files to the data folder
+    - Add the the biomass and abiotic csv files to the data folder
     - Write a script to:
-        - Merge biotic and abiotic datasets
+        - Merge biomass and abiotic datasets
         - Make and export some figures
 - For the adventurous: convert one of your projects to a compendium
 
