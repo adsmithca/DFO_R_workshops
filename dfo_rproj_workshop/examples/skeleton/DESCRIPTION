@@ -1,0 +1,11 @@
+Package: skeleton
+Title: Project title
+Version: 0.0.0.9000
+Authors@R: person("First", "Last", 
+                  email = "first.last@example.com", 
+                  role = c("aut", "cre"))
+Description: This is a research compendium for...
+Depends: R (>= 3.3.2)
+License: NA
+Encoding: UTF-8
+LazyData: true
