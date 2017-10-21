@@ -2,3 +2,5 @@ presentations/*_files/
 presentations/*-figure/
 presentations/*.html
 presentations/*_cache/
+examples/*.git/
+examples/*.gitignore
