@@ -1,0 +1,12 @@
+Package: basic
+Title: Trends in mean catch of redfish in the trawl survey
+Version: 0.0.0.9000
+Authors@R: c(person("Paul", "Regular", email = "Paul.Regular@dfo-mpo.gc.ca", role = c("aut", "cre")),
+             person("Keith", "Lewis", email = "Keith.Lewis@dfo-mpo.gc.ca", role = "aut"))
+Description: This is a research compendium for the analysis of trends in 
+             mean catch of redfish in the trawl survey.
+Depends: R (>= 3.3.2)
+License: NA
+Encoding: UTF-8
+LazyData: true
+Imports: readr, dplyr, ggplot2
