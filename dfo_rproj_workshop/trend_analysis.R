@@ -1,6 +1,8 @@
 
 ## Load packages
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
 
 ## Import trawl data
 biomass <- read_csv("data/trawl_biomass.csv")
