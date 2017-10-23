@@ -49,4 +49,6 @@ plot_trends(biomass, species = "halibut")
 
 ```{r}
 plot_trends(biomass, species = "redfish")
+## bla
+#bla
 ```

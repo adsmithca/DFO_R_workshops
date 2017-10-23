@@ -295,7 +295,7 @@ And another, called `plot_trends`, for plotting the results
 
 - Place reusable functions in the `R/` folder
 - They will simplify the scripts in your `analysis/` folder
-- For example, placing the abovementioned functions in `R/trend_fun.R` simplifies `analysis/trend_analysis.R` to:
+- For example, placing the above-mentioned functions in `R/trend_fun.R` simplifies `analysis/trend_analysis.R` to:
 
 ```r
     ## Load packages
@@ -311,11 +311,39 @@ And another, called `plot_trends`, for plotting the results
 
 ## Rmarkdown
 
+- An alternate to copying output from R into Word, Excel, PowerPoint, etc. is to use Rmarkdown
+- Rmarkdown integrates code and text and can produce documents of many different formats
+- For our intermediate example, we output a presentation using an `Rmd` file:
+    ```
+    |- analysis/
+    |-   +- trend_analysis.Rmd
+    ```
+
+## Rmarkdown
+
+<img src="screenshots/rmd.png" width="90%" />
+
+## Rmarkdown {.smaller}
+
+...which renders to slides that look like this:
+
+<img src="screenshots/rmd_slide.png" width="50%" />
+
+- We will cover more during our **November 23rd** workshop titled *Rmarkdown and reproducible research*
+
+## git {.smaller}
+
+- Avoid the multiple v1...v12...final...final2 file issues by using a version control system
+- Most basic workflow: make changes to code or doc and "commit" your changes with notes
+- Creates a running record of what you have done, like a lab notebook
+- For example:
+    - <img src="screenshots/git.png" width="70%" />
 
 
 ## git
 
-
+- Only scratching the surface here
+- For more details, join our **December 7** workshop titled *Keeping track of your work using version control with git (not just for R users!)*
 
 ## Exercises
 
