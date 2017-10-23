@@ -1,0 +1,52 @@
+---
+title: "Trends in mean catch of shrimp, cod, halibut and redfish in the trawl survey"
+author: "Keith Lewis, Paul Regular"
+date: "October 26, 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE, cache=TRUE}
+
+## devtools::build()    # builds the package
+## devtools::document() # builds the documentation for the functions using roxygen comments
+library(intermediate)   # load package functions to memory
+# ?plot_trends          # in case you forget some details of your functions
+library(tidyverse)
+biomass <- read_csv("../data/trawl_biomass.csv")  # load data
+## note that the .. above brings the directory to the Rproj level
+## (knitr defaults to the Rmd directory)
+
+```
+
+## Overview
+
+In this presentation we show survey trends for 
+
+- Shrimp
+- Cod
+- Halibut
+- Redfish
+
+## Shrimp
+
+```{r}
+plot_trends(biomass, species = "shrimp")
+```
+
+## Cod
+
+```{r}
+plot_trends(biomass, species = "cod")
+```
+
+## Halibut
+
+```{r}
+plot_trends(biomass, species = "halibut")
+```
+
+## Redfish
+
+```{r}
+plot_trends(biomass, species = "redfish")
+```

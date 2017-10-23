@@ -67,10 +67,10 @@ knitr::opts_chunk$set(cache = TRUE,
 
 ## Workshop outline of next 4 weeks
 
-> - Today: Project management: how to effectively organize a project in R
-> - November 9th: The very basics of programming in R: functions, debugging, warnings and errors, tests, data types
-> - November 23rd: Rmarkdown and reproducible research
-> - December 7: Keeping track of your work using version control with git (not just for R users!)
+> - **Today:** Project management: how to effectively organize a project in R
+> - **November 9th:** The very basics of programming in R: functions, debugging, warnings and errors, tests, data types
+> - **November 23rd:** Rmarkdown and reproducible research
+> - **December 7:** Keeping track of your work using version control with git (not just for R users!)
 
 ## Objectives {.build}
 
@@ -214,6 +214,7 @@ A simple `trend_analysis.R` script in the `analysis/` folder may look like this:
 ````r
 `r paste(readLines("examples/basic/analysis/trend_analysis.R"), collapse = "\n")`
 ````
+**WARNING:** this is not a proper analysis of these data! For demonstration only
 
 ## Sample script {.smaller}
 
@@ -258,9 +259,55 @@ dir.create(file.path(root_dir, proj_name, "analysis"))  # adds an analysis folde
 ```
 
 
-## Functions
+## Functions {.smaller}
 
+While it is tempting to copy and paste this script and replace `redfish` with `shrimp`, etc.
 
+````r
+`r paste(readLines("examples/basic/analysis/trend_analysis.R"), collapse = "\n")`
+````
+
+## Functions {.smaller}
+
+...it's not too hard to wrap simple scripts into a function and document the function using `roxygen`:
+
+````r
+`r paste(readLines("examples/intermediate/R/trend_fun.R"), collapse = "\n")`
+````
+
+## Functions {.smaller}
+
+Here we make a function, called `trends`, for calculating mean, sd, etc. by year
+
+````r
+`r paste(readLines("examples/intermediate/R/trend_fun.R")[1:25], collapse = "\n")`
+````
+
+## Functions {.smaller}
+
+And another, called `plot_trends`, for plotting the results
+
+````r
+`r paste(readLines("examples/intermediate/R/trend_fun.R")[27:46], collapse = "\n")`
+````
+
+## Functions {.smaller .build}
+
+- Place reusable functions in the `R/` folder
+- They will simplify the scripts in your `analysis/` folder
+- For example, placing the abovementioned functions in `R/trend_fun.R` simplifies `analysis/trend_analysis.R` to:
+
+```r
+    ## Load packages
+    library(tidyverse)
+
+    ## Import trawl data
+    biomass <- read_csv("data/trawl_biomass.csv")
+
+    ## Visualize trends
+    plot_trends(biomass, species = "redfish")
+```
+- We will spend more time on functions during our **November 9th** workshop titled *The very basics of programming in R: functions, debugging, warnings and errors, tests, data types*
 
 ## Rmarkdown
 
@@ -284,7 +331,8 @@ dir.create(file.path(root_dir, proj_name, "analysis"))  # adds an analysis folde
 ## References
 
 > - This presentation was heavily based on this really useful doc: https://github.com/ropensci/rrrpkg
-> - For more details on building R packages, see: [Wickham, Hadley, R Packages: Organise, test, document, and share your code. O'Reilly.](http://r-pkgs.had.co.nz/)
 > - Keep an eye on in development packages to simplify reproducable research in R: https://github.com/benmarwick/rrtools
+> - For more details on building R packages, see: [Wickham, Hadley, R Packages: Organise, test, document, and share your code. O'Reilly.](http://r-pkgs.had.co.nz/)
 > - Hadley Wickham's R style guide: http://adv-r.had.co.nz/Style.html
+> - Hadley Wickham's introduction to roxygen: https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html
 
