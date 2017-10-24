@@ -19,6 +19,7 @@ knitr::opts_chunk$set(cache = TRUE,
                       dev = "svg")
 ```
 
+# So......how do you organize your projects, folders, and files?
 
 # Examples of what not to do!!!
 
@@ -100,7 +101,7 @@ Use the `devtools` package to set-up the structure
 root_dir <- "examples"                                  # path to your project
 proj_name <- "skeleton"                                 # project name
 
-## Metadata for the project
+## Metadata for the project (NOT the data!!!!!)
 proj_metadata <- list("Title" = "Project title",
                       "Authors@R" = 'person("First", "Last", 
                                             email = "first.last@example.com", 
@@ -226,6 +227,15 @@ print(source("examples/basic/analysis/trend_analysis.R"))
 
 ```
 
+## Exercises
+
+- Set-up a research compendium for an analysis of habitat (depth and/or temperature) associations for shrimp, cod, halibut and/or redfish
+    - Modify the metadata
+    - Add the the biomass and abiotic csv files to the data folder
+    - Write a script to:
+        - Merge biomass and abiotic datasets
+        - Make and export some figures
+        
 ## But what if...
 
 - you want to run the analysis on multiple species?
@@ -347,12 +357,6 @@ And another, called `plot_trends`, for plotting the results
 
 ## Exercises
 
-- Set-up a research compendium for an analysis of habitat (depth and/or temperature) associations for shrimp, cod, halibut and/or redfish
-    - Modify the metadata
-    - Add the the biomass and abiotic csv files to the data folder
-    - Write a script to:
-        - Merge biomass and abiotic datasets
-        - Make and export some figures
 - For the adventurous: convert one of your projects to a compendium
 
 
