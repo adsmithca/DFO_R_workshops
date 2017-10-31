@@ -1,0 +1,13 @@
+Package: ReproResearch
+Title: Reproducible Research in R: an introduction
+Version: 0.0.0.9000
+Authors@R: c(person("Paul", "Regular", email = "Paul.Regular@dfo-mpo.gc.ca", 
+                      role = c("aut", "cre")),
+                      person("Keith", "Lewis", email = "Keith.Lewis@dfo-mpo.gc.ca", 
+                      role = "aut"))
+Description: An introduction to conducting reproducible research in R using RMarkdown
+Depends: R (>= 3.3.3)
+License: NA
+Encoding: UTF-8
+LazyData: true
+Imports: knitr

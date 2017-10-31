@@ -1,0 +1,92 @@
+---
+title: "Reproducible Research, R, and Markdown"
+author: "Keith P. Lewis"
+date: '2016-01-23'
+output:
+  beamer_presentation:
+    incremental: true
+---
+
+## Overview
+- Reproducible Research (RR)
+  - Reasons for RR
+  - Big Data - Open Science
+  - Workflow Evolution
+  - The Tools
+- Markdown
+    - basics
+    - generic recipe
+    - intermediate
+    - advanced
+- Next Steps
+
+## Reproducible Research (RR)
+- Reproducibility is a corner stone of science
+- Reproducibility is increasingly difficult
+    - complex statistics
+    - increased collaboration
+    - Big data
+    - computer scripts are increasingly central
+- Traditional final product = paper
+- RR final product = paper + code  + data
+
+## Benefits of RR
+- Idealistic Benefits
+    - Better science
+        - prevention ~ education
+        - medication ~  peer-review + editor + RR
+- Practical Benefits
+    - dynamic documents
+    - streamline workflow
+    - one file
+        - organize and retrieve analyses
+        - rescue projects
+        - collaborate and review projects
+
+## Idealistic Benefits - Open Science
+![open science model](figures/open-science-model.png)
+## Practical benefits - Workflow evolution
+![generic workflow](figures/markdown-generic-workflow.png)
+
+## Practical benefits - Workflow evolution 1
+![workflow chaos](figures/markdown-workflow-chaos.png)
+
+## Practical benefits - Workflow evolution 2
+![workflow better](figures/markdown-workflow-better.png)
+
+## Practical benefits - Workflow evolution 3
+![workflow current](figures/markdown-workflow-current.png)
+
+## RR - The tools
+![the tools](figures/Lyx.png)
+
+## Markdown - Basics
+- Text chunk
+- R chunk
+
+## Markdown generic recipe
+- YAML
+- hooks
+- text chunk
+- r chunk
+- tables
+- graphs
+
+## Intermediate markdown
+- Zuur's Exploratory data analysis
+
+## Advanced markdown
+- R files (data, functions, analysis, text)
+
+## The tools
+![the tools](figures/Lyx.png)
+
+## Next steps
+- Compile Notebook
+- Slide shows in markdown (Beamer, iosslides)
+- TeX/LaTeX
+    - LyX
+    - BibTeX
+- Github
+
+
