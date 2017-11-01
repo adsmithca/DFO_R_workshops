@@ -1,0 +1,109 @@
+---
+title: "Reproducible Research, R, and Markdown"
+author: "Keith P. Lewis"
+date: "NAFC | Fisheries and Oceans Canada | 2017-11-26"
+output: 
+  ioslides_presentation:
+    incremental: true
+    widescreen: true
+    logo: rmarkdown.png
+---
+
+```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+knitr::opts_knit$set(root.dir = '../')
+knitr::opts_chunk$set(cache = TRUE, 
+                      fig.align = "center", 
+                      fig.height = 4.5, 
+                      fig.width = 7.5,
+                      dev = "svg")
+```
+
+## Overview
+- Reproducible Research (RR)
+  - Reasons for RR
+  - Big Data - Open Science
+  - Workflow Evolution
+  - The Tools
+- Markdown
+    - basics
+    - generic recipe
+    - intermediate
+    - advanced
+- Next Steps
+
+## Reproducible Research (RR)
+- Reproducibility is a corner stone of science
+- Reproducibility is increasingly difficult
+    - complex statistics
+    - increased collaboration
+    - Big data
+    - computer scripts are increasingly central
+- Traditional final product = paper
+- RR final product = paper + code  + data
+
+## Benefits of RR
+- Idealistic Benefits
+    - Better science
+        - prevention ~ education
+        - medication ~  peer-review + editor + RR
+- Practical Benefits
+    - dynamic documents
+    - streamline workflow
+    - one file
+        - organize and retrieve analyses
+        - rescue projects
+        - collaborate and review projects
+        
+## History
+Sweave, knitr
+
+## Idealistic Benefits - Open Science
+![open science model](figures/open-science-model.png)
+## Practical benefits - Workflow evolution
+![generic workflow](figures/markdown-generic-workflow.png)
+
+## Practical benefits - Workflow evolution 1
+![workflow chaos](figures/markdown-workflow-chaos.png)
+
+## Practical benefits - Workflow evolution 2
+![workflow better](figures/markdown-workflow-better.png)
+
+## Practical benefits - Workflow evolution 3
+![workflow current](figures/markdown-workflow-current.png)
+
+## RR - The tools
+![the tools](figures/Lyx.png)
+
+## Markdown - Basics
+- Text chunk
+- R chunk
+
+## Markdown - Basics
+<img src="screenshots/rmarkdown1.png" width="95%" />
+
+## Markdown generic recipe
+- YAML
+- hooks
+- text chunk
+- r chunk
+- tables
+- graphs
+
+## Intermediate markdown
+- Zuur's Exploratory data analysis
+
+## Advanced markdown
+- R files (data, functions, analysis, text)
+
+## The tools
+![the tools](figures/Lyx.png)
+
+## Next steps
+- Compile Notebook
+- Slide shows in markdown (Beamer, iosslides)
+- TeX/LaTeX
+    - LyX
+    - BibTeX
+- Github
+
+
