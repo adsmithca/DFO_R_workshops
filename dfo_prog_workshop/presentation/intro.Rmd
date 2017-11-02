@@ -1,0 +1,22 @@
+---
+title: "The very basics of programming in R"
+subtitle: "loops, if/else statements, functions, debugging, etc."
+author: "Paul Regular, Alejandro Buren"
+date: "NAFC | Fisheries and Oceans Canada | November 9, 2017"
+output: 
+  ioslides_presentation:
+    incremental: true
+    widescreen: true
+    logo: Rlogo.svg
+    css: style.css
+---
+
+```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+knitr::opts_knit$set(root.dir = '../')
+knitr::opts_chunk$set(cache = TRUE, 
+                      fig.align = "center", 
+                      fig.height = 4.5, 
+                      fig.width = 7.5,
+                      dev = "svg")
+```
+

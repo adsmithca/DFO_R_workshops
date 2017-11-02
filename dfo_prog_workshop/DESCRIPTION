@@ -1,0 +1,7 @@
+Title: The very basics of programming in R
+Authors@R: c(person("Paul", "Regular", email = "Paul.Regular@dfo-mpo.gc.ca", role = "aut"),
+             person("Alejandro", "Buren", email = "Alejandro.Buren@dfo-mpo.gc.ca", role = "aut"))
+Description: An introduction to programming in R: loops, if else statements, functions, debugging, etc.
+Depends: R (>= 3.3.3)
+License: NA
+Encoding: UTF-8
