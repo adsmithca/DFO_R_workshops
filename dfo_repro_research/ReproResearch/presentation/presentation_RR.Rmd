@@ -31,6 +31,28 @@ knitr::opts_chunk$set(cache = TRUE,
     - advanced
 - Next Steps
 
+## What i've learned....so far!
+Clean up the figures - add version control!!!
+
+## Practical benefits - Workflow evolution
+<img src="figures/markdown-generic-workflow.png" width="95%" />
+
+## Practical benefits - Workflow evolution 1
+<img src="figures/markdown-workflow-chaos.png" width="95%" />
+
+## Practical benefits - Workflow evolution 2
+<img src="figures/markdown-workflow-better.png" width="95%" />
+
+## Practical benefits - Workflow evolution 3
+<img src="figures/markdown-workflow-current.png" width="95%" />
+
+## Idealistic Benefits - Open Science
+<img src="figures/open-science-model.png" width="95%" />
+
+## RR - The tools
+<img src="figures/Lyx.png" width="95%" />
+
+
 ## Reproducible Research (RR)
 - Reproducibility is a corner stone of science
 - Reproducibility is increasingly difficult
@@ -56,23 +78,6 @@ knitr::opts_chunk$set(cache = TRUE,
         
 ## History
 Sweave, knitr
-
-## Idealistic Benefits - Open Science
-![open science model](figures/open-science-model.png)
-## Practical benefits - Workflow evolution
-![generic workflow](figures/markdown-generic-workflow.png)
-
-## Practical benefits - Workflow evolution 1
-![workflow chaos](figures/markdown-workflow-chaos.png)
-
-## Practical benefits - Workflow evolution 2
-![workflow better](figures/markdown-workflow-better.png)
-
-## Practical benefits - Workflow evolution 3
-![workflow current](figures/markdown-workflow-current.png)
-
-## RR - The tools
-![the tools](figures/Lyx.png)
 
 ## Markdown - Basics
 - Text chunk
@@ -106,4 +111,5 @@ Sweave, knitr
     - BibTeX
 - Github
 
-
+## Help
+cheatsheet
