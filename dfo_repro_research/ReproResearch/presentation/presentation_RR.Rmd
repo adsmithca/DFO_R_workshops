@@ -79,6 +79,7 @@ Clean up the figures - add version control!!!
 ## History
 Sweave, knitr
 
+## Practical benefits - Workflow evolution
 ## Markdown - Basics
 - Text chunk
 - R chunk
