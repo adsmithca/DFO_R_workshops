@@ -1,7 +1,7 @@
 ---
 title: "The very basics of programming in R"
-subtitle: "loops, if/else statements, functions, debugging, etc."
-author: "Paul Regular, Alejandro Buren"
+subtitle: "loops, conditionals, and user-defined functions"
+author: "Alejandro Buren and Paul Regular"
 date: "NAFC | Fisheries and Oceans Canada | November 9, 2017"
 output: 
   ioslides_presentation:
@@ -19,4 +19,91 @@ knitr::opts_chunk$set(cache = TRUE,
                       fig.width = 7.5,
                       dev = "svg")
 ```
+
+
+## Intro
+
+- While R is often thought of as a statistical and graphing system, it is designed around a true computer language
+    - It includes **loops**, **conditionals** and **user-defined functions**
+    - This allows you to add additional functionality suited to your needs
+- Today we will run through the basics of **loops**, **conditionals** and **user-defined functions**
+    - We will build a simple age-structured model of population growth to demonstrate their use
+
+## Age-structured model
+
+- Here's a common equation in fishery science:
+    - $N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a, y}}$
+    - i.e. Abundance $N$ at age $a$ in year $y$ equals cohort abundance in the previous year times total mortality $Z$
+    - Have you ever though about how you would translate this to R code?
+    
+
+# Loops
+
+## Loop through years {.smaller .build}
+
+- Loops are really useful for equations like the cohort model
+- Let's start simple by tracking one cohort through time
+    - Pretend that the the cohort starts at 10000 in year 1 and predict for 10 years assuming Z = 0.5
+```{r}
+N <- 10000             # abundance in year 1
+for (j in 2:11) {      # loop through years 2:11
+  N <- N * exp(-0.5)   # update N each itteration of the loop
+  print(N)             # print N
+}                      # end loop
+```
+
+
+## Creating a vector {.smaller .build}
+
+- Following the previous loop, object `N` simply equals abundance in the last year (`r N`)
+- One option is to do this:
+
+```{r}
+N <- N_vec <- 10000             
+for (j in 2:11) {
+  N <- N * exp(-0.5)
+  N_vec <- c(N_vec, N) # use `c` to grow a vector of N through the itterations
+}
+N_vec
+```
+
+- This works fine, but it is **not reccomended!**
+    - It's hard work for a computer to 'grow' an object.
+
+## Creating a vector {.smaller .build}
+
+- Supplying an object to fill inside a loop is much more efficient than growing an object
+
+```{r}
+N <- c(10000, rep(NA, 10)) # create an object to fill inside the loop            
+for (j in 2:11) {
+  N[j] <- N[j - 1] * exp(-0.5)
+}
+N
+```
+
+
+
+## Simulating an age-structured model {.smaller}
+
+$N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a, y}}$
+
+
+```{r}
+
+## Step 1: Define ages and years
+ages <- 1:10
+years <- 2005:2016
+
+matrix(NA, nrow = length(ages), ncol = length(years))
+
+```
+
+
+
+
+
+
+
+
 
