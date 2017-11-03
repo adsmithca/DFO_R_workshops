@@ -37,11 +37,8 @@ dfo_rproj_workshop/research_compendium_fig.pptx
 dfo_ggplot_workshop/presentations/recording_ggplot2.wrf
 dfo_rproj_workshop/scripts/dfo_Rproj_scripts.R
 dfo_rproj_workshop/recording.wrf
-<<<<<<< HEAD
 Mailing list for R workshop.txt
 Mailing list for R workshop.msg
-dfo_repro_research/ReproResearch/presentation/presentation_RR.html
-=======
+dfo_repro_research/ReproResearch/presentation/*.html
 dfo_prog_workshop/presentation/*.html
 dfo_prog_workshop/presentation/*_cache/
->>>>>>> origin/master
