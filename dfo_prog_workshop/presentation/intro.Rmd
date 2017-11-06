@@ -20,7 +20,6 @@ knitr::opts_chunk$set(cache = TRUE,
                       dev = "svg")
 ```
 
-
 ## Intro
 
 - While R is often thought of as a statistical and graphing system, it is designed around a true computer language
@@ -233,6 +232,8 @@ for (i in seq_along(ages)[-1]) {
     N[i, j] <- N[i - 1, j - 1] * exp(-Z)
   }
 }
+
+## Here is where you calculate the propotion of individuals of age 1 in each year
 ```
 
 ```{r, echo = FALSE}
@@ -265,38 +266,82 @@ for (j in seq_along(years)) {
 
 - where `test` is a logical test, like `x > 5`, that evaluates to `TRUE` or `FALSE`
 
-## Cohort model example {.smaller .build}
+## if ( ) { } else { }. Cohort model example {.smaller .build}
 
 Now, lets modify our cohort model loop to place conditions on $Z$
 
-- Below we set $Z$ to 0.9 if year equals 2009, otherwise $Z$ is 0.5
+Assume that $Z$ was 0.9 in 2009, otherwise $Z$ is 0.5  
+Let's see how this works
+
 
 ```{r}
-   for (i in seq_along(ages)[-1]) {
-     for (j in seq_along(years)[-1]) {
-       if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
-         Z <- 0.9                              # Z is set to 0.9 if TRUE
-       } else {
-         Z <- 0.5                              # Z is set to 0.5 if FALSE
-       }
-       N[i, j] <- N[i - 1, j - 1] * exp(-Z)    # Z supplied here changes, depending on the itteration
-     }
-   }
+for (j in seq_along(years)[-1]) {
+  if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
+    Z <- 0.9                              # Z is set to 0.9 if TRUE
+  } else {
+    Z <- 0.5                              # Z is set to 0.5 if FALSE
+  }
+  print (paste('year: ', years[j], ' - Z: ', Z, sep = ''))
+}
 ```
 
+## if ( ) { } else { }. Cohort model example {.smaller .build}
 
-## Cohort model example {.smaller .build}
-
-Alternatively, the `ifelse` function can be used
+Now let's build the full equation
 
 ```{r}
 for (i in seq_along(ages)[-1]) {
   for (j in seq_along(years)[-1]) {
-    Z <- ifelse(years[j] == 2009, 0.9, 0.5) # ifelse(test, values if TRUE, values if FALSE)
-    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
+    if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
+      Z <- 0.9                              # Z is set to 0.9 if TRUE
+    } else {
+      Z <- 0.5                              # Z is set to 0.5 if FALSE
+    }
+    N[i, j] <- N[i - 1, j - 1] * exp(-Z)    # Z supplied here changes, depending on the itteration
   }
 }
 ```
+
+
+## ifelse(test, yes, no) {.smaller .build}
+
+You have reasons to believe all individuals of age 1 died since 2012
+
+First, transform the matrix **N** into a data.frame
+
+```{r}
+library(tidyr)
+Ndf <- N %>%
+  as.data.frame(.) %>%
+  tidyr::gather (.) %>%
+  cbind(rep(ages, length(years))) %>%
+  setNames(c('year', 'n', 'age'))
+Ndf
+```
+
+## ifelse(test, yes, no), continued {.smaller .build}
+Now, let's assign a value of 0 to the column **n** when age == 1 and year >=2012
+
+```{r}
+Ndf$n <- ifelse(Ndf$age == 1 & Ndf$year >= 2012, 0, Ndf$n)
+filter(Ndf, age == 1)
+
+```
+
+
+## ifelse VS if(condition){ } else { } {.build}
+
+Which one should I use?
+
+**if (cond) { yes } else { no }**   
+- The condition must be of length one (_e.g._ year == 2009)  
+- It is a control-flow structure. It was designed to effect programming forks  
+- It should be used when you build functions, to run certain parts of function given when given codition is true (one condition, length==1)
+
+
+**ifelse(test, yes, no)**    
+- returns a value with the same length and attributes as _test_  
+- ifelse should be used in transforming your data.frame 
 
 
 ## Conditionals exercise
@@ -441,7 +486,9 @@ TODO
 - Opinion / observation:
     - Purists R users ruthlessly avoid loops to shave minutes or seconds off their programs
     - Biologists are happy to wait minutes for a loop to finish something that would have taken hours to complete manually
-        - Dig into fully vectorized options if your code is slowing you down
+        - Dig into fully vectorized options if your code is slowing you down  
+        <img src="presentation/rstudio-hex-purrr.png", width = "40%">
+
         - Profile your code to find your bottlenecks 
             - <p style="font-size:20px">https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio</p>
 
