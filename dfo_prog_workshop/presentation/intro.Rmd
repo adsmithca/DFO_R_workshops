@@ -29,13 +29,77 @@ knitr::opts_chunk$set(cache = TRUE,
 - Today we will run through the basics of **loops**, **conditionals** and **user-defined functions**
     - We will build a simple age-structured model of population growth to demonstrate their use
 
+
+    
+## Boring, but important elements {.build}
+
+- Data types
+
+- Data structure
+
+
+Everything in R is an object.
+
+It is important to understand the different data types, data structures, and how to access the elements of these data structures
+
+
+
+## Data types  {.smaller .build}
+
+- character, 
+    - '2J'
+    - 'juvenile'
+- numeric 
+    - real (double precision), _e.g._ 1.25
+- integer
+    - 2L (the L tells R to store this as an integer)
+- logical
+    - TRUE
+    - FALSE
+- complex
+    -  1+4i (complex numbers with real and imaginary parts)
+- factors    
+    - unordered, _e.g._ 'Treatment', 'Control'
+    - ordered, _e.g._ 'High', 'Medium', 'Low'
+    
+Atomic vector: the vector only holds data of a single type    
+    
+## Data structures    
+```{r, echo=F}
+knitr::kable(  dtypes <- data.frame(dimensions = c('1-d','2-d','n-d'), homogenous = c('vector','matrix','array'), heterogenous = c('list','data frame','')))
+  
+```
+
+
+
+## Indexing
+
+The [ ] command
+
+- Vectors: [p] indicates the _p^th^_ position in the vector
+- Matrices and data frames: [r, c] indicates the _r^th^_ row, _c^th^_ column
+
+
+## Special values
+
+- Infinity
+    - Inf
+    - - Inf
+
+- NaN: Not a number _e.g._ 0/0
+
+- NULL: represents the null object in R:
+
+- NA: is a logical constant of length 1 which contains a missing value indicator
+
+# Back to the interesting part
+  
 ## Age-structured model
 
 - Here's a common equation in fishery science:
     - $N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a-1, y-1}}$
     - i.e. Abundance $N$ at age $a$ in year $y$ equals cohort abundance in the previous year times total mortality $Z$
-    - Have you ever though about how you would translate this to R code?
-    
+    - Have you ever though about how you would translate this to R code?    
 
 # Loops
 
@@ -68,47 +132,24 @@ knitr::opts_chunk$set(cache = TRUE,
 ```
 
 
+
 ## Cohort model example {.smaller .build}
 
-- Let's start simple with the cohort model by tracking one cohort through time ($N_y = N_{y-1} ~ e^{-Z}$)
-    - Pretend that the the cohort starts at 10000 in year 1 and predict for 8 years assuming Z = 0.5
-```{r, comment="        ##"}
-        N <- 10000                                     # abundance in year 1
-        for (j in 2:9) {                               # loop through years 2:11
-          N <- N * exp(-0.5)                           # update N each itteration of the loop
-          cat("N in year", j, "=", round(N), "\n")     # concatenate and print N
-        }                                              # end loop
-```
-
-
-## Creating a vector {.smaller .build}
-
-- Following the previous loop, object `N` simply equals abundance in the last year (~`r round(N)`)
-- One option is to do this:
+Let's start simple with the cohort model by tracking one cohort through time ($N_y = N_{y-1} ~ e^{-Z}$)  
+Pretend that the the cohort starts at 10000 in year 1 and predict for 10 years assuming Z = 0.5
 
 ```{r, comment = "   ##"}
-   N <- N_vec <- 10000             
-   for (j in 2:11) {
-     N <- N * exp(-0.5)
-     N_vec <- c(N_vec, N) # use `c` to grow a vector of N through the itterations
-   }
-   N_vec
-```
-
-- This works fine, but it is **not reccomended!**
-    - It's hard work for a computer to 'grow' an object.
-
-## Creating a vector {.smaller .build}
-
-- Supplying an object to fill inside a loop is much more efficient than growing an object
-
-```{r, comment = "   ##"}
-   N <- c(10000, rep(NA, 10)) # create an object to fill inside the loop            
+   N <- c(10000, rep(NA, 10)) # create an object to fill inside the loop          
+   N
    for (j in 2:11) {
      N[j] <- N[j - 1] * exp(-0.5)
    }
    N
 ```
+Note that we create the object (N) where we will store the values calculated within the loop.
+
+Not doing this is called 'to grow an object', and will considerably slow down your code 
+
 
 
 ## Cohort model example {.smaller .build}
@@ -171,9 +212,35 @@ round(N)
 
 ```
 
-## Loop exercise
+## Loop exercise {.smaller}
 
-TODO
+Let's assume that the proportion of individuals of age 1 in a given year is an important metric you need to obtain, use a for loop + the code below to obtain it
+
+```{r}
+## Step 1: Define ages and years
+ages <- 1:10
+years <- 2005:2016
+## Step 2: Create an empty matrix
+N <- matrix(NA, nrow = length(ages), ncol = length(years),
+            dimnames = list(age = ages, year = years))
+## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
+N[1, 1:12] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[2:10, 1] <- c(6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+Z <- 0.5
+## loop
+for (i in seq_along(ages)[-1]) {
+  for (j in seq_along(years)[-1]) {
+    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
+  }
+}
+```
+
+```{r, echo = FALSE}
+prop_a1 <- (rep(NA, ncol(N)))
+for (j in seq_along(years)) {
+ prop_a1[j] <- N[1,j] / sum(N[2:10, j])
+}
+```
 
 ## End loop
 
