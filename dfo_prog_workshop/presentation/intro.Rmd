@@ -1,0 +1,384 @@
+---
+title: "The very basics of programming in R"
+subtitle: "loops, conditionals, and user-defined functions"
+author: "Alejandro Buren and Paul Regular"
+date: "NAFC | Fisheries and Oceans Canada | November 9, 2017"
+output: 
+  ioslides_presentation:
+    incremental: true
+    widescreen: true
+    logo: Rlogo.svg
+    css: style.css
+---
+
+```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+knitr::opts_knit$set(root.dir = '../')
+knitr::opts_chunk$set(cache = TRUE, 
+                      fig.align = "center", 
+                      fig.height = 4.5, 
+                      fig.width = 7.5,
+                      dev = "svg")
+```
+
+
+## Intro
+
+- While R is often thought of as a statistical and graphing system, it is designed around a true computer language
+    - It includes **loops**, **conditionals** and **user-defined functions**
+    - This allows you to add additional functionality suited to your needs
+- Today we will run through the basics of **loops**, **conditionals** and **user-defined functions**
+    - We will build a simple age-structured model of population growth to demonstrate their use
+
+## Age-structured model
+
+- Here's a common equation in fishery science:
+    - $N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a-1, y-1}}$
+    - i.e. Abundance $N$ at age $a$ in year $y$ equals cohort abundance in the previous year times total mortality $Z$
+    - Have you ever though about how you would translate this to R code?
+    
+
+# Loops
+
+## Loops {.build}
+
+- Loops are really useful for equations like the cohort model
+- The basic structure looks like this:
+```{r}
+   for (i in 1:3) {
+     # do stuff
+   }
+```
+- Great for repeated tasks since it allows code to be executed repeatedly
+
+
+## Loops {.smaller .build}
+
+- As the loop runs through the sequence, index `i` changes
+```{r, comment="  ##"}
+   for (i in 1:3) {
+     print(i)
+   }
+```
+
+- The index name does not have to be `i` and the sequence can be a character string
+```{r, comment="  ##"}
+   for (a in c("age1", "age2", "age3")) {
+     print(a)
+   }
+```
+
+
+## Cohort model example {.smaller .build}
+
+- Let's start simple with the cohort model by tracking one cohort through time ($N_y = N_{y-1} ~ e^{-Z}$)
+    - Pretend that the the cohort starts at 10000 in year 1 and predict for 8 years assuming Z = 0.5
+```{r, comment="        ##"}
+        N <- 10000                                     # abundance in year 1
+        for (j in 2:9) {                               # loop through years 2:11
+          N <- N * exp(-0.5)                           # update N each itteration of the loop
+          cat("N in year", j, "=", round(N), "\n")     # concatenate and print N
+        }                                              # end loop
+```
+
+
+## Creating a vector {.smaller .build}
+
+- Following the previous loop, object `N` simply equals abundance in the last year (~`r round(N)`)
+- One option is to do this:
+
+```{r, comment = "   ##"}
+   N <- N_vec <- 10000             
+   for (j in 2:11) {
+     N <- N * exp(-0.5)
+     N_vec <- c(N_vec, N) # use `c` to grow a vector of N through the itterations
+   }
+   N_vec
+```
+
+- This works fine, but it is **not reccomended!**
+    - It's hard work for a computer to 'grow' an object.
+
+## Creating a vector {.smaller .build}
+
+- Supplying an object to fill inside a loop is much more efficient than growing an object
+
+```{r, comment = "   ##"}
+   N <- c(10000, rep(NA, 10)) # create an object to fill inside the loop            
+   for (j in 2:11) {
+     N[j] <- N[j - 1] * exp(-0.5)
+   }
+   N
+```
+
+
+## Cohort model example {.smaller .build}
+
+Let's return to the full equation:
+
+$N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a-1, y-1}}$
+
+And break this down into a matrix:
+
+$\begin{bmatrix} 
+N_{1,1}   &    N_{1,2}                     &   \ldots                    &   N_{1,Y}                              \\ 
+N_{2,1}   &    N_{1, 1} ~ e^{- Z_{1, 1}}   &   N_{1, 2} ~ e^{- Z_{1, 2}} &   \ddots                               \\ 
+\vdots    &    N_{2, 1} ~ e^{- Z_{2, 1}}   &   \ddots                    &   \ddots                               \\ 
+N_{A,1}   &    \ddots                      &   \ddots                    &   N_{A - 1, Y - 1} ~ e^{- Z_{A-1, Y-1}} 
+\end{bmatrix}$
+
+So, what's not overly clear in the equation is that **$N$ in year 1 ($N_{a,1}$)** and **$N$ at age 1 ($N_{1,y}$)** needs to be supplied, along with **total mortality ($Z_{a,y}$)**, for the rest of the matrix to be populated by the equation.
+
+## Equation $\rightarrow$ R code {.smaller .build}
+
+```{r}
+
+## Step 1: Define ages and years
+ages <- 1:10
+years <- 2005:2016
+
+## Step 2: Create an empty matrix
+N <- matrix(NA, nrow = length(ages), ncol = length(years),
+            dimnames = list(age = ages, year = years))
+N
+
+```
+
+
+## Equation $\rightarrow$ R code {.smaller .build}
+
+```{r}
+
+## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
+N[1, 1:12] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[2:10, 1] <- c(6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+N
+Z <- 0.5
+
+```
+
+
+## Equation $\rightarrow$ R code {.smaller .build}
+
+```{r}
+
+## Step 4: Use a loop to fill the matrix
+for (i in seq_along(ages)[-1]) {
+  for (j in seq_along(years)[-1]) {
+    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
+  }
+}
+round(N)
+
+```
+
+## Loop exercise
+
+TODO
+
+## End loop
+
+- Congrats! You've made up some numbers
+- But what if you wanted to see what would happen if $Z$ was higher at younger ages or specific years?
+
+# Conditionals
+
+## Conditionals {.build .smaller}
+
+- We sometimes want to do one thing if a condition is true and another if it is false
+- This is where `if` and `else` statements come in handy
+- Here's how they are structured in R:
+
+```{r, eval=FALSE}
+   if (test) {
+     # do this
+   } else {
+     # do this
+   }
+```
+
+- where `test` is a logical test, like `x > 5`, that evaluates to `TRUE` or `FALSE`
+
+## Cohort model example {.smaller .build}
+
+Now, lets modify our cohort model loop to place conditions on $Z$
+
+- Below we set $Z$ to 0.9 if year equals 2009, otherwise $Z$ is 0.5
+
+```{r}
+   for (i in seq_along(ages)[-1]) {
+     for (j in seq_along(years)[-1]) {
+       if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
+         Z <- 0.9                              # Z is set to 0.9 if TRUE
+       } else {
+         Z <- 0.5                              # Z is set to 0.5 if FALSE
+       }
+       N[i, j] <- N[i - 1, j - 1] * exp(-Z)    # Z supplied here changes, depending on the itteration
+     }
+   }
+```
+
+
+## Cohort model example {.smaller .build}
+
+Alternatively, the `ifelse` function can be used
+
+```{r}
+for (i in seq_along(ages)[-1]) {
+  for (j in seq_along(years)[-1]) {
+    Z <- ifelse(years[j] == 2009, 0.9, 0.5) # ifelse(test, values if TRUE, values if FALSE)
+    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
+  }
+}
+```
+
+
+## Conditionals exercise
+
+TODO
+
+## End conditionals {.build}
+
+- Great! Loops + conditionals should help you make your computer do lots of your redundant work
+- But if you still find yourself doing manual work (e.g. copy/paste/modify, copy/paste/modify), think about using functions
+
+```{r, eval=FALSE}
+   if(group == "happy") {
+      print("talk about functions :)")
+   } else {
+      print("end workshop :(")
+   }
+```
+
+# Functions
+
+## Functions {.build}
+
+- Functions are a core part of R and the ability to make your own functions allows you to add functionality to R to make your life easier
+    - It is also possible to make the lives of others easier if you share your functions
+        - You could even go as far as making a package
+- The syntax for writing a function is:
+```{r, eval=FALSE}
+   my_fun <- function(formal_arguments) {
+     # body; do stuff with the formal_arguments
+   }
+```
+
+
+## Functions {.build .smaller}
+
+```{r, eval=FALSE}
+my_fun <- function(formal_arguments) {
+  # body; do stuff with the formal_arguments
+}
+```
+
+- Here, `my_fun` is the name of the function
+    - Like objects in R, you can name your function just about anything
+- `function` indicates to R that you want to make a function
+- `formal_arguments` is a series of comma-separated statements of the form `argument = expression`
+    - Again, the `argument` name is flexible
+    - The `expression` can be a numeric vector, character string, you name it. You can even supply another function.
+- Finally, the `body` can be any valid R expression or set of R expressions
+
+
+## Minus example {.build .smaller}
+
+```{r}
+#' Function for substracting two values
+#' @param x,y Numeric values to substract (x = 1 and y = 1 are default values)  
+minus <- function(x = 1, y = 1) {
+  x - y
+}   
+```
+
+```{r}
+minus()                       # defaults are run when values are not supplied
+c(minus(3, 10), minus(10, 3)) # you can supply values without names, but remember that order matters!!
+minus(y = 10, x = 3)          # order does not matter if you supply argument names
+```
+
+## Minus example {.build .smaller}
+
+```{r}
+#' Function for substracting two values
+#' @param x,y Numeric values to substract (x = 1 and y = 1 are default values)  
+minus <- function(x = 1, y = 1) {
+  x - y
+}   
+```
+
+But note that this is a needless function since there is a build in function for subtraction
+
+```{r}
+`-`
+```
+
+
+
+## Cohort model example {.build .smaller}
+
+However, R does not have a built-in function for simulating an age-structured population model
+
+```{r}
+
+#' Simulate age-structured population model
+#' @param ages  Ages to include in the simulation
+#' @param years Years to include in the simulation
+#' @param Z     Total mortality
+#' @param R     Recruitment (N at age 1)
+#' @param N0    Starting abundance (N at year 1)
+sim_pop <- function(ages = 1:10, years = 2005:2016, Z = 0.5,
+                    R = c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800),
+                    N0 = c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)) {
+  N <- matrix(NA, nrow = length(ages), ncol = length(years),
+              dimnames = list(age = ages, year = years))      # start the N matrix
+  N[1, ] <- R                                                 # add age 1 vector
+  N[, 1] <- N0                                                # add year 1 vector
+  for (i in seq_along(ages)[-1]) {
+    for (j in seq_along(years)[-1]) {
+      N[i, j] <- N[i - 1, j - 1] * exp(-Z)                    # use equation to fill in the rest
+    }
+  }
+  N                                                           # return N matrix
+}
+
+```
+
+
+## Cohort model example {.build .smaller}
+
+Now our code simplifies to this:
+
+```{r}
+N <- sim_pop()
+round(N)
+```
+
+## Cohort model example {.build .smaller}
+
+And if we want to change something, we can use the arguments
+
+```{r}
+N <- sim_pop(Z = 1.3)
+round(N)
+```
+
+## Function exercise
+
+TODO
+
+## Side note on speed
+
+- Slow to fast operations in R:
+    - loops with growing objects < loops filling an object < apply functions < fully vectorized functions
+- Opinion / observation:
+    - Purists R users ruthlessly avoid loops to shave minutes or seconds off their programs
+    - Biologists are happy to wait minutes for a loop to finish something that would have taken hours to complete manually
+        - Dig into fully vectorized options if your code is slowing you down
+        - Profile your code to find your bottlenecks 
+            - <p style="font-size:20px">https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio</p>
+
+
+
+
+
