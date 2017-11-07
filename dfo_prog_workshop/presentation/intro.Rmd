@@ -234,7 +234,7 @@ for (i in seq_along(ages)[-1]) {
 ## Here is where you calculate the propotion of individuals of age 1 in each year
 ```
 
-```{r, echo = FALSE}
+```{r LoopExercise, echo=FALSE}
 prop_a1 <- (rep(NA, ncol(N)))
 for (j in seq_along(years)) {
  prop_a1[j] <- N[1,j] / sum(N[2:10, j])
@@ -356,7 +356,7 @@ Which one should I use?
    
    
    
-```{r, echo = FALSE, eval = FALSE}
+```{r ConditionalEx1, eval=FALSE, echo=FALSE}
 library(FSAdata)
 data(WhitefishMB)
 wf <- WhitefishMB
@@ -367,6 +367,34 @@ wf$trueage <- ifelse(wf$flag == TRUE, wf$scale,
 
 ## Conditionals exercise 2 {.build}
 
+In the cohort model we have been using, age 1 individuals were being forcefully created  
+Let's now create them from biological processes, *i.e.* 
+
+
+```{r, ConditionalEx2, eval = FALSE, echo = FALSE}
+## Step 1: Define ages and years
+ages <- 1:10
+years <- 2005:2016
+## Step 2: Create an empty matrix
+N <- matrix(NA, nrow = length(ages), ncol = length(years),
+            dimnames = list(age = ages, year = years))
+## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
+N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+Z <- 0.5
+## Step 4: create a vector of fecundities
+fx <- c(rep(0, 2), 0.1, 0.15, 0.25, 0.6, 0.9, 0.9, 0.85, 0.7)
+## step 5: 
+for (i in seq_along(ages)) {
+  for (j in seq_along(years)[-1]) {
+    if (ages[i] == 1) {                 # evalues to TRUE or FALSE, depending on the itteration
+      N[i, j] <- sum(N[, j] * fx)                          
+    } else {
+      N[i, j] <- N[i - 1, j - 1] * exp(-Z)    
+    }
+  }
+}
+```
 
 ## End conditionals {.build}
 
@@ -498,6 +526,8 @@ round(N)
 ## Function exercise
 
 TODO
+
+# Errors (and warnings) will happen. A few pointers to help
 
 
 ## Environments
