@@ -1,5 +1,6 @@
 ---
-title: "Reproducible Research, R, and Markdown"
+title: "Dynamic Documents, R, and Markdown"
+subtitle: "a part of reproducible research"
 author: "Keith P. Lewis"
 date: "NAFC | Fisheries and Oceans Canada | 2017-11-26"
 output: 
@@ -19,39 +20,33 @@ knitr::opts_chunk$set(cache = TRUE,
 ```
 
 ## Overview
+- What i've learned....so far
 - Reproducible Research (RR)
   - Reasons for RR
-  - Big Data - Open Science
   - Workflow Evolution
   - The Tools
-- Markdown
+- RMarkdown
     - basics
-    - generic recipe
     - intermediate
     - advanced
-- Next Steps
 
 ## What i've learned....so far!
 Clean up the figures - add version control!!!
 
-## Practical benefits - Workflow evolution
+## Workflow evolution 1
 <img src="figures/markdown-generic-workflow.png" width="95%" />
 
-## Practical benefits - Workflow evolution 1
+## Workflow evolution 2
 <img src="figures/markdown-workflow-chaos.png" width="95%" />
 
-## Practical benefits - Workflow evolution 2
+## Workflow evolution 3
 <img src="figures/markdown-workflow-better.png" width="95%" />
 
-## Practical benefits - Workflow evolution 3
+## Workflow evolution 4
 <img src="figures/markdown-workflow-current.png" width="95%" />
 
-## Idealistic Benefits - Open Science
+## A graphical model for RR and open science
 <img src="figures/open-science-model.png" width="95%" />
-
-## RR - The tools
-<img src="figures/Lyx.png" width="95%" />
-
 
 ## Reproducible Research (RR)
 - Reproducibility is a corner stone of science
@@ -64,53 +59,90 @@ Clean up the figures - add version control!!!
 - RR final product = paper + code  + data
 
 ## Benefits of RR
-- Idealistic Benefits
+- Idealistic
     - Better science
         - prevention ~ education
-        - medication ~  peer-review + editor + RR
-- Practical Benefits
+        - medication (traditional) ~  peer-review + editor
+        - medication (modern) ~  peer-review + editor + RR
+- Practical
     - dynamic documents
     - streamline workflow
     - one file
         - organize and retrieve analyses
         - rescue projects
         - collaborate and review projects
-        
-## History
-Sweave, knitr
 
-## Practical benefits - Workflow evolution
-## Markdown - Basics
+## RMarkdown - Basics
 - Text chunk
 - R chunk
 
-## Markdown - Basics
+## RMarkdown - Basics
 <img src="screenshots/rmarkdown1.png" width="95%" />
 
-## Markdown generic recipe
+## Basic Exercises
+Using the abiotic and/or biomass data:
+  - create a markdown document with a text chunk and an r chunk.  
+  - For the r chunk, use the tidyverse tools we've learned to filter the data and make a graph.  
+  - Knit the document as pdf, html, or word.
+
+## Intermediate RMarkdown
+- insert a figure
+- make a table
+- calculate a parameter and insert into text
+
+
+## Intermediate exercises
+Using the first exercise:
+  - insert graphic
+  - make a table
+  - insert parameter from a linear model
+  
+## Advanced RMarkdown - the boring but useful stuff
+ - YAML header
+ - hooks
+ 
+## Advanced exercises
+Using the first exercise:
+  - modify the YAML header
+  - modify the hooks
+  
+## Summary: Rmarkdown generic recipe
 - YAML
 - hooks
 - text chunk
 - r chunk
-- tables
-- graphs
+  - tables
+  - graphs
+  - parameters
 
-## Intermediate markdown
-- Zuur's Exploratory data analysis
-
-## Advanced markdown
-- R files (data, functions, analysis, text)
-
-## The tools
-![the tools](figures/Lyx.png)
-
-## Next steps
+## Summary: other options
 - Compile Notebook
-- Slide shows in markdown (Beamer, iosslides)
+- Slide shows in markdown (Beamer, ioslides)
 - TeX/LaTeX
     - LyX
     - BibTeX
-- Github
+- Presentations
+  - Beamer
+  - ioslides
+  - RPres
 
-## Help
-cheatsheet
+## Summary: other options (graphical summary)
+![the tools](figures/Lyx.png)
+  
+## Help {.smaller}
+Books
+Xie, Y. 2013. Dynamic Documents with R and knitr. CRC Press, London.
+Gandrud, C. 2014. Reproducible Research with R and RStudio. 2nd Edition. CRC Press, Boca Raton, FL. 
+
+Cheatsheets
+http://ropensci.github.io/reproducibility-guide/sections/introduction/
+https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
+
+Reproducible Research webpages
+http://ropensci.github.io/reproducibility-guide/sections/introduction/
+
+Knitr webpages
+https://yihui.name/knitr/
+
+## Sample document
+- Zuur's Exploratory data analysis - put on Github
