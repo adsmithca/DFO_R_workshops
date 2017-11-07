@@ -12,6 +12,7 @@ output:
 ---
 
 ```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+library(tidyverse)
 knitr::opts_knit$set(root.dir = '../')
 knitr::opts_chunk$set(cache = TRUE, 
                       fig.align = "center", 
@@ -45,21 +46,19 @@ It is important to understand the different data types, data structures, and how
 
 ## Data types  {.smaller .build}
 
-- character, 
-    - '2J'
-    - 'juvenile'
-- numeric 
-    - real (double precision), _e.g._ 1.25
-- integer
-    - 2L (the L tells R to store this as an integer)
-- logical
-    - TRUE
-    - FALSE
-- complex
-    -  1+4i (complex numbers with real and imaginary parts)
-- factors    
-    - unordered, _e.g._ 'Treatment', 'Control'
-    - ordered, _e.g._ 'High', 'Medium', 'Low'
+- `character`
+    - `"2J"`, `"juvenile"`
+- `numeric` 
+    - real (double precision), _e.g._ `1.25`
+- `integer`
+    - `2L` (the L tells R to store this as an integer)
+- `logical`
+    - `TRUE`, `FALSE`
+- `complex`
+    -  `1+4i` (complex numbers with real and imaginary parts)
+- `factor`    
+    - unordered, _e.g._ `"Treatment"`, `"Control"`
+    - ordered, _e.g._ `"High"`, `"Medium"`, `"Low"`
     
 Atomic vector: the vector only holds data of a single type    
     
@@ -73,23 +72,23 @@ knitr::kable(  dtypes <- data.frame(dimensions = c('1-d','2-d','n-d'), homogenou
 
 ## Indexing
 
-The [ ] command
+The `[ ]` command
 
-- Vectors: [p] indicates the _p^th^_ position in the vector
-- Matrices and data frames: [r, c] indicates the _r^th^_ row, _c^th^_ column
+- Vectors: `[p]` indicates the _p^th^_ position in the vector
+- Matrices and data frames: `[r, c]` indicates the _r^th^_ row, _c^th^_ column
 
 
 ## Special values
 
 - Infinity
-    - Inf
-    - - Inf
+    - `Inf`
+    - `-Inf`
 
-- NaN: Not a number _e.g._ 0/0
+- `NaN`: Not a number _e.g._ `0/0`
 
-- NULL: represents the null object in R:
+- `NULL`: represents the null object in R:
 
-- NA: is a logical constant of length 1 which contains a missing value indicator
+- `NA`: is a logical constant of length 1 which contains a missing value indicator
 
 # Back to the interesting part
   
@@ -145,9 +144,8 @@ Pretend that the the cohort starts at 10000 in year 1 and predict for 10 years a
    }
    N
 ```
-Note that we create the object (N) where we will store the values calculated within the loop.
 
-Not doing this is called 'to grow an object', and will considerably slow down your code 
+- Note that we create the object (`N`) where stored the values calculated within the loop. Not doing this is called "growing an object"; avoid this practice because it will considerably slow down your code! 
 
 
 
@@ -189,8 +187,8 @@ N
 ```{r}
 
 ## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
-N[1, 1:12] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
-N[2:10, 1] <- c(6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
 N
 Z <- 0.5
 
@@ -223,8 +221,8 @@ years <- 2005:2016
 N <- matrix(NA, nrow = length(ages), ncol = length(years),
             dimnames = list(age = ages, year = years))
 ## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
-N[1, 1:12] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
-N[2:10, 1] <- c(6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
 Z <- 0.5
 ## loop
 for (i in seq_along(ages)[-1]) {
