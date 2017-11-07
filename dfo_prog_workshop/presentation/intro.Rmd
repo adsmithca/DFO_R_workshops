@@ -479,6 +479,31 @@ round(N)
 
 TODO
 
+
+## Environments
+
+## Errors and warnings
+
+
+## Handling errors
+
+**try**
+
+**tryCatch**
+
+## How to fix bugs in your code {.build}
+
+- traceback
+
+- debug
+
+- browser
+
+
+**Introduction to Debugging in R:**   
+https://vimeo.com/99375765
+
+
 ## Side note on speed
 
 - Slow to fast operations in R:
@@ -487,8 +512,8 @@ TODO
     - Purists R users ruthlessly avoid loops to shave minutes or seconds off their programs
     - Biologists are happy to wait minutes for a loop to finish something that would have taken hours to complete manually
         - Dig into fully vectorized options if your code is slowing you down  
-        <img src="presentation/rstudio-hex-purrr.png", width = "40%">
-
+            - base: apply family
+             - tidyverse: <img src="rstudio-hex-purrr.png" width="5%" />        
         - Profile your code to find your bottlenecks 
             - <p style="font-size:20px">https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio</p>
 
