@@ -12,6 +12,7 @@ output:
 ---
 
 ```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+library(tidyverse)
 knitr::opts_knit$set(root.dir = '../')
 knitr::opts_chunk$set(cache = TRUE, 
                       fig.align = "center", 
@@ -19,7 +20,6 @@ knitr::opts_chunk$set(cache = TRUE,
                       fig.width = 7.5,
                       dev = "svg")
 ```
-
 
 ## Intro
 
@@ -29,13 +29,75 @@ knitr::opts_chunk$set(cache = TRUE,
 - Today we will run through the basics of **loops**, **conditionals** and **user-defined functions**
     - We will build a simple age-structured model of population growth to demonstrate their use
 
+
+    
+## Boring, but important elements {.build}
+
+- Data types
+
+- Data structure
+
+
+Everything in R is an object.
+
+It is important to understand the different data types, data structures, and how to access the elements of these data structures
+
+
+
+## Data types  {.smaller .build}
+
+- `character`
+    - `"2J"`, `"juvenile"`
+- `numeric` 
+    - real (double precision), _e.g._ `1.25`
+- `integer`
+    - `2L` (the L tells R to store this as an integer)
+- `logical`
+    - `TRUE`, `FALSE`
+- `complex`
+    -  `1+4i` (complex numbers with real and imaginary parts)
+- `factor`    
+    - unordered, _e.g._ `"Treatment"`, `"Control"`
+    - ordered, _e.g._ `"High"`, `"Medium"`, `"Low"`
+    
+Atomic vector: the vector only holds data of a single type    
+    
+## Data structures    
+```{r, echo=F}
+knitr::kable(  dtypes <- data.frame(dimensions = c('1-d','2-d','n-d'), homogenous = c('vector','matrix','array'), heterogenous = c('list','data frame','')))
+  
+```
+
+
+
+## Indexing
+
+The `[ ]` command
+
+- Vectors: `[p]` indicates the _p^th^_ position in the vector
+- Matrices and data frames: `[r, c]` indicates the _r^th^_ row, _c^th^_ column
+
+
+## Special values
+
+- Infinity
+    - `Inf`
+    - `-Inf`
+
+- `NaN`: Not a number _e.g._ `0/0`
+
+- `NULL`: represents the null object in R:
+
+- `NA`: is a logical constant of length 1 which contains a missing value indicator
+
+# Back to the interesting part
+  
 ## Age-structured model
 
 - Here's a common equation in fishery science:
     - $N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a-1, y-1}}$
     - i.e. Abundance $N$ at age $a$ in year $y$ equals cohort abundance in the previous year times total mortality $Z$
-    - Have you ever though about how you would translate this to R code?
-    
+    - Have you ever though about how you would translate this to R code?    
 
 # Loops
 
@@ -68,47 +130,23 @@ knitr::opts_chunk$set(cache = TRUE,
 ```
 
 
+
 ## Cohort model example {.smaller .build}
 
-- Let's start simple with the cohort model by tracking one cohort through time ($N_y = N_{y-1} ~ e^{-Z}$)
-    - Pretend that the the cohort starts at 10000 in year 1 and predict for 8 years assuming Z = 0.5
-```{r, comment="        ##"}
-        N <- 10000                                     # abundance in year 1
-        for (j in 2:9) {                               # loop through years 2:11
-          N <- N * exp(-0.5)                           # update N each itteration of the loop
-          cat("N in year", j, "=", round(N), "\n")     # concatenate and print N
-        }                                              # end loop
-```
-
-
-## Creating a vector {.smaller .build}
-
-- Following the previous loop, object `N` simply equals abundance in the last year (~`r round(N)`)
-- One option is to do this:
+Let's start simple with the cohort model by tracking one cohort through time ($N_y = N_{y-1} ~ e^{-Z}$)  
+Pretend that the the cohort starts at 10000 in year 1 and predict for 10 years assuming Z = 0.5
 
 ```{r, comment = "   ##"}
-   N <- N_vec <- 10000             
-   for (j in 2:11) {
-     N <- N * exp(-0.5)
-     N_vec <- c(N_vec, N) # use `c` to grow a vector of N through the itterations
-   }
-   N_vec
-```
-
-- This works fine, but it is **not reccomended!**
-    - It's hard work for a computer to 'grow' an object.
-
-## Creating a vector {.smaller .build}
-
-- Supplying an object to fill inside a loop is much more efficient than growing an object
-
-```{r, comment = "   ##"}
-   N <- c(10000, rep(NA, 10)) # create an object to fill inside the loop            
+   N <- c(10000, rep(NA, 10)) # create an object to fill inside the loop          
+   N
    for (j in 2:11) {
      N[j] <- N[j - 1] * exp(-0.5)
    }
    N
 ```
+
+- Note that we create the object (`N`) where stored the values calculated within the loop. Not doing this is called "growing an object"; avoid this practice because it will considerably slow down your code! 
+
 
 
 ## Cohort model example {.smaller .build}
@@ -149,8 +187,8 @@ N
 ```{r}
 
 ## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
-N[1, 1:12] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
-N[2:10, 1] <- c(6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
 N
 Z <- 0.5
 
@@ -171,9 +209,37 @@ round(N)
 
 ```
 
-## Loop exercise
+## Loop exercise {.smaller}
 
-TODO
+Let's assume that the proportion of individuals of age 1 in a given year is an important metric you need to obtain, use a for loop + the code below to obtain it
+
+```{r}
+## Step 1: Define ages and years
+ages <- 1:10
+years <- 2005:2016
+## Step 2: Create an empty matrix
+N <- matrix(NA, nrow = length(ages), ncol = length(years),
+            dimnames = list(age = ages, year = years))
+## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
+N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+Z <- 0.5
+## loop
+for (i in seq_along(ages)[-1]) {
+  for (j in seq_along(years)[-1]) {
+    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
+  }
+}
+
+## Here is where you calculate the propotion of individuals of age 1 in each year
+```
+
+```{r, echo = FALSE}
+prop_a1 <- (rep(NA, ncol(N)))
+for (j in seq_along(years)) {
+ prop_a1[j] <- N[1,j] / sum(N[2:10, j])
+}
+```
 
 ## End loop
 
@@ -198,43 +264,109 @@ TODO
 
 - where `test` is a logical test, like `x > 5`, that evaluates to `TRUE` or `FALSE`
 
-## Cohort model example {.smaller .build}
+## if ( ) { } else { }. Cohort model example {.smaller .build}
 
 Now, lets modify our cohort model loop to place conditions on $Z$
 
-- Below we set $Z$ to 0.9 if year equals 2009, otherwise $Z$ is 0.5
+Assume that $Z$ was 0.9 in 2009, otherwise $Z$ is 0.5  
+Let's see how this works
+
 
 ```{r}
-   for (i in seq_along(ages)[-1]) {
-     for (j in seq_along(years)[-1]) {
-       if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
-         Z <- 0.9                              # Z is set to 0.9 if TRUE
-       } else {
-         Z <- 0.5                              # Z is set to 0.5 if FALSE
-       }
-       N[i, j] <- N[i - 1, j - 1] * exp(-Z)    # Z supplied here changes, depending on the itteration
-     }
-   }
+for (j in seq_along(years)[-1]) {
+  if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
+    Z <- 0.9                              # Z is set to 0.9 if TRUE
+  } else {
+    Z <- 0.5                              # Z is set to 0.5 if FALSE
+  }
+  print (paste('year: ', years[j], ' - Z: ', Z, sep = ''))
+}
 ```
 
+## if ( ) { } else { }. Cohort model example {.smaller .build}
 
-## Cohort model example {.smaller .build}
-
-Alternatively, the `ifelse` function can be used
+Now let's build the full equation
 
 ```{r}
 for (i in seq_along(ages)[-1]) {
   for (j in seq_along(years)[-1]) {
-    Z <- ifelse(years[j] == 2009, 0.9, 0.5) # ifelse(test, values if TRUE, values if FALSE)
-    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
+    if (years[j] == 2009) {                 # evalues to TRUE or FALSE, depending on the itteration
+      Z <- 0.9                              # Z is set to 0.9 if TRUE
+    } else {
+      Z <- 0.5                              # Z is set to 0.5 if FALSE
+    }
+    N[i, j] <- N[i - 1, j - 1] * exp(-Z)    # Z supplied here changes, depending on the itteration
   }
 }
 ```
 
 
-## Conditionals exercise
+## ifelse(test, yes, no) {.smaller .build}
 
-TODO
+You have reasons to believe all individuals of age 1 died since 2012
+
+First, transform the matrix **N** into a data.frame
+
+```{r}
+library(tidyr)
+Ndf <- N %>%
+  as.data.frame(.) %>%
+  tidyr::gather (.) %>%
+  cbind(rep(ages, length(years))) %>%
+  setNames(c('year', 'n', 'age'))
+Ndf
+```
+
+## ifelse(test, yes, no), continued {.smaller .build}
+Now, let's assign a value of 0 to the column **n** when age == 1 and year >=2012
+
+```{r}
+Ndf$n <- ifelse(Ndf$age == 1 & Ndf$year >= 2012, 0, Ndf$n)
+filter(Ndf, age == 1)
+
+```
+
+
+## ifelse VS if(condition){ } else { } {.build}
+
+Which one should I use?
+
+**if (cond) { yes } else { no }**   
+- The condition must be of length one (_e.g._ year == 2009)  
+- It is a control-flow structure. It was designed to effect programming forks  
+- It should be used when you build functions, to run certain parts of function given when given codition is true (one condition, length==1)
+
+
+**ifelse(test, yes, no)**    
+- returns a value with the same length and attributes as _test_  
+- ifelse should be used in transforming your data.frame 
+
+
+## Conditionals exercise 1 {.build}
+
+1. We will use the following dataset *WhitefishMB {FSAdata}*  
+
+   It contains the ages of lake whitefish from 4 lakes as determined by scales and fin-rays  
+   
+   The ages estimated using these 2 methods do not always give the same answer  
+   
+   Let's assume that the ages obtained from scales are more accurate, except for fish coming from Lake Huron, where the fin-rays methodology is better developed    
+   
+   Prepare the dataset to be used in analyses where you identify the most accurate age reading
+   
+   
+   
+```{r, echo = FALSE, eval = FALSE}
+library(FSAdata)
+data(WhitefishMB)
+wf <- WhitefishMB
+wf$flag <- wf$fin == wf$scale
+wf$trueage <- ifelse(wf$flag == TRUE, wf$scale,
+                     ifelse(wf$lake == 'Huron', wf$fin, wf$scale))
+```   
+
+## Conditionals exercise 2 {.build}
+
 
 ## End conditionals {.build}
 
@@ -367,6 +499,31 @@ round(N)
 
 TODO
 
+
+## Environments
+
+## Errors and warnings
+
+
+## Handling errors
+
+**try**
+
+**tryCatch**
+
+## How to fix bugs in your code {.build}
+
+- traceback
+
+- debug
+
+- browser
+
+
+**Introduction to Debugging in R:**   
+https://vimeo.com/99375765
+
+
 ## Side note on speed
 
 - Slow to fast operations in R:
@@ -374,7 +531,9 @@ TODO
 - Opinion / observation:
     - Purists R users ruthlessly avoid loops to shave minutes or seconds off their programs
     - Biologists are happy to wait minutes for a loop to finish something that would have taken hours to complete manually
-        - Dig into fully vectorized options if your code is slowing you down
+        - Dig into fully vectorized options if your code is slowing you down  
+            - base: apply family
+             - tidyverse: <img src="rstudio-hex-purrr.png" width="5%" />        
         - Profile your code to find your bottlenecks 
             - <p style="font-size:20px">https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio</p>
 
