@@ -342,9 +342,31 @@ Which one should I use?
 - ifelse should be used in transforming your data.frame 
 
 
-## Conditionals exercise
+## Conditionals exercise 1 {.build}
 
-TODO
+1. We will use the following dataset *WhitefishMB {FSAdata}*  
+
+   It contains the ages of lake whitefish from 4 lakes as determined by scales and fin-rays  
+   
+   The ages estimated using these 2 methods do not always give the same answer  
+   
+   Let's assume that the ages obtained from scales are more accurate, except for fish coming from Lake Huron, where the fin-rays methodology is better developed    
+   
+   Prepare the dataset to be used in analyses where you identify the most accurate age reading
+   
+   
+   
+```{r, echo = FALSE, eval = FALSE}
+library(FSAdata)
+data(WhitefishMB)
+wf <- WhitefishMB
+wf$flag <- wf$fin == wf$scale
+wf$trueage <- ifelse(wf$flag == TRUE, wf$scale,
+                     ifelse(wf$lake == 'Huron', wf$fin, wf$scale))
+```   
+
+## Conditionals exercise 2 {.build}
+
 
 ## End conditionals {.build}
 
