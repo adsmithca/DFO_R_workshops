@@ -344,7 +344,7 @@ Which one should I use?
 
 ## Conditionals exercise 1 {.build}
 
-1. We will use the following dataset *WhitefishMB {FSAdata}*  
+We will use the following dataset *WhitefishMB {FSAdata}*  
 
    It contains the ages of lake whitefish from 4 lakes as determined by scales and fin-rays  
    
@@ -367,9 +367,35 @@ wf$trueage <- ifelse(wf$flag == TRUE, wf$scale,
 
 ## Conditionals exercise 2 {.build}
 
-In the cohort model we have been using, age 1 individuals were being forcefully created  
+In the cohort model we have been using, we have provided number of individuals of age 1     
 Let's now create them from biological processes, *i.e.* 
 
+$N_{1,y} = {\underset{A}{\sum}N_{a, y}  f_{a}}$, for age 1  
+where $f_{a}$ is an age-specific vector of fecundity rates (constant across time)   
+
+and  
+
+$N_{a,y} = N_{a-1, y-1} ~ e^{- Z_{a-1, y-1}}$ for all other ages  
+
+Modify the code provided before in order to incorporate this new equation   
+
+## Conditionals exercise 2, continued
+```{r, eval = FALSE, echo = T}
+## Step 1: Define ages and years
+ages <- 1:10
+years <- 2005:2016
+## Step 2: Create an empty matrix
+N <- matrix(NA, nrow = length(ages), ncol = length(years),
+            dimnames = list(age = ages, year = years))
+## Step 3: Make up some numbers for N at age 1, N at year 1 and Z
+N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
+N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
+Z <- 0.5
+## Step 4: create a vector of fecundities
+f <- c(rep(0, 2), 0.1, 0.15, 0.25, 0.6, 0.9, 0.9, 0.85, 0.7)
+## step 5: This is where you modify the loops
+
+```
 
 ```{r, ConditionalEx2, eval = FALSE, echo = FALSE}
 ## Step 1: Define ages and years
@@ -383,12 +409,12 @@ N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
 N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
 Z <- 0.5
 ## Step 4: create a vector of fecundities
-fx <- c(rep(0, 2), 0.1, 0.15, 0.25, 0.6, 0.9, 0.9, 0.85, 0.7)
+f <- c(rep(0, 2), 0.1, 0.15, 0.25, 0.6, 0.9, 0.9, 0.85, 0.7)
 ## step 5: 
 for (i in seq_along(ages)) {
   for (j in seq_along(years)[-1]) {
     if (ages[i] == 1) {                 # evalues to TRUE or FALSE, depending on the itteration
-      N[i, j] <- sum(N[, j] * fx)                          
+      N[i, j] <- sum(N[, j] * f)                          
     } else {
       N[i, j] <- N[i - 1, j - 1] * exp(-Z)    
     }
@@ -435,11 +461,12 @@ my_fun <- function(formal_arguments) {
 - Here, `my_fun` is the name of the function
     - Like objects in R, you can name your function just about anything
 - `function` indicates to R that you want to make a function
-- `formal_arguments` is a series of comma-separated statements of the form `argument = expression`
-    - Again, the `argument` name is flexible
-    - The `expression` can be a numeric vector, character string, you name it. You can even supply another function.
-- Finally, the `body` can be any valid R expression or set of R expressions
-
+- Functions have 3 parts
+    - `formal_arguments` is a series of comma-separated statements of the form `argument = expression`
+        - Again, the `argument` name is flexible
+        - The `expression` can be a numeric vector, character string, you name it. You can even supply another function.
+    - `body`: can be any valid R expression or set of R expressions
+    - `environment`: "map" of the location of the function's variables. Can be confusing, let's leave this now. A bit on this later
 
 ## Minus example {.build .smaller}
 
