@@ -572,7 +572,7 @@ p <- p + geom_line()
 p
 ```
 
-## Function exercise 2 {.smaller}
+## Function exercise, continued ($i$) {.smaller}
 It is hard to compare trends among species because their biomass ranges are different  
 
 If we plot the standardized means by species it will be much easier to visualize 
@@ -583,7 +583,7 @@ $Z =  (X - \mu)/\sigma$
 
 and then plot the standardized means
 
-## Function exercise 3 {.smaller}
+## Function exercise, continued ($ii$) {.smaller}
 
 your plot should look like this
 
@@ -602,7 +602,7 @@ p <- p + geom_line()
 p
 ```
 
-## Function exercise 4 {.smaller}
+## Function exercise, continued ($iii$) {.smaller}
 Here is some code to give you a head start
 
 ```{r, echo = T}
