@@ -70,13 +70,18 @@ knitr::kable(  dtypes <- data.frame(dimensions = c('1-d','2-d','n-d'), homogenou
 
 
 
-## Indexing
+## Indexing {.build}
 
 The `[ ]` command
 
 - Vectors: `[p]` indicates the _p^th^_ position in the vector
 - Matrices and data frames: `[r, c]` indicates the _r^th^_ row, _c^th^_ column
 
+```{r}
+X <- matrix(1:9, nrow = 3, ncol = 3)
+X
+X[2, 3]
+```
 
 ## Special values
 
@@ -145,7 +150,7 @@ Pretend that the the cohort starts at 10000 in year 1 and predict for 10 years a
    N
 ```
 
-- Note that we create the object (`N`) where stored the values calculated within the loop. Not doing this is called "growing an object"; avoid this practice because it will considerably slow down your code! 
+- Note that we create the object (`N`) where the values calculated within the loop are stored. Not doing this is called "growing an object"; avoid this practice because it will considerably slow down your code! 
 
 
 
@@ -342,7 +347,7 @@ Which one should I use?
 - ifelse should be used in transforming your data.frame 
 
 
-## Conditionals exercise 1 {.build}
+## Conditionals exercise 1 
 
 We will use the following dataset *WhitefishMB {FSAdata}*  
 
@@ -354,7 +359,10 @@ We will use the following dataset *WhitefishMB {FSAdata}*
    
    Prepare the dataset to be used in analyses where you identify the most accurate age reading
    
-   
+```{r}
+library(FSAdata)
+data(WhitefishMB)
+```
    
 ```{r ConditionalEx1, eval=FALSE, echo=FALSE}
 library(FSAdata)
@@ -466,7 +474,7 @@ my_fun <- function(formal_arguments) {
         - Again, the `argument` name is flexible
         - The `expression` can be a numeric vector, character string, you name it. You can even supply another function.
     - `body`: can be any valid R expression or set of R expressions
-    - `environment`: "map" of the location of the function's variables. Can be confusing, let's leave this now. A bit on this later
+    - `environment`: "map" of the location of the function's variables. Can be confusing, let's leave this for now. A bit on this later
 
 ## Minus example {.build .smaller}
 
@@ -568,7 +576,7 @@ p
 It is hard to compare trends among species because their biomass ranges are different  
 
 If we plot the standardized means by species it will be much easier to visualize 
-x
+
 Write a function to calculate the standards scores of data    
 
 $Z =  (X - \mu)/\sigma$
@@ -611,16 +619,27 @@ $Z =  (X - \mu)/\sigma$
 # Errors (and warnings) will happen. A few pointers to help
 
 
-## Environments
+
 
 ## Errors and warnings
 
+**Errors** will halt the execution of your code.   
+You will need to deal with these in order for your code to run
 
-## Handling errors
+**Warnings** will not halt execution. The code will run until the end, and then print a warning  
+*Do not* ignore warnings. The fact that the code ran until the end, does not mean it did what you think it did
 
-**try**
+## Read error messages {.build}
+```{r, error = TRUE}
+print('b' + 1)
+```
 
-**tryCatch**
+You get 2 pieces of information:
+
+  - which line of code contains the error:   `Error in "b" + 1`
+  - what the error is: `non-numeric argument to binary operator`
+
+
 
 ## How to fix bugs in your code {.build}
 
@@ -634,6 +653,21 @@ $Z =  (X - \mu)/\sigma$
 **Introduction to Debugging in R:**   
 https://vimeo.com/99375765
 
+
+## Environments {.build}
+
+An environment is just a place to store variables  
+If you start up R and make an assignment, you’re adding an entry in the global environment.  
+```{r}
+x <- 1
+pryr::where('x')
+```
+
+Functions have their own environments
+
+Usually, you do not care about this. However, you start caring when:  
+    - passing functions as arguments to other functions  
+    - returning functions from functions
 
 ## Side note on speed
 
