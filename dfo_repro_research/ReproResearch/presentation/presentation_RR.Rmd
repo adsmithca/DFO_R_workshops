@@ -20,18 +20,12 @@ knitr::opts_chunk$set(cache = TRUE,
 ```
 
 ## Overview
-- What i've learned....so far
-- Reproducible Research (RR)
-  - Reasons for RR
-  - Workflow Evolution
-  - The Tools
-- RMarkdown
+- Workflows: What i've learned....so far
+- Reproducible Research (RR): reasons and benefits
+- Dynamic Documents with RMarkdown
     - basics
     - intermediate
     - advanced
-
-## What i've learned....so far!
-Clean up the figures - add version control!!!
 
 ## Workflow
 <style> 
@@ -65,7 +59,7 @@ Clean up the figures - add version control!!!
 </style>
 <img src="figures/4_workflow_current_state.PNG" width="95%" />
 
-## A graphical model for RR and open science (Lewis et al. accepted) {smaller}
+## A graphical model for RR and open science (Lewis et al. accepted) 
 <style> 
   #slideID > p { 
     margin-top: -100px; 
@@ -80,8 +74,7 @@ Clean up the figures - add version control!!!
     - increased collaboration
     - Big data
     - computer scripts are increasingly central
-- Traditional final product = paper
-- RR final product = paper + code  + data
+
 
 ## Benefits of RR
 - Idealistic
@@ -90,31 +83,39 @@ Clean up the figures - add version control!!!
         - medication (traditional) ~  peer-review + editor
         - medication (modern) ~  peer-review + editor + RR
 - Practical
-    - dynamic documents
+    - recover your own work
     - streamline workflow
-    - one file
         - organize and retrieve analyses
-        - rescue projects
-        - collaborate and review projects
+    - rescue projects
+    - improved collaboration and review of projects
 
-## RMarkdown - Basics
-- Text chunk
-- R chunk
+## Dynamic Documents
+Word processing v document preparation
+WYSIWYG v WYSISYM
+Examples:
+  - Markdown
+  - LaTeX (LyX)
 
-## RMarkdown - Basics
+## RMarkdown: the basics
 <img src="screenshots/rmarkdown1.png" width="95%" />
+
+## RMarkdown: the basics
+  - YAML header
+  - Text chunk
+  - R chunk
+  - package knitr
 
 ## Basic Exercises
 Using the abiotic and/or biomass data:
   - create a markdown document with a text chunk and an r chunk.  
-  - For the r chunk, use the tidyverse tools we've learned to filter the data and make a graph.  
+  - For the r chunk, use the tidyverse tools we've learned to read in the data, filter the data, and make a graph. 
+  - Text chunk can be minimal - just get the idea.
   - Knit the document as pdf, html, or word.
 
 ## Intermediate RMarkdown
 - insert a figure
 - make a table
 - calculate a parameter and insert into text
-
 
 ## Intermediate exercises
 Using the first exercise:
