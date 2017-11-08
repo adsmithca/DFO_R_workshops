@@ -33,20 +33,45 @@ knitr::opts_chunk$set(cache = TRUE,
 ## What i've learned....so far!
 Clean up the figures - add version control!!!
 
+## Workflow
+<style> 
+  #slideID > p { 
+    margin-top: -50px; 
+  } 
+</style>
+<img src="figures/1_generic_workflow.PNG" width="95%" />
+
 ## Workflow evolution 1
-<img src="figures/markdown-generic-workflow.png" width="95%" />
+<style> 
+  #slideID > p { 
+    margin-top: -50px; 
+  } 
+</style>
+<img src="figures/2_workflow_chaos.PNG" width="95%" />
 
 ## Workflow evolution 2
-<img src="figures/markdown-workflow-chaos.png" width="95%" />
+<style> 
+  #slideID > p { 
+    margin-top: -50px; 
+  } 
+</style>
+<img src="figures/3_workflow_improvements.PNG" width="95%" />
 
 ## Workflow evolution 3
-<img src="figures/markdown-workflow-better.png" width="95%" />
+<style> 
+  #slideID > p { 
+    margin-top: -50px; 
+  } 
+</style>
+<img src="figures/4_workflow_current_state.PNG" width="95%" />
 
-## Workflow evolution 4
-<img src="figures/markdown-workflow-current.png" width="95%" />
-
-## A graphical model for RR and open science
-<img src="figures/open-science-model.png" width="95%" />
+## A graphical model for RR and open science (Lewis et al. accepted) {smaller}
+<style> 
+  #slideID > p { 
+    margin-top: -100px; 
+  } 
+</style>
+<img src="figures/5_open-science-model.png" width="80%" />
 
 ## Reproducible Research (RR)
 - Reproducibility is a corner stone of science
