@@ -352,7 +352,7 @@ Which one should I use?
 
 - The condition must be of length one (_e.g._ `year == 2009`)  
 - It is a control-flow structure. It was designed to effect programming forks  
-- It should be used when you build functions, to run certain parts of function given when given codition is `TRUE` (one condition, `length == 1`)
+- It should be used when you build functions, to run certain parts of function given when given condition is `TRUE` (one condition, `length == 1`)
 
 
 `ifelse(test, yes, no)`  
