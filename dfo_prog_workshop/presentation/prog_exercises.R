@@ -11,10 +11,9 @@ N[1, ] <- c(10000, 2000, 3500, 1000, 15000, 1500, 700, 300, 500, 200, 400, 5800)
 N[, 1] <- c(10000, 6000, 3600, 2200, 1300, 800, 500, 300, 200, 100)
 Z <- 0.5
 ## loop
-for (j in seq_along(years)[-1]) {
-  for (i in seq_along(ages)[-1]) {
-    N[i, j] <- N[i - 1, j - 1] * exp(-Z)
-  }
+prop_a1 <- (rep(NA, ncol(N)))
+for (j in seq_along(years)) {
+  prop_a1[j] <- N[1,j] / sum(N[2:10, j])
 }
 
 
