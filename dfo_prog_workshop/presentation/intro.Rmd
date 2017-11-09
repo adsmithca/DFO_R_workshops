@@ -236,7 +236,7 @@ for (j in seq_along(years)[-1]) {
   }
 }
 
-## Here is where you calculate the propotion of individuals of age 1 in each year
+## Here is where you calculate the proportion of individuals of age 1 in each year
 ```
 
 ```{r LoopExercise, echo=FALSE}
@@ -576,7 +576,7 @@ meanbiomass <- read.csv('data/trawl_biomass.csv', header = T) %>%
   summarise(meanb = mean(biomass))
 p <- ggplot(meanbiomass, aes(x = year, y = meanb, colour = species))
 p <- p + geom_line()
-p
+print(p)
 ```
 
 ## Function exercise {.smaller}
@@ -662,7 +662,7 @@ https://vimeo.com/99375765
 
 An environment is just a place to store variables
 
-If you start up R and make an assignment, you’re adding an entry in the global environment.  
+If you start up R and make an assignment, you are adding an entry in the global environment.  
 
 ```{r}
 x <- 1
