@@ -370,7 +370,7 @@ We will use the following dataset *WhitefishMB {FSAdata}*
 >- Let's assume that the ages obtained from scales are more accurate, except for fish coming from Lake Huron, where the fin-rays methodology is better developed    
 >- Prepare the dataset to be used in analyses where you identify the most accurate age reading
    
-```{r}
+```{r, warning=FALSE}
 library(FSAdata)
 data(WhitefishMB)
 ```
@@ -691,6 +691,14 @@ Usually, you do not care about this. However, you start caring when:
             - <p style="font-size:20px">https://support.rstudio.com/hc/en-us/articles/218221837-Profiling-with-RStudio</p>
 
 
+```{r}
+
+## Export R scripts from this Rmd file
+# knitr::purl(input = "presentation/intro.Rmd", 
+#             output = "presentation/intro_scripts.R")
+## Made minor edits to intro_scripts.R
+
+```
 
 
 
