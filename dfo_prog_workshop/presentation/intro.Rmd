@@ -242,7 +242,7 @@ for (j in seq_along(years)[-1]) {
 ```{r LoopExercise, echo=FALSE}
 prop_a1 <- (rep(NA, ncol(N)))
 for (j in seq_along(years)) {
- prop_a1[j] <- N[1,j] / sum(N[2:10, j])
+ prop_a1[j] <- N[1,j] / sum(N[, j])
 }
 ```
 
