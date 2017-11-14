@@ -1,6 +1,6 @@
 ---
 title: "Dynamic Documents, R, and Markdown"
-subtitle: "a part of reproducible research"
+subtitle: "a key component of reproducible research"
 author: "Keith P. Lewis"
 date: "NAFC | Fisheries and Oceans Canada | 2017-11-26"
 output: 
@@ -59,14 +59,6 @@ knitr::opts_chunk$set(cache = TRUE,
 </style>
 <img src="figures/4_workflow_current_state.PNG" width="95%" />
 
-## A graphical model for RR and open science (Lewis et al. accepted) 
-<style> 
-  #slideID > p { 
-    margin-top: -100px; 
-  } 
-</style>
-<img src="figures/5_open-science-model.png" width="80%" />
-
 ## Reproducible Research (RR)
 - Reproducibility is a corner stone of science
 - Reproducibility is increasingly difficult
@@ -90,9 +82,9 @@ knitr::opts_chunk$set(cache = TRUE,
     - improved collaboration and review of projects
 
 ## Dynamic Documents
-Word processing v document preparation
-WYSIWYG v WYSISYM
-Examples:
+- Word processing v document preparation
+- WYSIWYG v WYSISYM
+- Examples:
   - Markdown
   - LaTeX (LyX)
 
@@ -106,10 +98,10 @@ Examples:
   - package knitr
 
 ## Basic Exercises
-Using the abiotic and/or biomass data:
+- Using the abiotic and/or biomass data:
   - create a markdown document with a text chunk and an r chunk.  
   - For the r chunk, use the tidyverse tools we've learned to read in the data, filter the data, and make a graph. 
-  - Text chunk can be minimal - just get the idea.
+  - Text chunk can be minimal: just get the idea.
   - Knit the document as pdf, html, or word.
 
 ## Intermediate RMarkdown
@@ -118,7 +110,7 @@ Using the abiotic and/or biomass data:
 - calculate a parameter and insert into text
 
 ## Intermediate exercises
-Using the first exercise:
+- Copy the first exercise to a new file and:
   - insert graphic
   - make a table
   - insert parameter from a linear model
@@ -128,7 +120,7 @@ Using the first exercise:
  - hooks
  
 ## Advanced exercises
-Using the first exercise:
+Copy the second exercise to a new file and:
   - modify the YAML header
   - modify the hooks
   
@@ -140,6 +132,14 @@ Using the first exercise:
   - tables
   - graphs
   - parameters
+
+## A graphical model for RR and open science using dynamic documents (Lewis et al. accepted) {.smaller}
+<style> 
+  #slideID > p { 
+    margin-top: -100px; 
+  } 
+</style>
+<img src="figures/5_open-science-model.png" width="80%" />
 
 ## Summary: other options
 - Compile Notebook
