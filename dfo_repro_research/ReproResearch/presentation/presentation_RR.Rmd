@@ -60,78 +60,90 @@ knitr::opts_chunk$set(cache = TRUE,
 <img src="figures/4_workflow_current_state.PNG" width="95%" />
 
 ## Reproducible Research (RR)
-- Reproducibility is a corner stone of science
-- Reproducibility is increasingly difficult
+- Reproducibility is a cornerstone of science
+- Reproducibility is increasingly difficult because of:
     - complex statistics
-    - increased collaboration
-    - Big data
-    - computer scripts are increasingly central
-
+    - multiple authors increased collaboration
+    - Big data: data decisions
+- However, without the code and data, a manuscript is not reproducible
 
 ## Benefits of RR
-- Idealistic
-    - Better science
-        - prevention ~ education
-        - medication (traditional) ~  peer-review + editor
-        - medication (modern) ~  peer-review + editor + RR
-- Practical
-    - recover your own work
+- Idealistic: RR makes for better science (or helps prevents bad science)
+  - prevention ~ education
+  - medication (traditional) ~  peer-review + editor
+  - medication (modern) ~  peer-review + editor + RR
+  - see paper
+- Practical:
     - streamline workflow
-        - organize and retrieve analyses
+    - rapidly update your own work
+    - organize and retrieve analyses
     - rescue projects
     - improved collaboration and review of projects
 
 ## Dynamic Documents
-- Word processing v document preparation
-- WYSIWYG v WYSISYM
+- Word processing (WYSIWYG) v document preparation (WYSISYM)
+- Seperates writing from formatting
 - Examples:
   - Markdown
   - LaTeX (LyX)
+- knitr (Yihui Xie)
+
+## Objectives
+- produce an document (html, pdf, or Word) in Rmarkdown
+- make it pretty
+- make it dynamic
 
 ## RMarkdown: the basics
 <img src="screenshots/rmarkdown1.png" width="95%" />
 
-## RMarkdown: the basics
-  - YAML header
-  - Text chunk
-  - R chunk
-  - package knitr
-
 ## Basic Exercises
-- Using the abiotic and/or biomass data:
-  - create a markdown document with a text chunk and an r chunk.  
-  - For the r chunk, use the tidyverse tools we've learned to read in the data, filter the data, and make a graph. 
-  - Text chunk can be minimal: just get the idea.
-  - Knit the document as pdf, html, or word.
+- Use the abbreviated abiotic and/or biomass data
+- Create a markdown document with a text chunk and an r chunk  
+  - For the r chunk, read in the data, filter the data, and make a graph 
+  - Text chunk can be minimal: just get the idea
+  - Knit the document as pdf, html, or MS Word
 
-## Intermediate RMarkdown
-- insert a figure
-- make a table
-- calculate a parameter and insert into text
+## Intermediate RMarkdown - prettify the document
+- Change the YAML header
+- Add headers
+- Add a label and a caption
+- Control what to display
 
 ## Intermediate exercises
-- Copy the first exercise to a new file and:
-  - insert graphic
-  - make a table
-  - insert parameter from a linear model
-  
-## Advanced RMarkdown - the boring but useful stuff
- - YAML header
- - hooks
- 
+Copy the first exercise to a new file:
+- Change the YAML header (title and date)
+- Add headers (e.g. Introduction, Results)
+- Add a label and a caption - put label in text
+- Control what to display (change the echo = and results= options)
+
+## Advanced RMarkdown
+- insert a figure
+- make a table (kable)
+- calculate a parameter and insert into text
+
 ## Advanced exercises
-Copy the second exercise to a new file and:
-  - modify the YAML header
-  - modify the hooks
+- Copy the second exercise to a new file:
+  - insert a graphic
+  - make a table (create an r chunk and make the table)
+  - perform a simle linear model and insert R-squared in text
+  - update the above using the full data set
   
-## Summary: Rmarkdown generic recipe
-- YAML
-- hooks
-- text chunk
-- r chunk
-  - tables
-  - graphs
-  - parameters
+## Next steps RMarkdown
+ - YAML headers
+ - hooks
+ - inserting graphics
+ - Presentations (ioslides and RPres)
+ - Posters (dashboard)
+ - Adding bibliographies
+ - templates
+ - insert equations
+
+## Summary: other options
+- Compile Notebook
+- TeX/LaTeX
+    - LyX
+    - BibTeX
+  - Beamer
 
 ## A graphical model for RR and open science using dynamic documents (Lewis et al. accepted) {.smaller}
 <style> 
@@ -141,20 +153,6 @@ Copy the second exercise to a new file and:
 </style>
 <img src="figures/5_open-science-model.png" width="80%" />
 
-## Summary: other options
-- Compile Notebook
-- Slide shows in markdown (Beamer, ioslides)
-- TeX/LaTeX
-    - LyX
-    - BibTeX
-- Presentations
-  - Beamer
-  - ioslides
-  - RPres
-
-## Summary: other options (graphical summary)
-![the tools](figures/Lyx.png)
-  
 ## Help {.smaller}
 Books
 Xie, Y. 2013. Dynamic Documents with R and knitr. CRC Press, London.
@@ -169,6 +167,13 @@ http://ropensci.github.io/reproducibility-guide/sections/introduction/
 
 Knitr webpages
 https://yihui.name/knitr/
+https://support.rstudio.com/hc/en-us/articles/205368677-R-Markdown-Dynamic-Documents-for-R
+https://sachsmc.github.io/knit-git-markr-guide/knitr/knit.html
+
+YAML
+http://rmarkdown.rstudio.com/html_document_format.html
+http://rmarkdown.rstudio.com/pdf_document_format.html
+http://rmarkdown.rstudio.com/word_document_format.html
 
 ## Sample document
 - Zuur's Exploratory data analysis - put on Github
