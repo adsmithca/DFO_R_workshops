@@ -17,7 +17,16 @@ knitr::opts_chunk$set(cache = TRUE,
                       fig.height = 4.5, 
                       fig.width = 7.5,
                       dev = "svg")
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 ```
+
+## RStudio Tips
+
+## Before we get started
+- Were you able to create a new file using the RMarkdown option?
 
 ## Overview
 - Workflows: What i've learned....so far
@@ -67,12 +76,15 @@ knitr::opts_chunk$set(cache = TRUE,
     - Big data: data decisions
 - However, without the code and data, a manuscript is not reproducible
 
-## Benefits of RR
-- Idealistic: RR makes for better science (or helps prevents bad science)
-  - prevention ~ education
-  - medication (traditional) ~  peer-review + editor
-  - medication (modern) ~  peer-review + editor + RR
-  - see paper
+## Benefits of RR {.smaller}
+- Idealistic: 
+    - RR makes for better science (or helps prevents bad science)
+    - see WSBpaper******
+    - Analogy:
+      - prevention ~ education
+      - medication (traditional) ~  peer-review + editor
+      - medication (modern) ~  peer-review + editor + RR
+  
 - Practical:
     - streamline workflow
     - rapidly update your own work
@@ -82,7 +94,8 @@ knitr::opts_chunk$set(cache = TRUE,
 
 ## Dynamic Documents
 - Word processing (WYSIWYG) v document preparation (WYSISYM)
-- Seperates writing from formatting
+  - Seperates writing from formatting
+  - other advantages *******
 - Examples:
   - Markdown
   - LaTeX (LyX)
@@ -92,41 +105,78 @@ knitr::opts_chunk$set(cache = TRUE,
 - produce an document (html, pdf, or Word) in Rmarkdown
 - make it pretty
 - make it dynamic
+- work on these ******
 
 ## RMarkdown: the basics
 <img src="screenshots/rmarkdown1.png" width="95%" />
 
+## RMarkdown: the basics of "chunks"
+- The "r chunk"
+- ```r{} starts the chunk
+- ``` ends the chunk
+- The "text chunk"
+  - e.g. "In a hole in the ground there lived a hobbit....."
+
 ## Basic Exercises
-- Use the abbreviated abiotic and/or biomass data
-- Create a markdown document with a text chunk and an r chunk  
-  - For the r chunk, read in the data, filter the data, and make a graph 
-  - Text chunk can be minimal: just get the idea
-  - Knit the document as pdf, html, or MS Word
 
 ## Intermediate RMarkdown - prettify the document
 - Change the YAML header
-- Add headers
+- Add headers to the text
 - Add a label and a caption
 - Control what to display
 
+## RMarkdown: intermediate
+Modify the YAML header and add headers
+<img src="screenshots/rmarkdown1.png" width="95%" />
+
+## RMarkdown: intermediate "chunks"
+- ```r{} starts the chunk
+- ``` ends the chunk
+- But you can add loads of stuff to r{}
+  - Add a label and a caption - r{fig.cap = "the title"}
+  - Control what to display
+    - code r{echo = F}
+    - warnings r{warnings = F}
+    - messages r{messages = F}
+    - results r{results = "hide"}
+
 ## Intermediate exercises
-Copy the first exercise to a new file:
-- Change the YAML header (title and date)
-- Add headers (e.g. Introduction, Results)
-- Add a label and a caption - put label in text
-- Control what to display (change the echo = and results= options)
+Copy the first exercise to a new file and produce the following document
 
 ## Advanced RMarkdown
-- insert a figure
-- make a table (kable)
+- label a figure in the text
+- make a table (kable, xtable, stargazer)
 - calculate a parameter and insert into text
+- update the document
+
+## Label a figure and make a table
+{r, "name the figure"}
+
+make the 
+
+## Tangent alert: lists
+```{r}
+summary(lm(depth~year, data=abiotic_abrev))
+summary
+```
+
+## Tangent alert: lists
+```{r}
+m1 <- summary(lm(depth~year, data=abiotic_abrev))
+str(m1)
+```
+
+## Tangent alert: lists
+```{r}
+m1 <- summary(lm(depth~year, data=abiotic_abrev))
+m1$r.squared
+```
 
 ## Advanced exercises
-- Copy the second exercise to a new file:
-  - insert a graphic
-  - make a table (create an r chunk and make the table)
-  - perform a simle linear model and insert R-squared in text
-  - update the above using the full data set
+- Copy the second exercise to a new file and produce the following document
+
+
+- .....then update it :)
   
 ## Next steps RMarkdown
  - YAML headers
@@ -165,10 +215,11 @@ https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
 Reproducible Research webpages
 http://ropensci.github.io/reproducibility-guide/sections/introduction/
 
-Knitr webpages
+Knitr or Markdown webpages
 https://yihui.name/knitr/
 https://support.rstudio.com/hc/en-us/articles/205368677-R-Markdown-Dynamic-Documents-for-R
 https://sachsmc.github.io/knit-git-markr-guide/knitr/knit.html
+http://kbroman.org/knitr_knutshell/pages/Rmarkdown.html
 
 YAML
 http://rmarkdown.rstudio.com/html_document_format.html
