@@ -1,0 +1,35 @@
+---
+title: "Second Markdown Doc"
+author: "Keith Lewis"
+date: "November 16, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+file.exists("../data/trawl_abiotic.csv")
+file.exists("../data/trawl_biomass.csv")
+
+# load the data
+abiotic <- read_csv("../data/trawl_abiotic.csv", guess_max = 5000)
+head(abiotic)
+
+# modify the data
+abiotic_abrev <- filter(abiotic, year < 2005)
+```
+
+## Introduction
+In a hole in the ground there lived a hobbit.....
+
+```{r fig.cap="A histogram of bottom temperatures in NAFO division 2J", echo=F, warning=FALSE, message=F}
+abiotic_abrev %>%                        # Start with the 'abiotic' dataset
+  filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J
+  ggplot(aes(temp_bottom)) +       # Then, determine aes
+  geom_histogram()               # plot histograms
+```
+
