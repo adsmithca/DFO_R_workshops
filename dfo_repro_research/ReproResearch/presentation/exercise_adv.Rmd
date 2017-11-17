@@ -3,6 +3,7 @@ title: "Second Markdown Doc"
 author: "Keith Lewis"
 date: "November 16, 2017"
 output:
+  word_document: default
   pdf_document:
     fig_caption: yes
 ---
@@ -16,8 +17,8 @@ library(ggplot2)
 library(kfigr)
 library(xtable)
 
-file.exists("../data/trawl_abiotic.csv")
-file.exists("../data/trawl_biomass.csv")
+#file.exists("../data/trawl_abiotic.csv")
+#file.exists("../data/trawl_biomass.csv")
 
 # load the data
 abiotic <- read_csv("../data/trawl_abiotic.csv", guess_max = 5000)
@@ -40,10 +41,9 @@ abiotic_abrev %>%                        # Start with the 'abiotic' dataset
 Not a nasty dirty, wet hole filled with the ends of worms and an oozy smell, nor yet a dry, bare sandy hole with nothing in it to sit down on or to eat: it was a hobbit-hole, and that means comfort.
 
 ```{r}
-out <- abiotic_abrev %>%
+abiotic_abrev %>%
   group_by(nafo_div) %>%
   summarise(mean_depth = mean(depth), std_depth = sd(depth)) 
-out    
 ```
 
 Some text
