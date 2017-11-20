@@ -31,4 +31,3 @@ abiotic_abrev %>%                        # Start with the 'abiotic' dataset
   ggplot(aes(temp_bottom)) +       # Then, determine aes
   geom_histogram()               # plot histograms
 ```
-
