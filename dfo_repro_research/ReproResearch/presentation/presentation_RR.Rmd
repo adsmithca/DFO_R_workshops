@@ -31,18 +31,100 @@ abiotic_abrev <- filter(abiotic, year < 2005)
 ```
 
 ## RStudio Tips
-
+- Complie Notebook??
+  
 ## Before we get started
 - Could you click on File -> New -> RMarkdown?
+- Got data sets, 
+- packages knitr, kfigr, xtable, tidyverse
 
 ## Overview
-- Workflows: What i've learned....so far
 - Reproducible Research (RR): reasons and benefits
 - Dynamic Documents with RMarkdown
     - introduction 
     - basics
+    - Workflows: What i've learned....so far
     - intermediate
     - advanced
+
+
+## Reproducible Research (RR)
+- Reproducibility is a cornerstone of science
+- Reproducibility is increasingly difficult because of:
+    - complex statistics
+    - multiple authors/ increased collaboration
+    - Big data: data decisions
+
+## A graphical model for RR (Lewis et al. accepted) {.smaller}
+<style> 
+  #slideID > p { 
+    margin-top: -100px; 
+  } 
+</style>
+<img src="figures/5_open-science-model.png" width="80%" />
+
+## Reproducible Research (RR)
+- Reproducibility is a cornerstone of science
+- Reproducibility is increasingly difficult because of:
+    - complex statistics
+    - multiple authors/ increased collaboration
+    - Big data: data decisions
+- Without the code and data, an analysis is not reproducible
+- But how to make the document reproducible?
+
+## RR with Dynamic Documents (DD)
+- What is a dynamic document?
+  - source document with program code and text
+    - Minimizes cutting/pasting
+    - links writing and analysis
+- Word processing (WYSIWYG) v document preparation (WYSISYM)
+  - Seperates writing from formatting
+- Languages: e.g., Markdown, LaTeX (LyX)
+- knitr (Yihui Xie)
+
+## Benefits of RR with DD {.smaller}
+- Idealistic: 
+    - RR makes for better science (or helps prevents bad science)
+    - see WSBpaper******
+    - Analogy:
+      - prevention ~ education
+      - medication (traditional) ~  peer-review + editor
+      - medication (modern) ~  peer-review + editor + RR
+  
+- Practical:
+    - streamline workflow
+    - rapidly update your own work
+    - organize and retrieve analyses
+    - rescue projects
+    - improved collaboration and review of projects
+
+
+## Objectives
+- basic: produce a dynamic document (html, pdf, or Word) in Rmarkdown
+- intermediate: make it pretty
+- advanced: make it functional, i.e., fully reproducible
+
+## RMarkdown: the basics
+<style> 
+  #slideID > p { 
+    margin-top: -150px; 
+  } 
+</style>
+<img src="figures/6_Rstudio_DD.png" width="95%" />
+
+## RMarkdown: the basics of "chunks"
+- The "r chunk"
+- To start a r chunk type ```r{}
+- To end a r chunk type ```
+- The "text chunk" goes in between the r chunks
+  - e.g. "In a hole in the ground there lived a hobbit....."
+
+## Basic Exercises
+Now, your turn:
+- 1) read in the abiotic data file
+- 2) filter out the years after 2005
+- 3) begin an R markdown file
+- 4) edit it to produce the example
 
 ## Workflow
 <style> 
@@ -76,79 +158,10 @@ abiotic_abrev <- filter(abiotic, year < 2005)
 </style>
 <img src="figures/4_workflow_current_state.PNG" width="95%" />
 
-## Reproducible Research (RR)
-- Reproducibility is a cornerstone of science
-- Reproducibility is increasingly difficult because of:
-    - complex statistics
-    - multiple authors increased collaboration
-    - Big data: data decisions
-- However, without the code and data, a manuscript is not reproducible
-
-## A graphical model for RR and open science using dynamic documents (Lewis et al. accepted) {.smaller}
-<style> 
-  #slideID > p { 
-    margin-top: -100px; 
-  } 
-</style>
-<img src="figures/5_open-science-model.png" width="80%" />
-
-## Benefits of RR {.smaller}
-- Idealistic: 
-    - RR makes for better science (or helps prevents bad science)
-    - see WSBpaper******
-    - Analogy:
-      - prevention ~ education
-      - medication (traditional) ~  peer-review + editor
-      - medication (modern) ~  peer-review + editor + RR
-  
-- Practical:
-    - streamline workflow
-    - rapidly update your own work
-    - organize and retrieve analyses
-    - rescue projects
-    - improved collaboration and review of projects
-
-## Dynamic Documents
-- Word processing (WYSIWYG) v document preparation (WYSISYM)
-  - Seperates writing from formatting
-  - E.g. Markdown, LaTeX (LyX)
-- What is a dynamic document?
-  - source document with program code and text
-    - Minimizes cutting/pasting
-    - links writing and analysis
-- knitr (Yihui Xie)
-
-## Objectives
-- basic: produce a dynamic document (html, pdf, or Word) in Rmarkdown
-- intermediate: make it pretty
-- advanced: make it functional, i.e., fully reproducible
-
-## RMarkdown: the basics
-<style> 
-  #slideID > p { 
-    margin-top: -100px; 
-  } 
-</style>
-<img src="figures/6_Rstudio_DD.png" width="95%" />
-
-## RMarkdown: the basics of "chunks"
-- The "r chunk"
-- To start a r chunk type ```r{}
-- To end a r chunk type ```
-- The "text chunk" goes in between the r chunks
-  - e.g. "In a hole in the ground there lived a hobbit....."
-
-## Basic Exercises
-Now, your turn:
-- 1) read in the abiotic data file
-- 2) filter out the years after 2005
-- 3) begin an R markdown file
-- 4) edit it to produce the example
-
 ## Intermediate RMarkdown - prettify the document
 - Change the YAML header
 - Add headers to the text
-- Add a label and a caption
+- Add a caption
 - Control what to display
 
 ## RMarkdown: intermediate
@@ -181,9 +194,10 @@ Copy the first exercise to a new file and produce the following document
 
 ## Advanced RMarkdown: label a figure and make a table
 - label: {r, "label of the figure", fig.cap = "blah, blah, blah"}
+
 - embed label using R code in text ``` ``r "r some function(arguements)"`` ```
 - hard code e.g. "blah, blah, blah (Fig. 1)"
-- dynamic e.g. "blah, blah, blah ``` `figr('histo1', TRUE, type="Fig.")` ```
+- dynamic e.g. "blah, blah, blah ``` `figr('label', TRUE, type="Fig.")` ```
 
 ## Advanced RMarkdown: make the table
 - Various package options (kable, xtable, stargazer)
