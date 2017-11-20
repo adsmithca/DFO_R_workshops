@@ -1,6 +1,6 @@
 ---
-title: "Dynamic Documents, R, and Markdown"
-subtitle: "a key component of reproducible research"
+title: "Dynamic Documents: R and Markdown"
+subtitle: "A key component of reproducible research"
 author: "Keith P. Lewis"
 date: "NAFC | Fisheries and Oceans Canada | 2017-11-26"
 output: 
@@ -22,21 +22,29 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 
+# tangle the file
+#purl("presentation_RR.Rmd", output = "test2.R", documentation = 2)
+
 # load the data
 abiotic <- read_csv("../data/trawl_abiotic.csv", guess_max = 5000)
 head(abiotic)
 
 # modify the data
 abiotic_abrev <- filter(abiotic, year < 2005)
+
 ```
 
 ## RStudio Tips
-- Complie Notebook??
-  
+- Outline button
+- Clear consul (Ctrl-l)
+- Drag and drop code 
+- Tools -> Global Options -> Code -> Diagnostics -> "Provide R Style Diagnostics"
+
+
 ## Before we get started
 - Could you click on File -> New -> RMarkdown?
-- Got data sets, 
-- packages knitr, kfigr, xtable, tidyverse
+- Go abiotic data set?
+- Have you installed packages knitr, kfigr, xtable, and usual tidyverse
 
 ## Overview
 - Reproducible Research (RR): reasons and benefits
@@ -47,13 +55,8 @@ abiotic_abrev <- filter(abiotic, year < 2005)
     - intermediate
     - advanced
 
-
 ## Reproducible Research (RR)
 - Reproducibility is a cornerstone of science
-- Reproducibility is increasingly difficult because of:
-    - complex statistics
-    - multiple authors/ increased collaboration
-    - Big data: data decisions
 
 ## A graphical model for RR (Lewis et al. accepted) {.smaller}
 <style> 
@@ -66,67 +69,71 @@ abiotic_abrev <- filter(abiotic, year < 2005)
 ## Reproducible Research (RR)
 - Reproducibility is a cornerstone of science
 - Reproducibility is increasingly difficult because of:
+    - Big data: data decisions
     - complex statistics
     - multiple authors/ increased collaboration
-    - Big data: data decisions
 - Without the code and data, an analysis is not reproducible
 - But how to make the document reproducible?
 
 ## RR with Dynamic Documents (DD)
-- What is a dynamic document?
-  - source document with program code and text
-    - Minimizes cutting/pasting
-    - links writing and analysis
-- Word processing (WYSIWYG) v document preparation (WYSISYM)
-  - Seperates writing from formatting
-- Languages: e.g., Markdown, LaTeX (LyX)
-- knitr (Yihui Xie)
+* What is a dynamic document?
+    - source document with program code and text    
+        - Minimizes cutting/pasting
+        - links writing and analysis
+- DD can be made with Markdown or LaTeX (LyX)
+    - Word processing (WYSIWYG) v document preparation (WYSISYM)
+    - Seperates writing from formatting
+- package knitr (Yihui Xie)
 
 ## Benefits of RR with DD {.smaller}
 - Idealistic: 
     - RR makes for better science (or helps prevents bad science)
-    - see WSBpaper******
     - Analogy:
-      - prevention ~ education
-      - medication (traditional) ~  peer-review + editor
-      - medication (modern) ~  peer-review + editor + RR
-  
+        - prevention ~ education
+        - medication (traditional) ~  peer-review + editor
+        - medication (modern) ~  peer-review + editor + RR
+    - see WSBpaper******
 - Practical:
     - streamline workflow
     - rapidly update your own work
     - organize and retrieve analyses
     - rescue projects
     - improved collaboration and review of projects
+    - steal code 
+    
 
 
 ## Objectives
 - basic: produce a dynamic document (html, pdf, or Word) in Rmarkdown
+- think about your own workflows
 - intermediate: make it pretty
 - advanced: make it functional, i.e., fully reproducible
 
 ## RMarkdown: the basics
 <style> 
   #slideID > p { 
-    margin-top: -150px; 
+    margin-top: -100px; 
   } 
 </style>
 <img src="figures/6_Rstudio_DD.png" width="95%" />
 
 ## RMarkdown: the basics of "chunks"
 - The "r chunk"
-- To start a r chunk type ```r{}
-- To end a r chunk type ```
+- Start a r chunk: type ```{r}
+- Type some R code
+- End a r chunk: type ```
 - The "text chunk" goes in between the r chunks
-  - e.g. "In a hole in the ground there lived a hobbit....."
+    - e.g. "In a hole in the ground there lived a hobbit....."
 
-## Basic Exercises
-Now, your turn:
-- 1) read in the abiotic data file
-- 2) filter out the years after 2005
-- 3) begin an R markdown file
-- 4) edit it to produce the example
+## Basic Exercise
+Now it's your turn:    
 
-## Workflow
+- begin an R markdown file
+- read in the abiotic data file
+- filter out the years after 2005
+- edit it to produce the example....
+
+## Let's talk about workflows!
 <style> 
   #slideID > p { 
     margin-top: -50px; 
@@ -173,55 +180,59 @@ Now, your turn:
 <img src="figures/6_Rstudio_DD.png" width="95%" />
 
 ## RMarkdown: intermediate "chunks"
-- ```r{} starts the chunk
+- ```{r} starts the chunk
 - ``` ends the chunk
-- But you can add loads of stuff to r{}
-  - Add a label and a caption - r{fig.cap = "the title"}
+- But you can add loads of stuff to {r}
+  - Add a caption - {r fig.cap = "the title"}
   - Control what to display
-    - code r{echo = F}
-    - warnings r{warnings = F}
-    - messages r{messages = F}
-    - results r{results = "hide"}
+    - code {r echo = F}
+    - warnings {r warnings = F}
+    - messages {r messages = F}
+    - results {r results = "hide"}
+    - evaluate chunk but code and output not displayed {r include=FALSE}
 
 ## Intermediate exercises
 Copy the first exercise to a new file and produce the following document
 
 ## Advanced RMarkdown
 - label a figure in the text, i.e., cross reference
-- make a table 
 - calculate a parameter and insert into text
+- make a table 
 - update the document
 
-## Advanced RMarkdown: label a figure and make a table
-- label: {r, "label of the figure", fig.cap = "blah, blah, blah"}
+## Advanced RMarkdown: cross reference a figure
+- label: {r "chunk label", fig.cap = "the title"}
 
-- embed label using R code in text ``` ``r "r some function(arguements)"`` ```
-- hard code e.g. "blah, blah, blah (Fig. 1)"
-- dynamic e.g. "blah, blah, blah ``` `figr('label', TRUE, type="Fig.")` ```
+- embed R code in text chunk ``` ``r "r some function(arguments)"`` ```
+- label figure using hard code, e.g., "blah, blah, blah (Fig. 1)"
+- label figure dynamically, e.g., "blah, blah, blah 'r figr(label = 'chunk label', TRUE, type="Fig.")' "
+- Note that the ' is really a `
+
+## Advanced RMarkdown: calculate a parameter and insert into text
+- embed R code in text chunk ``` ``r "r some function(arguments)"`` ```
+- hard code parameters, e.g., "blah, blah, blah mean = 10, SD = 2"
+- dynamically code parameters, e.g. "blah, blah, blah mean= 'r mean(abiotic_abrev$depth)' "
+    - result, e.g. "blah, blah, blah mean= ``` `r mean(abiotic_abrev$depth)` ```
+- dynamic and pretty, e.g., "blah, blah, blah mean = 'r round(mean(abiotic_abrev$depth), 2)'
+    - result, e.g., "blah, blah, blah mean = ``` `r round(mean(abiotic_abrev$depth), 2)` ```
 
 ## Advanced RMarkdown: make the table
 - Various package options (kable, xtable, stargazer)
 - the steps:
   - create a summary first
   - wrap it the summary in xtable and make an object
+    - e.g., tab <- xtable(the summary)
   - print the table
-
-## Advanced RMarkdown: calculate a parameter and insert into text
-- embed R code in text `some function(arguements)`
-- hard code e.g. "blah, blah, blah mean = 10, SD = 2"
-- dynamic e.g. "blah, blah, blah mean= ``` `r mean(abiotic_abrev$depth)` ```
-- dynamic and pretty e.g. "blah, blah, blah mean = ``` `r round(mean(abiotic_abrev$depth), 2)` ```
+    - print(tab, comment = F)
 
 ## Advanced exercises
 - Copy the second exercise to a new file and produce the following document
 - Hint: the summary is the mean and SD of depth by NAFO division - use the tidyverse
-- tab <- xtable(the summary)
-- print(tab, comment = F)
 
 
-- .....then update it :)
+- .....then update it  to 2010 :)
   
-## Next steps in RMarkdown
+## Next steps in RMarkdown {.smaller}
  - YAML headers
  - hooks
  - inserting graphics
@@ -231,6 +242,10 @@ Copy the first exercise to a new file and produce the following document
  - templates
  - insert equations
  - Notebooks
+ - packrat (so package updates don't mess things up)
+ - Plotly
+ - Ctrl-Shift-k
+ - package editR
 
 ## Help {.smaller}
 Books
@@ -255,5 +270,5 @@ http://rmarkdown.rstudio.com/html_document_format.html
 http://rmarkdown.rstudio.com/pdf_document_format.html
 http://rmarkdown.rstudio.com/word_document_format.html
 
-## Sample document
-- Zuur's Exploratory data analysis - put on Github
+
+
