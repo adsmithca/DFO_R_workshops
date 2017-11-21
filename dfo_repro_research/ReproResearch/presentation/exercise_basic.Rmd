@@ -12,9 +12,6 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 
-file.exists("../data/trawl_abiotic.csv")
-file.exists("../data/trawl_biomass.csv")
-
 # load the data
 abiotic <- read_csv("../data/trawl_abiotic.csv", guess_max = 5000)
 head(abiotic)

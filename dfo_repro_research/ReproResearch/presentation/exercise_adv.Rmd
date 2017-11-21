@@ -17,7 +17,6 @@ library(ggplot2)
 library(kfigr)
 library(xtable)
 library(knitr)
-library(printr)
 
 #file.exists("../data/trawl_abiotic.csv")
 #file.exists("../data/trawl_biomass.csv")
