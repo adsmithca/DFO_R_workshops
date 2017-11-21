@@ -200,20 +200,22 @@ Copy the first exercise to a new file and produce the following document
 - update the document
 
 ## Advanced RMarkdown: cross reference a figure
-- label: {r "chunk label", fig.cap = "the title"}
-
-- embed R code in text chunk ``` ``r "r some function(arguments)"`` ```
 - label figure using hard code, e.g., "blah, blah, blah (Fig. 1)"
-- label figure dynamically, e.g., "blah, blah, blah 'r figr(label = 'chunk label', TRUE, type="Fig.")' "
-- Note that the ' is really a `
+- or.....
+- add a chunk label: {r "chunk label", fig.cap = "the title"}
+
+- embed R code in text chunk: ``` ``r "r some function(arguments)"`` ```
+- label figure dynamically, e.g., "blah, blah, blah " blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "chunk label", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
+
 
 ## Advanced RMarkdown: calculate a parameter and insert into text
-- embed R code in text chunk ``` ``r "r some function(arguments)"`` ```
 - hard code parameters, e.g., "blah, blah, blah mean = 10, SD = 2"
-- dynamically code parameters, e.g. "blah, blah, blah mean= 'r mean(abiotic_abrev$depth)' "
-    - result, e.g. "blah, blah, blah mean= ``` `r mean(abiotic_abrev$depth)` ```
-- dynamic and pretty, e.g., "blah, blah, blah mean = 'r round(mean(abiotic_abrev$depth), 2)'
-    - result, e.g., "blah, blah, blah mean = ``` `r round(mean(abiotic_abrev$depth), 2)` ```
+- or....
+- embed R code in text chunk ``` ``r "r some function(arguments)"`` ```
+- dynamically code parameters, e.g. "blah, blah, blah, mean= ` ``r paste0("r ", "mean(abiotic_abrev$depth)")`` `
+    - result, e.g. "blah, blah, blah, mean= `r mean(abiotic_abrev$depth)` "
+- dynamic and pretty, e.g., "blah, blah, blah, mean = ` ``r paste0("r ", "round(mean(abiotic_abrev$depth) ,2)")`` ` "
+    - result, e.g., "blah, blah, blah, mean = `r round(mean(abiotic_abrev$depth), 2)` "
 
 ## Advanced RMarkdown: make the table
 - Various package options (kable, xtable, stargazer)
