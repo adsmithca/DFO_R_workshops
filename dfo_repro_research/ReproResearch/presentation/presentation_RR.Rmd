@@ -17,13 +17,14 @@ knitr::opts_chunk$set(cache = TRUE,
                       fig.height = 4.5, 
                       fig.width = 7.5,
                       dev = "svg")
+
 library(readr)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
 
-# tangle the file
-#purl("presentation_RR.Rmd", output = "test2.R", documentation = 2)
+file.exists("../data/trawl_abiotic.csv")
+file.exists("../data/trawl_biomass.csv")
 
 # load the data
 abiotic <- read_csv("../data/trawl_abiotic.csv", guess_max = 5000)
@@ -31,20 +32,19 @@ head(abiotic)
 
 # modify the data
 abiotic_abrev <- filter(abiotic, year < 2005)
-
 ```
 
 ## RStudio Tips
 - Outline button
-- Clear consul (Ctrl-l)
+- Clear console (Ctrl-l)
 - Drag and drop code 
 - Tools -> Global Options -> Code -> Diagnostics -> "Provide R Style Diagnostics"
 
 
 ## Before we get started
 - Could you click on File -> New -> RMarkdown?
-- Go abiotic data set?
-- Have you installed packages knitr, kfigr, xtable, and usual tidyverse
+- Do you have the abiotic data set?
+- Have you installed packages knitr, kfigr, xtable, and the usual tidyverse
 
 ## Overview
 - Reproducible Research (RR): reasons and benefits
@@ -64,7 +64,7 @@ abiotic_abrev <- filter(abiotic, year < 2005)
     margin-top: -100px; 
   } 
 </style>
-<img src="figures/5_open-science-model.png" width="80%" />
+<img src="figures/5_Open_Science_revised_final_ppt.png" width="90%" />
 
 ## Reproducible Research (RR)
 - Reproducibility is a cornerstone of science
@@ -73,26 +73,27 @@ abiotic_abrev <- filter(abiotic, year < 2005)
     - complex statistics
     - multiple authors/ increased collaboration
 - Without the code and data, an analysis is not reproducible
-- But how to make the document reproducible?
+- But a document without the code and data is difficult to reproduce
 
 ## RR with Dynamic Documents (DD)
 * What is a dynamic document?
     - source document with program code and text    
-        - Minimizes cutting/pasting
+        - Minimizes cutting/pasting - tedious and error prone
         - links writing and analysis
 - DD can be made with Markdown or LaTeX (LyX)
     - Word processing (WYSIWYG) v document preparation (WYSISYM)
     - Seperates writing from formatting
-- package knitr (Yihui Xie)
+    - Formatting is consistent, professional, and automatic
+- package knitr (Yihui Xie) - links R with DD
 
 ## Benefits of RR with DD {.smaller}
 - Idealistic: 
-    - RR makes for better science (or helps prevents bad science)
-    - Analogy:
+    - Makes for better, more productive science 
+    - Can address bigger scale questions
+    - Analogy (bad science as a disease):
         - prevention ~ education
         - medication (traditional) ~  peer-review + editor
         - medication (modern) ~  peer-review + editor + RR
-    - see WSBpaper******
 - Practical:
     - streamline workflow
     - rapidly update your own work
@@ -101,8 +102,6 @@ abiotic_abrev <- filter(abiotic, year < 2005)
     - improved collaboration and review of projects
     - steal code 
     
-
-
 ## Objectives
 - basic: produce a dynamic document (html, pdf, or Word) in Rmarkdown
 - think about your own workflows
@@ -218,7 +217,7 @@ Copy the first exercise to a new file and produce the following document
 
 ## Advanced RMarkdown: make the table
 - Various package options (kable, xtable, stargazer)
-- the steps:
+- the steps (for xtable):
   - create a summary first
   - wrap it the summary in xtable and make an object
     - e.g., tab <- xtable(the summary)
@@ -227,6 +226,8 @@ Copy the first exercise to a new file and produce the following document
 
 ## Advanced exercises
 - Copy the second exercise to a new file and produce the following document
+- indent under "pdf_document:" 
+      - "fig_caption: yes" to YAML header
 - Hint: the summary is the mean and SD of depth by NAFO division - use the tidyverse
 
 
@@ -248,24 +249,24 @@ Copy the first exercise to a new file and produce the following document
  - package editR
 
 ## Help {.smaller}
-Books
+Books  
 Xie, Y. 2013. Dynamic Documents with R and knitr. CRC Press, London.
 Gandrud, C. 2014. Reproducible Research with R and RStudio. 2nd Edition. CRC Press, Boca Raton, FL. 
 
-Cheatsheets
+Cheatsheets  
 http://ropensci.github.io/reproducibility-guide/sections/introduction/
 https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf
 
-Reproducible Research webpages
+Reproducible Research webpages  
 http://ropensci.github.io/reproducibility-guide/sections/introduction/
 
-Knitr or Markdown webpages
+Knitr or Markdown webpages  
 https://yihui.name/knitr/
 https://support.rstudio.com/hc/en-us/articles/205368677-R-Markdown-Dynamic-Documents-for-R
 https://sachsmc.github.io/knit-git-markr-guide/knitr/knit.html
 http://kbroman.org/knitr_knutshell/pages/Rmarkdown.html
 
-YAML
+YAML  
 http://rmarkdown.rstudio.com/html_document_format.html
 http://rmarkdown.rstudio.com/pdf_document_format.html
 http://rmarkdown.rstudio.com/word_document_format.html
