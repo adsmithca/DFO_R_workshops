@@ -108,6 +108,8 @@ abiotic_abrev <- filter(abiotic, year < 2005)
 - intermediate: make it pretty
 - advanced: make it functional, i.e., fully reproducible
 
+- And maybe never use Word or PowerPoint again.....ever!
+
 ## RMarkdown: the basics
 <style> 
   #slideID > p { 
