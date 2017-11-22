@@ -3,9 +3,7 @@ title: "Second Markdown Doc"
 author: "Keith Lewis"
 date: "November 16, 2017"
 output:
-  pdf_document:
-    fig_caption: yes
-  word_document: default
+  pdf_document
 ---
 
 ```{r setup, include=FALSE}
