@@ -205,7 +205,7 @@ Copy the first exercise to a new file and produce the following document
 - add a chunk label: {r "chunk label", fig.cap = "the title"}
 
 - embed R code in text chunk: ``` ``r "r some function(arguments)"`` ```
-- label figure dynamically, e.g., "blah, blah, blah " blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "chunk label", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
+- label figure dynamically, e.g., "blah, blah, blah " blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "histo1", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
 
 
 ## Advanced RMarkdown: calculate a parameter and insert into text
@@ -228,8 +228,6 @@ Copy the first exercise to a new file and produce the following document
 
 ## Advanced exercises
 - Copy the second exercise to a new file and produce the following document
-- indent under "pdf_document:" 
-      - "fig_caption: yes" to YAML header
 - Hint: the summary is the mean and SD of depth by NAFO division - use the tidyverse
 
 
