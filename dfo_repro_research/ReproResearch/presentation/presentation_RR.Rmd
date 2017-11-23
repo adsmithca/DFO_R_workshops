@@ -51,7 +51,7 @@ abiotic_abrev <- filter(abiotic, year < 2005)
 - Dynamic Documents with RMarkdown
     - introduction 
     - basics
-    - Workflows: What i've learned....so far
+    - workflows: What i've learned....so far
     - intermediate
     - advanced
 
@@ -78,37 +78,37 @@ abiotic_abrev <- filter(abiotic, year < 2005)
 ## RR with Dynamic Documents (DD)
 * What is a dynamic document?
     - source document with program code and text    
-        - Minimizes cutting/pasting - tedious and error prone
+        - minimizes cutting/pasting - tedious and error prone
         - links writing and analysis
 - DD can be made with Markdown or LaTeX (LyX)
-    - Word processing (WYSIWYG) v document preparation (WYSISYM)
-    - Seperates writing from formatting
-    - Formatting is consistent, professional, and automatic
-- package knitr (Yihui Xie) - links R with DD
+    - word processing (WYSIWYG) v document preparation (WYSISYM)
+    - seperates writing from formatting
+    - formatting is consistent, professional, and automatic
+- package knitr (Yihui Xie) - links R with document
 
 ## Benefits of RR with DD {.smaller}
 - Idealistic: 
-    - Makes for better, more productive science 
-    - Can address bigger scale questions
-    - Analogy (bad science as a disease):
+    - makes for better, more productive science 
+    - can address bigger scale questions
+    - analogy (bad science as a disease):
         - prevention ~ education
         - medication (traditional) ~  peer-review + editor
         - medication (modern) ~  peer-review + editor + RR
 - Practical:
     - streamline workflow
     - rapidly update your own work
-    - organize and retrieve analyses
+    - organize and retrieve analyses (DD + RProject)
     - rescue projects
     - improved collaboration and review of projects
     - steal code 
     
 ## Objectives
-- basic: produce a dynamic document (html, pdf, or Word) in Rmarkdown
-- think about your own workflows
-- intermediate: make it pretty
-- advanced: make it functional, i.e., fully reproducible
+- Basic: produce a dynamic document (html, pdf, or Word) in Rmarkdown
+- Think about your own workflows
+- Intermediate: make it pretty
+- Advanced: make it functional, i.e., fully reproducible
 
-- And maybe never use Word or PowerPoint again.....ever!
+- and never use Word or PowerPoint again.....ever!
 
 ## RMarkdown: the basics
 <style> 
@@ -132,7 +132,8 @@ Now it's your turn:
 - begin an R markdown file
 - read in the abiotic data file
 - filter out the years after 2005
-- edit it to produce the example....
+- edit it to produce the following example....
+- save the file and knit it
 
 ## Let's talk about workflows!
 <style> 
@@ -169,10 +170,10 @@ Now it's your turn:
 ## Intermediate RMarkdown - prettify the document
 - Change the YAML header
 - Add headers to the text
-- Add a caption
+- Add a figure caption
 - Control what to display
 
-## RMarkdown: intermediate
+## Intermediate RMarkdown : hashtags - they're not just for Twitter
 <style> 
   #slideID > p { 
     margin-top: -100px; 
@@ -180,7 +181,7 @@ Now it's your turn:
 </style>
 <img src="figures/6_Rstudio_DD.png" width="95%" />
 
-## RMarkdown: intermediate "chunks"
+## Intermediate RMarkdown:  modify the "chunks"
 - ```{r} starts the chunk
 - ``` ends the chunk
 - But you can add loads of stuff to {r}
@@ -192,22 +193,22 @@ Now it's your turn:
     - results {r results = "hide"}
     - evaluate chunk but code and output not displayed {r include=FALSE}
 
-## Intermediate exercises
-Copy the first exercise to a new file and produce the following document
+## RMarkdown intermediate exercises
+Copy the first exercise to a new file (save it) and produce the following document
 
 ## Advanced RMarkdown
-- label a figure in the text, i.e., cross reference
-- calculate a parameter and insert into text
-- make a table 
-- update the document
+- Label a figure in the text, i.e., cross reference
+- Calculate a parameter and insert into text
+- Make a table 
+- Update the document
 
 ## Advanced RMarkdown: cross reference a figure
-- label figure using hard code, e.g., "blah, blah, blah (Fig. 1)"
+- Label figure using hard code, e.g., "blah, blah, blah (Fig. 1)"
 - or.....
-- add a chunk label: {r "chunk label", fig.cap = "the title"}
-
-- embed R code in text chunk: ``` ``r "r some function(arguments)"`` ```
-- label figure dynamically, e.g., "blah, blah, blah " blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "histo1", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
+- Add a chunk label: {r "chunk label", fig.cap = "the title"}
+    - e.g., {r histo1, fig.cap = "title"}
+- Embed R code in text chunk: ``` ``r "r some function(arguments)"`` ```
+- Label figure dynamically, e.g., "blah, blah, blah " blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "histo1", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
 
 
 ## Advanced RMarkdown: calculate a parameter and insert into text
@@ -216,20 +217,20 @@ Copy the first exercise to a new file and produce the following document
 - embed R code in text chunk ``` ``r "r some function(arguments)"`` ```
 - dynamically code parameters, e.g. "blah, blah, blah, mean= ` ``r paste0("r ", "mean(abiotic_abrev$depth)")`` `
     - result, e.g. "blah, blah, blah, mean= `r mean(abiotic_abrev$depth)` "
-- dynamic and pretty, e.g., "blah, blah, blah, mean = ` ``r paste0("r ", "round(mean(abiotic_abrev$depth) ,2)")`` ` "
+- dynamic and pretty, e.g., "blah, blah, blah, mean = ` ``r paste0("r ", "round(mean(abiotic_abrev$depth), 2)")`` ` "
     - result, e.g., "blah, blah, blah, mean = `r round(mean(abiotic_abrev$depth), 2)` "
 
 ## Advanced RMarkdown: make the table
 - Various package options (kable, xtable, stargazer)
 - the steps (for xtable):
-  - create a summary first
-  - wrap it the summary in xtable and make an object
-    - e.g., tab <- xtable(the summary)
-  - print the table
-    - print(tab, comment = F)
+    - create a summary first
+    - wrap it the summary in xtable and make an object
+        - e.g., tab <- xtable(the summary)
+    - print the table
+        - print(tab, comment = F)
 
 ## Advanced exercises
-- Copy the second exercise to a new file and produce the following document
+- Copy the second exercise to a new file (save it) and produce the following document
 - Hint: the summary is the mean and SD of depth by NAFO division - use the tidyverse
 
 
