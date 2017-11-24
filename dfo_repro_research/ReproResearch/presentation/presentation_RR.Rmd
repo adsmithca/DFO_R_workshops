@@ -81,7 +81,7 @@ abiotic_abrev <- filter(abiotic, year < 2005)
         - minimizes cutting/pasting - tedious and error prone
         - links writing and analysis
 - DD can be made with Markdown or LaTeX (LyX)
-    - word processing (WYSIWYG) v document preparation (WYSISYM)
+    - word processing (WYSIWYG) v document preparation (WYSIWYM)
     - seperates writing from formatting
     - formatting is consistent, professional, and automatic
 - package knitr (Yihui Xie) - links R with document
@@ -208,7 +208,7 @@ Copy the first exercise to a new file (save it) and produce the following docume
 - Add a chunk label: {r "chunk label", fig.cap = "the title"}
     - e.g., {r histo1, fig.cap = "title"}
 - Embed R code in text chunk: ``` ``r "r some function(arguments)"`` ```
-- Label figure dynamically, e.g., "blah, blah, blah " blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "histo1", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
+- Label figure dynamically, e.g., "blah, blah, blah,` ``r paste0("r ", "figr(label =", "'", "histo1", "'", ", TRUE, type = ", '"Fig."', ")")`` `"
 
 
 ## Advanced RMarkdown: calculate a parameter and insert into text
@@ -228,6 +228,7 @@ Copy the first exercise to a new file (save it) and produce the following docume
         - e.g., tab <- xtable(the summary)
     - print the table
         - print(tab, comment = F)
+        - {r echo=F, results='asis'}
 
 ## Advanced exercises
 - Copy the second exercise to a new file (save it) and produce the following document
