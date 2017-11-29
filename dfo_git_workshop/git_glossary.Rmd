@@ -1,0 +1,43 @@
+---
+title: "Git Glossary"
+author: "Eric Pedersen"
+date: "November 29, 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Git Glossary
+
+## Repository
+
+This is the history of commits and stored prior versions of files for a given
+project. The repository is stored in a hidden folder called `.git`, found in 
+the root directory of the project. It holds all the information on how to recreate
+the steps you took to develop this project, and is used by git to determine
+what changes in the current directory have not yet been recorded in a commit.
+
+## Staging
+
+Files that are staged are in an interm step before being commited. When you
+create a commit, only the changes to files in the tracked folder that have been
+staged will be included in that commit. While we have not covered it in the 
+workshop, it is possible to stage only part of a file; for instance, if you 
+have changed both the first paragraph of a document and the final paragraph, you
+can stage the first part without having to stage the second. This is useful if 
+you have been working on different parts of an analysis, and want to keep track
+of the different parts seperately.
+
+## Commit
+
+Commits are saved snapshots of your project at a specific point in time. Each
+commit includes a set of files in a given state, and a commit message written by
+the person who made the commit describing what was accomplished in the commit.
+Commits track all of the changes to the file since the file was last included in
+a commit. Git keeps track of your changes through a series of commits. 
+
+## History
