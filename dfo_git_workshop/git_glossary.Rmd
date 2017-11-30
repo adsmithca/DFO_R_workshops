@@ -13,13 +13,28 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Git Glossary
 
+## Project
+
+This is a loose term for all of the things that are being tracked in a given git
+repository. All files in a project 
+
 ## Repository
 
 This is the history of commits and stored prior versions of files for a given
-project. The repository is stored in a hidden folder called `.git`, found in 
-the root directory of the project. It holds all the information on how to recreate
-the steps you took to develop this project, and is used by git to determine
-what changes in the current directory have not yet been recorded in a commit.
+project. The repository is stored in a hidden folder called `.git`, found in the
+root directory of the project. It holds all the information on how to recreate
+the steps you took to develop this project, and is used by git to determine what
+changes in the current directory have not yet been recorded in a commit.
+Repositories can be either local, which is the repository on your own computer,
+that you work on, or remote. A remote repository tracks changes to the same
+project as the local repository, but resides somewhere else from the local; in
+another place on the same computer, or more typically, via internet connection.
+A Github repository is an example of a remote repository. Changes you make on
+your local repository can be sent to the remote repository by using the *push*
+command. You can bring changes made on a remote repository to your local
+repository by *fetching* then *merging* into your local repository. These two
+commands can be combined with the *pull* command.
+
 
 ## Staging
 
