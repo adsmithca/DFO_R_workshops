@@ -10,7 +10,7 @@ git config --global user.email "eric.pedersen@dfo-mpo.gc.ca"
 # They make it easier to edit git messages (which are your records
 # on the changes you've made, it's good to make this easy)
 git config --global core.editor notepad
-git config format.commitMessageColumns 72
+git config --global format.commitMessageColumns 72
 
 
 #First: make sure you're in the right folder
@@ -35,6 +35,7 @@ ls -Force
 git status
 
 #2: staging and committing files
+
 #now let's create a new (empty) text file:
 touch "file_1"
 
@@ -100,3 +101,12 @@ git log --stat --oneline
 notepad "data_file"
 git add "data_file"
 git commit --amend
+
+git log --stat --oneline
+
+
+#3. Viewing differences between commits
+#to see what has been changed between two different commits, we use the diff command:
+git diff <ID for older commit> <ID for newer commit>
+
+
