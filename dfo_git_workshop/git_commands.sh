@@ -110,3 +110,13 @@ git log --stat --oneline
 git diff <ID for older commit> <ID for newer commit>
 
 
+#Exercises (10 minutes approx.): 
+#1. Try making a few new changes to the three files we made (file_1, file_2, data_file).  Try to do at least two new commits. 
+#2. Try deleting one of the three files. What happens to the git status? 
+#3. Try renaming one of the two remaining files without changing its contents (you don’t have to do this in the console). What does this do to the git status?
+
+#END OF SCRIPT FILE 
+#After this, we move on to using a GUI. 
+
+
+
