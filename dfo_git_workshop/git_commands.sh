@@ -37,6 +37,9 @@ git status
 #2: staging and committing files
 
 #now let's create a new (empty) text file:
+#(touch is a command that updates a file's Modified date without changing it
+# if the file doesn't exist it creates it, but is safe to use on existing
+# files as well)
 touch "file_1"
 
 #Then edit it.
