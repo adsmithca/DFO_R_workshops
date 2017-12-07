@@ -29,9 +29,10 @@ cd git_tutorial
 git init
 
 #All this does is create a hidden folder in the current directory.
-#We can make sure it's there (the -Force option tells the prompt to
-#show all files)
-ls -Force
+#We can make sure it's there (the a option tells the prompt to
+#show all files. Note an earlier version of this used the -Force command, which
+#doesn't work in Git bash)
+ls -a
 git status
 
 #2: staging and committing files
