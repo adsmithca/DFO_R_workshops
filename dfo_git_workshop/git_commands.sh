@@ -12,8 +12,6 @@ git config --global user.email "eric.pedersen@dfo-mpo.gc.ca"
 git config --global core.editor notepad
 git config --global format.commitMessageColumns 72
 
-# For Mac users, run these lines (you should install the Atom text editor first
-git config --global core.editor "atom --wait"
 
 #First: make sure you're in the right folder
 #For Windows users: change my name with your user name.
@@ -31,18 +29,14 @@ cd git_tutorial
 git init
 
 #All this does is create a hidden folder in the current directory.
-#We can make sure it's there (the a option tells the prompt to
-#show all files. Note an earlier version of this used the -Force command, which
-#doesn't work in Git bash)
-ls -a
+#We can make sure it's there (the -Force option tells the prompt to
+#show all files)
+ls -Force
 git status
 
 #2: staging and committing files
 
 #now let's create a new (empty) text file:
-#(touch is a command that updates a file's Modified date without changing it
-# if the file doesn't exist it creates it, but is safe to use on existing
-# files as well)
 touch "file_1"
 
 #Then edit it.
