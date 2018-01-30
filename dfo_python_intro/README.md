@@ -69,6 +69,6 @@ Set up instructions adapted from [Software
 Carpentry](https://software-carpentry.org/). 
 
 # Data Sources
-The data file `RaceRocksDailySalTemp.txt` is from a (data collection 
-program)[http://www.pac.dfo-mpo.gc.ca/science/oceans/data-donnees/lightstations-phares/index-eng.html) 
+The data file `RaceRocksDailySalTemp.txt` is from a [data collection 
+program](http://www.pac.dfo-mpo.gc.ca/science/oceans/data-donnees/lightstations-phares/index-eng.html)
 in the DFO Pacific Region.
