@@ -24,6 +24,7 @@ presentations/*_cache/
 
 *.pdf
 *.zip
+*.ics
 dfo_ggplot_workshop/presentations/intro_REMOTE_8768.Rmd
 dfo_ggplot_workshop/presentations/intro_BACKUP_8768.Rmd
 dfo_ggplot_workshop/presentations/intro_LOCAL_8768.Rmd
@@ -52,3 +53,5 @@ dfo_repro_research/ReproResearch/presentation/presentation_RR_cache/html/unnamed
 dfo_repro_research/ReproResearch/presentation/presentation_RR_cache/html/__packages
 dfo_repro_research/ReproResearch/email_group1.docx
 ~$
+dfo_plotly_workshop/presentation/*.html
+dfo_plotly_workshop/presentation/*_cache

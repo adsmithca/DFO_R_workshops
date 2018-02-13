@@ -1,37 +1,20 @@
 ---
-title: 'Plotting in the tidyverse: ggplot2'
-author: "Keith Lewis and Paul Regular"
-date: "NAFC | Fisheries and Oceans Canada | October 12, 2017"
+title: "Interactive plotting using the plotly package in R"
+author: "Paul Regular"
+date: "NAFC | Fisheries and Oceans Canada | Feb 15, 2018"
 output:
-  beamer_presentation:
-    incremental: yes
   ioslides_presentation:
     incremental: yes
-    logo: ggplot2_hex.png
+    logo: plotly_logo.png
     widescreen: yes
 ---
 
 
 ```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-library(readr)
-library(tidyr)
-library(dplyr)
-library(ggplot2)
+library(plotly)
 knitr::opts_knit$set(root.dir = '../')
-knitr::opts_chunk$set(cache = TRUE, 
-                      fig.align = "center", 
-                      fig.height = 4.5, 
-                      fig.width = 7.5,
-                      dev = "svg")
+knitr::opts_chunk$set(cache = TRUE)
 ```
-
-
-## Rstudio tips
-- Arguements
-    - `gather(data = dune_sp, key=species, value = "cover_class", Achimill:Callcusp)` or
-    - `gather(dune_sp, species, "cover_class", Achimill:Callcusp)`
-- Use the editor and pass to consol with Ctrl-Enter
-- The cheatsheets
 
 
 ## Getting started {.build .smaller}
@@ -41,45 +24,58 @@ Before we go:
 1. Were you able to download the scripts and data we sent?
 2. Does the following code run without errors? 
 
-```{r startup, eval=FALSE, message=FALSE, warning=FALSE}
+```{r startup, message=FALSE, warning=FALSE}
+
+## Import and process data used in this presentation
+
 # setwd("c:/where_the_folder_is/")
-
-library(readr)
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-
-file.exists("data/trawl_abiotic.csv")
-file.exists("data/trawl_biomass.csv")
-file.exists("data/wdata.Rdata")
-file.exists("data/strata_boundaries/all_strata.shp")
-file.exists("data/NL_shapefile/NL.shp")
+library(tidyverse)
+library(plotly) # devtools::install_github("ropensci/plotly")
+abiotic <- read_csv("data/trawl_abiotic.csv", guess_max = 5000)
+biomass <- read_csv("data/trawl_biomass.csv", guess_max = 5000)
+biomass <- biomass %>% left_join(abiotic, by = c("year", "trawl_id"))
+cod_trend <- biomass %>% 
+  group_by(year, nafo_div) %>% 
+  summarise(mean_cod = mean(cod))
 
 ```
 
 ## Outline
 
->- Plotting options
->- Grammar of graphics
->- ggplot2: the basics
->- ggplot2: intermediate
->- ggplot2: advanced stuff
->- ggplot2: extensions
->- Cookbook for R
+>- What is Plotly?
+>- ggplot2 recap
+>- ggplot2 -> plotly
+>- `plot_ly` interface
+>- Just `add_` plotly
+>- Subplots
+>- Controls
+>- Animations
+>- Help
+
 
 ## Plotting options
 
-*"The greatest value of a picture is when it forces us to notice what we never expected to see."* — John Tukey
+> *"The greatest value of a picture is when it forces us to notice what we never expected to see."* — John Tukey
 
-- spreadsheets, e.g., Excel (hint: it sucks!)
+- spreadsheets, e.g., Excel
 - stand alone program, e.g., Sigma Plot
 - other stats programs, e.g., SAS
 - R
     - base
-    - various functions
-    - ggplot2 (part of the tidyverse)
+    - lattice
+    - ggplot2
+    - plotly
+    
+## What is plotly?
 
-## Grammar of graphics
+- Interface to the JavaScript graphing library that powers http://plot.ly
+- You can make graphs using their online interface https://plot.ly/create/
+- Or you can use the plotly package in R
+- Easy to get up and running, especially if you know ggplot2
+
+## ggplot2 recap
+
+Grammar of graphics
 
 - layer
     - data
@@ -91,280 +87,196 @@ file.exists("data/NL_shapefile/NL.shp")
 - coordinates (e.g. Cartesian)
 - faceting (multiple subsets; lattice)
 
-## ggplot2: the basics
+## ggplot2: scatterplot  {.build}
 
->- data
->- scatterplot
->- boxplot
->- stacked bar
->- saving the output
->- exercises
-
-## ggplot2: the basics - data {.build}
-
->- A prerequisite for plotting in R is reading your data into R
->- ggplot2 is built for tidy data
-
-```{r, message=FALSE}
-
-library(readr)
-abiotic <- read_csv("data/trawl_abiotic.csv", guess_max = 5000)
-head(abiotic)
-
-```
-
-## ggplot2: the basics - scatterplot  {.build}
-
-```{r, warning=FALSE, fig.width=4.5}
-ggplot(data = abiotic, aes(x = temp_bottom, y = depth)) + geom_point()
-```
-
-## ggplot2: the basics - box-whisker plot  {.build}
-
-```{r, warning = FALSE}
-ggplot(data = abiotic, aes(x = nafo_div, y = temp_bottom)) + geom_boxplot()
-```
-
-## ggplot2: the basics - stacked bargraph  {.build}
-
-```{r}
-ggplot(data = abiotic, aes(x = year, fill = nafo_div)) +
-  geom_bar(stat = "count") # statistics modifies geom
-```
-
-## ggplot2: the basics - saving the figure 
-
-```{r, eval=FALSE}
-ggplot(data = abiotic, aes(x = year, fill = nafo_div)) +
-  geom_bar(stat = "count")     # statistics modifies geom
-ggsave("plot.pdf")             # saves to working directory
-ggsave("plot.png", dpi = 600)
-```
-
->- Easy to export publication quality vector (e.g. "pdf") or high-resolution raster (e.g. "png") figures
-
-
-## ggplot2: the basics - exercises 
-
->- Load the trawl biomass data using readr
->- Replicate the plot below and save the file as a pdf
-
-```{r, message=FALSE, echo=FALSE}
-biomass <- read_csv("data/trawl_biomass.csv")
-ggplot(data = biomass, aes(x = factor(year), y = shrimp)) + geom_boxplot()
-```
-
-## ggplot2: intermediate
-
-Move away from defaults to publication quality
-
->- build upon an object
->- change size, colour, and shape
->- axes
->- legends
->- themes
-
-## ggplot2: intermediate - object + geom {.build}
-
-```{r, fig.height=4.5, fig.width = 4, warning=FALSE}
-p <- ggplot(data = abiotic)
-p + geom_point(aes(x = temp_bottom, y = depth))
-```
-
-## ggplot2: intermediate - object + alternate aes {.build}
-
-```{r, fig.height=4.5, fig.width = 4, warning=FALSE}
-p + geom_point(aes(x = temp_bottom, y = depth, colour = nafo_div))
-```
-
-## ggplot2: intermediate - object + more grammar {.smaller .build}
-
-```{r, fig.height=3.5, fig.width = 4, warning=FALSE}
-p <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))
-p + geom_point(shape = 16, size = 1, alpha = 0.5) +  # change the geom
-  ylab("Depth (m)") +                                # change label of y-axis
-  xlab("Temperature (°C)") +                         # change label of x-axis
-  labs(colour = "NAFO")                              # change label of legend
-```
-
-## ggplot2: intermediate - object + more grammar {.smaller .build}
-
-```{r, fig.height=3.5, fig.width = 4, warning=FALSE}
-p <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))
-p + geom_point(shape = 16, size = 1, alpha = 0.5) +                      # change the geom
-  ylab("Depth (m)") + xlab("Temperature (°C)") + labs(colour = "NAFO") + # change labels
-  scale_y_reverse(limits = c(750, 0)) +                                  # reverse y-axis and impose limits
-  scale_x_continuous(position = "top") +                                 # place x-axis on top of plot
-  scale_colour_brewer(palette = "Set1") +                                # change the colour palette
-  theme_bw()                                                             # change the theme
-```
-
-## ggplot2: intermediate - exercises
-
->- Use either the trawl abiotic or biomass data and create a chart
->- Then, make it publication quality (change the axis label, theme, etc.)
->- save it as a pdf or other file type
-
-## ggplot2: advanced stuff
-
->- tidyverse & facets
->- working with layers - the true power of ggplot!
-
-## ggplot2: advanced stuff - the tidyverse {.smaller .build}
-
-```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE}
-abiotic %>%                        # Start with the 'abiotic' dataset
-  filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J
-  ggplot(aes(temp_bottom)) +       # Then, determine aes
-    geom_histogram()               # plot histograms
-```
-
-## ggplot2: advanced stuff - tidyverse and facets {.smaller .build}
-
-```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE}
-abiotic %>%                        # Start with the 'abiotic' dataset
-  filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J
-  ggplot(aes(temp_bottom)) +       # Then, determine aes
-    geom_histogram() +             # plot histograms
-    facet_wrap(~ year)             # facet by year
-```
-
-## ggplot2: advanced stuff - layers  {.smaller .build}
-
-```{r, fig.height=4, fig.width = 4, warning=FALSE}
-# no layers
-ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) # run this line - what happens?
-```
-
-## ggplot2: advanced stuff - layers {.smaller .build}
-
-```{r, fig.height=4, fig.width = 4, warning=FALSE}
-# one layer
-ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) + # the data and aes
-  geom_point()                                                               # the point layer
-```
-
-## ggplot2: advanced stuff - layers {.smaller .build}
-
-```{r, fig.height=4, fig.width = 4, warning=FALSE}
-# one layer but with data specific to layer
-ggplot() +
-  geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))  # geom, data, aes 
-
-```
-
-## ggplot2: advanced stuff - layers {.smaller .build}
-
-```{r, fig.height=4, fig.width = 4, warning=FALSE}
-# two layers
-ggplot() +
-  geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) +
-  geom_vline(aes(xintercept = 0), linetype = 2)
-```
-
-## ggplot2: advanced stuff - layers {.smaller .build}
-
-```{r}
-load("data/wdata.Rdata")
-w <- ggplot(adf, aes(length, weight, colour = as.factor(month)))
-w <- w + geom_point(alpha = 0.5)
-w <- w + geom_line(data = pdata, aes(length, predw, colour = as.factor(month)), size = 1.5)
-w <- w + labs(x = 'Length (cm)', y = 'Weight (kg)')
-w <- w + scale_colour_discrete(name = "",
-                               breaks = c("12", "1", "2"),
-                               labels = c("December", "January", "February"))
-```
-
-## ggplot2: advanced stuff - layers {.smaller .build}
-
-```{r}
-w
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+ggplot(data = cod_trend, aes(x = year, y = mean_cod)) + geom_point()
 ```
 
 
-## ggplot2: advanced stuff - exercises
+## ggplot2: scatterplot + more aes {.build}
 
->- Using the trawl data sets, use pipes to join the two data sets, modify the data, and make a figure with at least two layers
-
-## ggplot2: extensions
-
->- multiple plots
->- interactive plots
->- maps
-
-
-## ggplot2: extensions - multiple plots {.smaller .build}
-```{r, warning=FALSE, message=FALSE}
-p1 <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth)) + geom_point()
-p2 <- ggplot(data = abiotic, aes(x = nafo_div, y = temp_bottom)) + geom_boxplot()
-cowplot::plot_grid(p1, p2, labels = c("A", "B"))
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+ggplot(data = cod_trend, aes(x = year, y = mean_cod, colour = nafo_div)) + geom_point()
 ```
 
-## ggplot2: extensions - interactive plots {.smaller .build}
-```{r, warning=FALSE, message = FALSE, fig.height=3.5}
-p <- abiotic %>% 
-  left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data
-  ggplot(aes(x = depth, y = cod, colour = temp_bottom)) +  # set-up aes
-  geom_point(alpha = 0.5) + scale_y_sqrt() +               # sqrt scale to help see the data
-  scale_colour_viridis_c() + theme_minimal()               # set colour and theme
-p                                                          # print static plot
+## ggplot2: scatterplot + more layers & save object {.build}
 
-```
-
-## ggplot2: extensions - interactive plots {.smaller .build}
-```{r, warning=FALSE, message=FALSE, fig.width=10}
-library(plotly)
-ggplotly(p)       # print interactive plot
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+(p <- ggplot(data = cod_trend, 
+       aes(x = year, y = mean_cod, colour = nafo_div, group = nafo_div)) + 
+  geom_point() + geom_line())
 ```
 
 
+## ggplot2: refine {.build}
 
-## ggplot2: extensions - maps  {.smaller .build}
-
-```{r, warning=FALSE, message=FALSE}
-library(sf)
-strata <- read_sf("data/strata_boundaries/all_strata.shp", # import shapefiles
-                  layer = "all_strata")                     
-nl <- read_sf("data/NL_shapefile/NL.shp", layer = "NL")
-p <- abiotic %>% 
-  left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data                           
-  filter(year == 2010) %>%                                 # filter to 2010 data
-  group_by(nafo_div, strata) %>%                           # set-up groups
-  summarise(mean_shrimp = mean(shrimp)) %>%                # calculate mean biomass of shrimp by strat
-  left_join(strata, by = "strata") %>%                     # merge with sf object
-  ggplot(aes(fill = mean_shrimp)) + geom_sf() +            # strata map
-  geom_sf(data = nl, fill = "grey") +                      # NL map
-  ggtitle("Mean biomass of shrimp by strata in 2010") +    # plot labels
-  labs(fill = "Mean\nbiomass") +
-  scale_fill_viridis_c() + theme_bw()                      # colour and theme
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+p + labs(x = "Year", y = "Cod biomass (mean catch)", colour = "NAFO") + 
+  scale_colour_brewer(palette = "Set2") + theme_minimal()
 ```
 
-## ggplot2: extensions - maps  {.smaller .build}
 
-```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height = 4.5}
-p # print map
-```
+<!-- ## ggplot2: advanced stuff -->
 
-## Help {.smaller}
+<!-- >- tidyverse & facets -->
+<!-- >- working with layers - the true power of ggplot! -->
 
-Books on ggplot:
+<!-- ## ggplot2: advanced stuff - the tidyverse {.smaller .build} -->
 
->- Chang, W. 2013. R Graphics Cookbook. O'Reilly
->- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer.
+<!-- ```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE} -->
+<!-- abiotic %>%                        # Start with the 'abiotic' dataset -->
+<!--   filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J -->
+<!--   ggplot(aes(temp_bottom)) +       # Then, determine aes -->
+<!--     geom_histogram()               # plot histograms -->
+<!-- ``` -->
 
-Theoretical foundation:
+<!-- ## ggplot2: advanced stuff - tidyverse and facets {.smaller .build} -->
 
->- Tufte, E.R. The visual display of quantitative information.
->- Wilkinson, L. 2005. The grammar of graphics. Springer.
+<!-- ```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE} -->
+<!-- abiotic %>%                        # Start with the 'abiotic' dataset -->
+<!--   filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J -->
+<!--   ggplot(aes(temp_bottom)) +       # Then, determine aes -->
+<!--     geom_histogram() +             # plot histograms -->
+<!--     facet_wrap(~ year)             # facet by year -->
+<!-- ``` -->
 
-Websites:
+<!-- ## ggplot2: advanced stuff - layers  {.smaller .build} -->
 
->- http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!]
->- http://ggplot.yhathq.com/
->- https://rpubs.com/hadley/ggplot2-layers [for understanding layers]
->- https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html
+<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
+<!-- # no layers -->
+<!-- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) # run this line - what happens? -->
+<!-- ``` -->
 
-Papers:
+<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
 
->- Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601. https://rpubs.com/hadley/ggplot2-layers
+<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
+<!-- # one layer -->
+<!-- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) + # the data and aes -->
+<!--   geom_point()                                                               # the point layer -->
+<!-- ``` -->
+
+<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
+
+<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
+<!-- # one layer but with data specific to layer -->
+<!-- ggplot() + -->
+<!--   geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))  # geom, data, aes  -->
+
+<!-- ``` -->
+
+<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
+
+<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
+<!-- # two layers -->
+<!-- ggplot() + -->
+<!--   geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) + -->
+<!--   geom_vline(aes(xintercept = 0), linetype = 2) -->
+<!-- ``` -->
+
+<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
+
+<!-- ```{r} -->
+<!-- load("data/wdata.Rdata") -->
+<!-- w <- ggplot(adf, aes(length, weight, colour = as.factor(month))) -->
+<!-- w <- w + geom_point(alpha = 0.5) -->
+<!-- w <- w + geom_line(data = pdata, aes(length, predw, colour = as.factor(month)), size = 1.5) -->
+<!-- w <- w + labs(x = 'Length (cm)', y = 'Weight (kg)') -->
+<!-- w <- w + scale_colour_discrete(name = "", -->
+<!--                                breaks = c("12", "1", "2"), -->
+<!--                                labels = c("December", "January", "February")) -->
+<!-- ``` -->
+
+<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
+
+<!-- ```{r} -->
+<!-- w -->
+<!-- ``` -->
+
+
+<!-- ## ggplot2: advanced stuff - exercises -->
+
+<!-- >- Using the trawl data sets, use pipes to join the two data sets, modify the data, and make a figure with at least two layers -->
+
+<!-- ## ggplot2: extensions -->
+
+<!-- >- multiple plots -->
+<!-- >- interactive plots -->
+<!-- >- maps -->
+
+
+<!-- ## ggplot2: extensions - multiple plots {.smaller .build} -->
+<!-- ```{r, warning=FALSE, message=FALSE} -->
+<!-- p1 <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth)) + geom_point() -->
+<!-- p2 <- ggplot(data = abiotic, aes(x = nafo_div, y = temp_bottom)) + geom_boxplot() -->
+<!-- cowplot::plot_grid(p1, p2, labels = c("A", "B")) -->
+<!-- ``` -->
+
+<!-- ## ggplot2: extensions - interactive plots {.smaller .build} -->
+<!-- ```{r, warning=FALSE, message = FALSE, fig.height=3.5} -->
+<!-- p <- abiotic %>%  -->
+<!--   left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data -->
+<!--   ggplot(aes(x = depth, y = cod, colour = temp_bottom)) +  # set-up aes -->
+<!--   geom_point(alpha = 0.5) + scale_y_sqrt() +               # sqrt scale to help see the data -->
+<!--   scale_colour_viridis_c() + theme_minimal()               # set colour and theme -->
+<!-- p                                                          # print static plot -->
+
+<!-- ``` -->
+
+<!-- ## ggplot2: extensions - interactive plots {.smaller .build} -->
+<!-- ```{r, warning=FALSE, message=FALSE, fig.width=10} -->
+<!-- library(plotly) -->
+<!-- ggplotly(p)       # print interactive plot -->
+<!-- ``` -->
+
+
+
+<!-- ## ggplot2: extensions - maps  {.smaller .build} -->
+
+<!-- ```{r, warning=FALSE, message=FALSE} -->
+<!-- library(sf) -->
+<!-- strata <- read_sf("data/strata_boundaries/all_strata.shp", # import shapefiles -->
+<!--                   layer = "all_strata")                      -->
+<!-- nl <- read_sf("data/NL_shapefile/NL.shp", layer = "NL") -->
+<!-- p <- abiotic %>%  -->
+<!--   left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data                            -->
+<!--   filter(year == 2010) %>%                                 # filter to 2010 data -->
+<!--   group_by(nafo_div, strata) %>%                           # set-up groups -->
+<!--   summarise(mean_shrimp = mean(shrimp)) %>%                # calculate mean biomass of shrimp by strat -->
+<!--   left_join(strata, by = "strata") %>%                     # merge with sf object -->
+<!--   ggplot(aes(fill = mean_shrimp)) + geom_sf() +            # strata map -->
+<!--   geom_sf(data = nl, fill = "grey") +                      # NL map -->
+<!--   ggtitle("Mean biomass of shrimp by strata in 2010") +    # plot labels -->
+<!--   labs(fill = "Mean\nbiomass") + -->
+<!--   scale_fill_viridis_c() + theme_bw()                      # colour and theme -->
+<!-- ``` -->
+
+<!-- ## ggplot2: extensions - maps  {.smaller .build} -->
+
+<!-- ```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height = 4.5} -->
+<!-- p # print map -->
+<!-- ``` -->
+
+<!-- ## Help {.smaller} -->
+
+<!-- Books on ggplot: -->
+
+<!-- >- Chang, W. 2013. R Graphics Cookbook. O'Reilly -->
+<!-- >- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer. -->
+
+<!-- Theoretical foundation: -->
+
+<!-- >- Tufte, E.R. The visual display of quantitative information. -->
+<!-- >- Wilkinson, L. 2005. The grammar of graphics. Springer. -->
+
+<!-- Websites: -->
+
+<!-- >- http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!] -->
+<!-- >- http://ggplot.yhathq.com/ -->
+<!-- >- https://rpubs.com/hadley/ggplot2-layers [for understanding layers] -->
+<!-- >- https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html -->
+
+<!-- Papers: -->
+
+<!-- >- Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601. https://rpubs.com/hadley/ggplot2-layers -->
 

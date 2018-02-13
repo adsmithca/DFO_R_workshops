@@ -1,20 +1,37 @@
 ---
-title: " Interactive plotting using the plotly package in R""
-author: "Paul Regular"
-date: "NAFC | Fisheries and Oceans Canada | Feb 15, 2018"
+title: 'Plotting in the tidyverse: ggplot2'
+author: "Keith Lewis and Paul Regular"
+date: "NAFC | Fisheries and Oceans Canada | October 12, 2017"
 output:
+  beamer_presentation:
+    incremental: yes
   ioslides_presentation:
     incremental: yes
-    logo: plotly_logo.png
+    logo: ggplot2_hex.png
     widescreen: yes
 ---
 
 
 ```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-library(plotly)
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 knitr::opts_knit$set(root.dir = '../')
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(cache = TRUE, 
+                      fig.align = "center", 
+                      fig.height = 4.5, 
+                      fig.width = 7.5,
+                      dev = "svg")
 ```
+
+
+## Rstudio tips
+- Arguements
+    - `gather(data = dune_sp, key=species, value = "cover_class", Achimill:Callcusp)` or
+    - `gather(dune_sp, species, "cover_class", Achimill:Callcusp)`
+- Use the editor and pass to consol with Ctrl-Enter
+- The cheatsheets
 
 
 ## Getting started {.build .smaller}
@@ -27,7 +44,10 @@ Before we go:
 ```{r startup, eval=FALSE, message=FALSE, warning=FALSE}
 # setwd("c:/where_the_folder_is/")
 
-library(plotly) # devtools::install_github("ropensci/plotly")
+library(readr)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
 
 file.exists("data/trawl_abiotic.csv")
 file.exists("data/trawl_biomass.csv")
