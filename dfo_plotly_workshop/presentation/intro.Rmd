@@ -13,7 +13,7 @@ output:
 ```{r setup, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
 library(plotly)
 knitr::opts_knit$set(root.dir = '../')
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(dev = "svg")
 ```
 
 
@@ -31,6 +31,9 @@ Before we go:
 # setwd("c:/where_the_folder_is/")
 library(tidyverse)
 library(plotly) # devtools::install_github("ropensci/plotly")
+caa <- read.table("data/catch_num.txt", header = TRUE, sep = "\t", row.names = 1)
+caa <- as.matrix(caa)
+dimnames(caa) <- list(Year = rownames(caa), Age = gsub("X", "", colnames(caa)))
 abiotic <- read_csv("data/trawl_abiotic.csv", guess_max = 5000)
 biomass <- read_csv("data/trawl_biomass.csv", guess_max = 5000)
 biomass <- biomass %>% left_join(abiotic, by = c("year", "trawl_id"))
@@ -44,9 +47,10 @@ cod_trend <- biomass %>%
 
 >- What is Plotly?
 >- ggplot2 recap
->- ggplot2 -> plotly
+>- ggplot2 → plotly
 >- `plot_ly` interface
->- Just `add_` plotly
+>- 3D charts
+>- Maps
 >- Subplots
 >- Controls
 >- Animations
@@ -94,189 +98,205 @@ ggplot(data = cod_trend, aes(x = year, y = mean_cod)) + geom_point()
 ```
 
 
-## ggplot2: scatterplot + more aes {.build}
+## ggplot2: more aesthetics {.build}
 
 ```{r, warning=FALSE, fig.width=10, fig.height = 4}
 ggplot(data = cod_trend, aes(x = year, y = mean_cod, colour = nafo_div)) + geom_point()
 ```
 
-## ggplot2: scatterplot + more layers & save object {.build}
+## ggplot2: more layers {.build}
 
 ```{r, warning=FALSE, fig.width=10, fig.height = 4}
-(p <- ggplot(data = cod_trend, 
+ggplot(data = cod_trend, 
        aes(x = year, y = mean_cod, colour = nafo_div, group = nafo_div)) + 
-  geom_point() + geom_line())
+  geom_point() + geom_line()
 ```
 
 
-## ggplot2: refine {.build}
+## ggplot2: refine & save object {.build}
+
+```{r, warning=FALSE}
+p <- ggplot(data = cod_trend,                            # data     
+            aes(x = year, y = mean_cod,                     
+                colour = nafo_div, group = nafo_div)) +  # mapping (aesthetics) 
+  geom_point() +                                         # points layer 
+  geom_line() +                                          # lines layer
+  labs(x = "Year", y = "Cod biomass (mean catch)", 
+       colour = "NAFO") +                                # labels
+  scale_colour_brewer(palette = "Set2") +                # colour palette
+  theme_minimal()                                        # ggplot theme
+```
+
+## ggplot2: refine & save object {.build}
 
 ```{r, warning=FALSE, fig.width=10, fig.height = 4}
-p + labs(x = "Year", y = "Cod biomass (mean catch)", colour = "NAFO") + 
-  scale_colour_brewer(palette = "Set2") + theme_minimal()
+p # print plot
 ```
 
 
-<!-- ## ggplot2: advanced stuff -->
+## ggplot2 → plotly {.build}
 
-<!-- >- tidyverse & facets -->
-<!-- >- working with layers - the true power of ggplot! -->
-
-<!-- ## ggplot2: advanced stuff - the tidyverse {.smaller .build} -->
-
-<!-- ```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE} -->
-<!-- abiotic %>%                        # Start with the 'abiotic' dataset -->
-<!--   filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J -->
-<!--   ggplot(aes(temp_bottom)) +       # Then, determine aes -->
-<!--     geom_histogram()               # plot histograms -->
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - tidyverse and facets {.smaller .build} -->
-
-<!-- ```{r, fig.height=4, fig.width = 6.5, warning=FALSE, message=FALSE} -->
-<!-- abiotic %>%                        # Start with the 'abiotic' dataset -->
-<!--   filter(nafo_div == "2J") %>%     # Then, filter down to rows where nafo_div == 2J -->
-<!--   ggplot(aes(temp_bottom)) +       # Then, determine aes -->
-<!--     geom_histogram() +             # plot histograms -->
-<!--     facet_wrap(~ year)             # facet by year -->
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - layers  {.smaller .build} -->
-
-<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
-<!-- # no layers -->
-<!-- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) # run this line - what happens? -->
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
-
-<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
-<!-- # one layer -->
-<!-- ggplot(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) + # the data and aes -->
-<!--   geom_point()                                                               # the point layer -->
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
-
-<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
-<!-- # one layer but with data specific to layer -->
-<!-- ggplot() + -->
-<!--   geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div))  # geom, data, aes  -->
-
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
-
-<!-- ```{r, fig.height=4, fig.width = 4, warning=FALSE} -->
-<!-- # two layers -->
-<!-- ggplot() + -->
-<!--   geom_point(data = abiotic, aes(x = temp_bottom, y = depth, colour = nafo_div)) + -->
-<!--   geom_vline(aes(xintercept = 0), linetype = 2) -->
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
-
-<!-- ```{r} -->
-<!-- load("data/wdata.Rdata") -->
-<!-- w <- ggplot(adf, aes(length, weight, colour = as.factor(month))) -->
-<!-- w <- w + geom_point(alpha = 0.5) -->
-<!-- w <- w + geom_line(data = pdata, aes(length, predw, colour = as.factor(month)), size = 1.5) -->
-<!-- w <- w + labs(x = 'Length (cm)', y = 'Weight (kg)') -->
-<!-- w <- w + scale_colour_discrete(name = "", -->
-<!--                                breaks = c("12", "1", "2"), -->
-<!--                                labels = c("December", "January", "February")) -->
-<!-- ``` -->
-
-<!-- ## ggplot2: advanced stuff - layers {.smaller .build} -->
-
-<!-- ```{r} -->
-<!-- w -->
-<!-- ``` -->
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+ggplotly(p)
+```
 
 
-<!-- ## ggplot2: advanced stuff - exercises -->
+## ggplot2 → plotly exercise {.smaller}
 
-<!-- >- Using the trawl data sets, use pipes to join the two data sets, modify the data, and make a figure with at least two layers -->
+>- Use the `abiotic` data, `ggplot` and `ggplotly` to try and replicate the plot below
 
-<!-- ## ggplot2: extensions -->
+```{r echo=FALSE, warning=FALSE, fig.height=4, fig.width=10}
+p <- ggplot(data = abiotic, 
+            aes(x = depth, y = temp_bottom, 
+                colour = temp_bottom, shape = nafo_div)) +
+  scale_color_distiller(palette = "Spectral") +
+  labs(x = "Depth (m)", y = "Temperature (°C)",
+       colour = "Temperature (°C)", shape = "NAFO") +
+  geom_point() + theme_minimal()
+ggplotly(p)
+```
 
-<!-- >- multiple plots -->
-<!-- >- interactive plots -->
-<!-- >- maps -->
+&nbsp;
 
-
-<!-- ## ggplot2: extensions - multiple plots {.smaller .build} -->
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- p1 <- ggplot(data = abiotic, aes(x = temp_bottom, y = depth)) + geom_point() -->
-<!-- p2 <- ggplot(data = abiotic, aes(x = nafo_div, y = temp_bottom)) + geom_boxplot() -->
-<!-- cowplot::plot_grid(p1, p2, labels = c("A", "B")) -->
-<!-- ``` -->
-
-<!-- ## ggplot2: extensions - interactive plots {.smaller .build} -->
-<!-- ```{r, warning=FALSE, message = FALSE, fig.height=3.5} -->
-<!-- p <- abiotic %>%  -->
-<!--   left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data -->
-<!--   ggplot(aes(x = depth, y = cod, colour = temp_bottom)) +  # set-up aes -->
-<!--   geom_point(alpha = 0.5) + scale_y_sqrt() +               # sqrt scale to help see the data -->
-<!--   scale_colour_viridis_c() + theme_minimal()               # set colour and theme -->
-<!-- p                                                          # print static plot -->
-
-<!-- ``` -->
-
-<!-- ## ggplot2: extensions - interactive plots {.smaller .build} -->
-<!-- ```{r, warning=FALSE, message=FALSE, fig.width=10} -->
-<!-- library(plotly) -->
-<!-- ggplotly(p)       # print interactive plot -->
-<!-- ``` -->
+>- *Hint: use the `shape` aesthetic and a continuous colour scale (e.g. `scale_color_distiller`)*
 
 
+## `plot_ly` interface
 
-<!-- ## ggplot2: extensions - maps  {.smaller .build} -->
+- Inspired by the layered grammar of graphics
+- Not as fully featured as `ggplot` but supports some options not supported by `ggplot`
+    - e.g. Can supply matrices, make 3D plots, and draw multiple axes
+- Recognizes and preserves groupings created by `dplyr::group_by`
+    - Facilitates a data-to-plot pipeline
+- Like the `geom_` functions in ggplot2, the plotly package includes a series of `add_` functions to add layers to a plotly object
 
-<!-- ```{r, warning=FALSE, message=FALSE} -->
-<!-- library(sf) -->
-<!-- strata <- read_sf("data/strata_boundaries/all_strata.shp", # import shapefiles -->
-<!--                   layer = "all_strata")                      -->
-<!-- nl <- read_sf("data/NL_shapefile/NL.shp", layer = "NL") -->
-<!-- p <- abiotic %>%  -->
-<!--   left_join(biomass, by = c("year", "trawl_id")) %>%       # merge abiotic and biomass data                            -->
-<!--   filter(year == 2010) %>%                                 # filter to 2010 data -->
-<!--   group_by(nafo_div, strata) %>%                           # set-up groups -->
-<!--   summarise(mean_shrimp = mean(shrimp)) %>%                # calculate mean biomass of shrimp by strat -->
-<!--   left_join(strata, by = "strata") %>%                     # merge with sf object -->
-<!--   ggplot(aes(fill = mean_shrimp)) + geom_sf() +            # strata map -->
-<!--   geom_sf(data = nl, fill = "grey") +                      # NL map -->
-<!--   ggtitle("Mean biomass of shrimp by strata in 2010") +    # plot labels -->
-<!--   labs(fill = "Mean\nbiomass") + -->
-<!--   scale_fill_viridis_c() + theme_bw()                      # colour and theme -->
-<!-- ``` -->
+## `plot_ly`: scatterplot  {.build}
 
-<!-- ## ggplot2: extensions - maps  {.smaller .build} -->
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+plot_ly(data = cod_trend, x = ~year, y = ~mean_cod) %>% add_markers()
+```
 
-<!-- ```{r, warning=FALSE, message=FALSE, fig.width=10, fig.height = 4.5} -->
-<!-- p # print map -->
-<!-- ``` -->
 
-<!-- ## Help {.smaller} -->
+## `plot_ly`: more aesthetics {.build}
 
-<!-- Books on ggplot: -->
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+plot_ly(data = cod_trend, x = ~year, y = ~mean_cod, color = ~nafo_div) %>% add_markers()
+```
 
-<!-- >- Chang, W. 2013. R Graphics Cookbook. O'Reilly -->
-<!-- >- Wickham, H. 2009. ggplot2: elegant graphics for data analysis. Springer. -->
+## `plot_ly`: more layers {.build}
 
-<!-- Theoretical foundation: -->
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+cod_trend %>% 
+  group_by(nafo_div) %>% 
+  plot_ly(x = ~year, y = ~mean_cod, color = ~nafo_div) %>% 
+  add_markers() %>% add_lines()
+```
 
-<!-- >- Tufte, E.R. The visual display of quantitative information. -->
-<!-- >- Wilkinson, L. 2005. The grammar of graphics. Springer. -->
 
-<!-- Websites: -->
+## `plot_ly`: refine & save object {.build}
 
-<!-- >- http://www.cookbook-r.com/   [THIS IS GOLD!!!!!!!!] -->
-<!-- >- http://ggplot.yhathq.com/ -->
-<!-- >- https://rpubs.com/hadley/ggplot2-layers [for understanding layers] -->
-<!-- >- https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html -->
+```{r, warning=FALSE}
+p <- cod_trend %>%                                          # data                                    
+  group_by(nafo_div) %>%                                    # groupings
+  plot_ly(x = ~year, y = ~mean_cod, color = ~nafo_div) %>%  # mapping (aesthetics)
+  add_markers() %>%                                         # points layer
+  add_lines() %>%                                           # lines layer
+  layout(xaxis = list(title = "Year"),
+         yaxis = list(title = "Cod biomass (mean catch)"))  # labels
+```
 
-<!-- Papers: -->
+## `plot_ly`: refine & save object {.build}
 
-<!-- >- Su, Y-S. 2008. It's easy to produce chartjunk using MS Excel 2007 but hard to make good graphs.  Computational Statistis and Data Anlaysis. 52: 4594-4601. https://rpubs.com/hadley/ggplot2-layers -->
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+p # print plot
+```
+
+
+## `plot_ly` exercise {.smaller}
+
+>- Use the `abiotic` data and `plot_ly` to try and replicate the plot below
+
+```{r echo=FALSE, warning=FALSE, fig.height=4, fig.width=10}
+abiotic %>% 
+  group_by(nafo_div) %>% 
+  plot_ly(x = ~depth, y = ~temp_bottom, 
+          color = ~temp_bottom, symbol = ~nafo_div) %>% 
+  add_markers() %>% 
+  layout(xaxis = list(title = "Depth (m)"),
+         yaxis = list(title = "Temperature (°C)")) %>% 
+  colorbar(title = "Temperature (°C)")
+
+```
+
+>- *Hint: use the `symbol` argument in `plot_ly` and pipe `colorbar(title = "Temperature (°C)")` to label the color bar*
+
+## 3D charts: surface {.smaller .build}
+
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+Catch <- caa[as.character(1997:2010), ]
+plot_ly(x = colnames(Catch), y = rownames(Catch), z = ~Catch) %>% add_surface() %>% 
+  layout(scene = list(xaxis = list(title = "Age"), 
+                      yaxis = list(title = "Year"), 
+                      zaxis = list(title = "Catch")))
+```
+
+## 3D charts: lines {.smaller .build}
+
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+d <- as.data.frame.table(caa[as.character(1997:2010), ], responseName = "Catch")
+d$Age <- as.numeric(d$Age); d$Year <- as.numeric(d$Year)
+d %>% group_by(Year) %>% 
+  plot_ly(x = ~Age, y = ~Year, z = ~Catch, color = ~Catch) %>% add_lines()
+```
+
+## 3D charts: points {.smaller .build}
+
+```{r, warning=FALSE, fig.width=10, fig.height = 4}
+abiotic %>% filter(year == 2010, nafo_div == "3L") %>% 
+  mutate(depth = -depth) %>% 
+  plot_ly(x = ~long, y = ~lat, z = ~depth, color = ~temp_bottom) %>% 
+  add_markers() %>% layout(scene = list(zaxis = list(autorange = "reversed")))
+```
+
+## Maps
+
+```{r message=FALSE, warning=FALSE}
+dat <- biomass %>% filter(year == 2010)                       # data to put on a map
+base <- map_data("world", "canada") %>% group_by(group)       # base map data
+p <- plot_geo(x = ~long, y = ~lat, sizes = c(1, 500)) %>%     # mapping
+  add_polygons(data = base, color = I("grey"),                # add base map
+               name = "base map", hoverinfo = "none") %>%     # disable tooltabs
+  add_markers(data = dat, size = ~cod, name = "cod",          # add cod points
+              text = ~cod) %>% 
+  add_markers(data = dat, size = ~shrimp, name = "shrimp",    # add shrimp points
+              text = ~shrimp) %>% 
+  add_markers(data = dat, size = ~redfish, name = "redfish",  # add redfish points
+              text = ~redfish) %>% 
+  layout(geo = list(showframe = FALSE,                        # turn off default base map
+                    showcoastlines = FALSE,
+                    projection = list(type = "mercator"),     # set projection
+                    lonaxis = list(range = c(-65, -40)),      # set x and y lims
+                    lataxis = list(range = c(45, 56))))
+```
+
+## Map
+
+```{r echo=FALSE, fig.height=5.5, fig.width=10, warning=FALSE}
+p
+```
+
+
+
+## Help {.smaller}
+
+Online plotly book:
+
+>- Sievert, C. 2018. plotly for R. https://plotly-book.cpsievert.me/index.html
+
+Websites:
+
+>- https://plot.ly/r/   [Plotly R Library]
+
+
+
 
