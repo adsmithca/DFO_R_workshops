@@ -52,7 +52,6 @@ cod_trend <- biomass %>%
 >- 3D charts
 >- Maps
 >- Subplots
->- Controls
 >- Animations
 >- Help
 
@@ -249,43 +248,142 @@ d %>% group_by(Year) %>%
   plot_ly(x = ~Age, y = ~Year, z = ~Catch, color = ~Catch) %>% add_lines()
 ```
 
-## 3D charts: points {.smaller .build}
+## 3D charts: exercise {.smaller}
 
-```{r, warning=FALSE, fig.width=10, fig.height = 4}
+Use the `abiotic` data to replicate this plot of temperatures from the 2010 survey in 3L
+
+```{r, echo = FALSE, warning=FALSE, fig.width=10, fig.height = 4.5}
 abiotic %>% filter(year == 2010, nafo_div == "3L") %>% 
   mutate(depth = -depth) %>% 
   plot_ly(x = ~long, y = ~lat, z = ~depth, color = ~temp_bottom) %>% 
-  add_markers() %>% layout(scene = list(zaxis = list(autorange = "reversed")))
+  add_markers()
 ```
+
+- *Hint: mutate depth*
+
 
 ## Maps
 
 ```{r message=FALSE, warning=FALSE}
-dat <- biomass %>% filter(year == 2010)                       # data to put on a map
-base <- map_data("world", "canada") %>% group_by(group)       # base map data
-p <- plot_geo(x = ~long, y = ~lat, sizes = c(1, 500)) %>%     # mapping
-  add_polygons(data = base, color = I("grey"),                # add base map
-               name = "base map", hoverinfo = "none") %>%     # disable tooltabs
-  add_markers(data = dat, size = ~cod, name = "cod",          # add cod points
-              text = ~cod) %>% 
-  add_markers(data = dat, size = ~shrimp, name = "shrimp",    # add shrimp points
-              text = ~shrimp) %>% 
-  add_markers(data = dat, size = ~redfish, name = "redfish",  # add redfish points
-              text = ~redfish) %>% 
-  layout(geo = list(showframe = FALSE,                        # turn off default base map
-                    showcoastlines = FALSE,
-                    projection = list(type = "mercator"),     # set projection
-                    lonaxis = list(range = c(-65, -40)),      # set x and y lims
+p <- biomass %>%                                          # pipe data
+  filter(year == 2010) %>%
+  gather(species, biomass, shrimp:redfish) %>% 
+  plot_geo(x = ~long, y = ~lat, color = ~species,         # plot_geo mapping
+           size = ~biomass, sizes = c(1, 500)) %>%
+  add_markers() %>%                                       # add points
+  layout(geo = list(resolution = 50,                      # base map specs
+                    showland = TRUE,                      
+                    landcolor = toRGB("grey90"),          
+                    coastlinecolor = toRGB("grey80"),
+                    projection = list(type = "mercator"),    
+                    lonaxis = list(range = c(-65, -40)),  # x and y limits    
                     lataxis = list(range = c(45, 56))))
 ```
 
 ## Map
 
-```{r echo=FALSE, fig.height=5.5, fig.width=10, warning=FALSE}
+```{r, echo=FALSE, fig.height=5.5, fig.width=10, warning=FALSE}
+p
+```
+
+## Map: exercise {.smaller}
+
+Use the `abiotic` data to replicate this plot of temperatures from the 2010 survey
+
+```{r, echo=FALSE, fig.height=5.5, fig.width=10}
+
+a <- abiotic %>% 
+  filter(year == 2010) %>% 
+  plot_geo(x = ~long, y = ~lat, color = ~temp_bottom) %>%
+  add_markers(showlegend = FALSE, name = "temp_bottom") %>%                     
+  layout(geo = list(resolution = 50,                     
+                    showland = TRUE,                      
+                    landcolor = toRGB("grey90"),          
+                    coastlinecolor = toRGB("grey80"),
+                    projection = list(type = "mercator"),    
+                    lonaxis = list(range = c(-65, -40)),   
+                    lataxis = list(range = c(45, 56))))
+a
+
+```
+
+## Subplot {.smaller .build}
+
+1) Build a series of plots
+
+```{r, warning=FALSE}
+p1 <- biomass %>% 
+  group_by(year) %>% 
+  summarise(mean = mean(cod)) %>% 
+  plot_ly(x = ~year, y = ~mean) %>% add_lines(name = "cod")
+p2 <- biomass %>% 
+  group_by(year) %>% 
+  summarise(mean = mean(shrimp)) %>% 
+  plot_ly(x = ~year, y = ~mean) %>% add_lines(name = "shrimp")
+```
+
+## Subplot {.smaller .build}
+
+2) Supply to subplot function
+
+```{r, warning=FALSE, fig.width=10, fig.height = 4.5}
+subplot(p1, p2, nrows = 2, shareX = TRUE)
+```
+
+## Subplot: exercise
+
+Combine two or more of the plots produced today
+
+```{r, echo=FALSE, fig.width=10, fig.height = 4.5}
+subplot(p, a)
+```
+
+
+## Animations
+
+```{r}
+p <- biomass %>%                                          
+  gather(species, biomass, shrimp:redfish) %>% 
+  plot_geo(x = ~long, y = ~lat, color = ~species,
+           size = ~biomass, sizes = c(1, 500),
+           frame = ~year) %>%                             # add frame to the mapping
+  add_markers() %>%                                       
+  layout(geo = list(resolution = 50,                      
+                    showland = TRUE,                      
+                    landcolor = toRGB("grey90"),          
+                    coastlinecolor = toRGB("grey80"),
+                    projection = list(type = "mercator"),    
+                    lonaxis = list(range = c(-65, -40)),    
+                    lataxis = list(range = c(45, 56))))
+```
+
+
+## Animations
+
+```{r, echo=FALSE, fig.height=5.5, fig.width=10, warning=FALSE}
 p
 ```
 
 
+## Animations: exercise {.smaller}
+
+Use the `abiotic` data to replicate this plot of temperatures
+
+```{r, echo=FALSE, fig.height=5, fig.width=10}
+
+a <- abiotic %>% 
+  plot_geo(x = ~long, y = ~lat, color = ~temp_bottom, frame = ~year) %>%
+  add_markers(showlegend = FALSE, name = "temp_bottom") %>%                     
+  layout(geo = list(resolution = 50,                     
+                    showland = TRUE,                      
+                    landcolor = toRGB("grey90"),          
+                    coastlinecolor = toRGB("grey80"),
+                    projection = list(type = "mercator"),    
+                    lonaxis = list(range = c(-65, -40)),   
+                    lataxis = list(range = c(45, 56))))
+a
+
+```
 
 ## Help {.smaller}
 
