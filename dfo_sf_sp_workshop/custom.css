@@ -1,0 +1,12 @@
+.large { font-size: 130% }
+.huge {font-size: 170% }
+.small { font-size: 70% }
+
+.pull-left {
+  float: left;
+  width: 47%;
+}
+.pull-right {
+  float: right;
+  width: 47%;
+}

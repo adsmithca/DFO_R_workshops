@@ -1,0 +1,125 @@
+---
+title: "Working with spatial data and mapping in R"
+subtitle: " The sf and sp packages"
+author: "Eric Pedersen and Aaron Adamack"
+date: "March 23rd, 2018"
+output:
+  xaringan::moon_reader:
+    css: ["default", "custom.css"]
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# What we'll be talking about today:
+.huge[
+- Why map in R? 
+]
+
+--
+
+.huge[
+- Short intro to spatial data and GIS concepts
+]
+--
+
+.huge[
+- What are the sp and sf packages, and why does it help to know both?
+]
+
+--
+
+.huge[
+- How to, for sp and sf: 
+]
+  - Load maps
+  - Putting data with spatial coordinates into R spatial data format
+  - Plotting basic maps
+
+--
+
+.huge[
+- A quick demo of a couple useful tools: 
+]
+  - Plotting sf and sp maps in ggplot2
+  - Rgooglemaps
+  
+---
+# Why map in R?
+
+.huge[
+- Makes it easier to get information from maps
+]
+
+--
+
+.huge[
+- Can map data and model outputs more easily
+]
+
+--
+
+.huge[
+- It's reproducible]
+
+--
+
+.huge[
+- You can make really nice maps]
+
+
+---
+![](figures/bike_ggplot.png)
+
+--- 
+#The very basics for GIS
+
+
+
+---
+
+#Getting set up
+.huge[
+```{r, eval=FALSE}
+library(sp)
+library(sf)
+library(raster)
+
+all_canada<-getData('GADM', country="CAN", level=1) # provinces
+
+nfld <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
+plot(nfld)
+```
+]
+---
+class: left, middle
+#Getting set up
+
+.center[
+```{r, eval=TRUE, echo=FALSE}
+library(sp)
+library(sf)
+library(raster)
+
+all_canada<-getData('GADM', country="CAN", level=1) # provinces
+
+nfld <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
+plot(nfld)
+```
+]
+---
+
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+
