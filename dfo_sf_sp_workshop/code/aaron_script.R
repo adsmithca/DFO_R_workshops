@@ -7,11 +7,12 @@ require(classInt)
 require(RColorBrewer)
 require(RgoogleMaps)
 require(raster)
-require(plyr)
+require(dplyr)
+require(rgeos)
 
 vignette# load the data
-abiotic<-read.csv("e:\\dfo_r_workshops\\dfo.r.workshops\\dfo_sf_sp_workshop\\data\\trawl_abiotic.csv")
-biomass<-read.csv("e:\\dfo_r_workshops\\dfo.r.workshops\\dfo_sf_sp_workshop\\data\\trawl_biomass.csv")
+abiotic<-read.csv("dfo_sf_sp_workshop\\data\\trawl_abiotic.csv")
+biomass<-read.csv("dfo_sf_sp_workshop\\data\\trawl_biomass.csv")
 
 # check out the abiotic and biomass data
 head(abiotic)
@@ -21,8 +22,8 @@ head(biomass)
 fielddata<-merge(abiotic,biomass,all.x=TRUE)
 
 # load the map layers
-nafo.div.shelf<-readOGR(dsn="e:\\dfo_r_workshops\\dfo.r.workshops\\dfo_sf_sp_workshop\\data\\map_layers",layer="nafo_div_shelf")
-divisions<-readOGR(dsn="e:\\dfo_r_workshops\\dfo.r.workshops\\dfo_sf_sp_workshop\\data\\map_layers\\Divisions",layer="Divisions")
+nafo.div.shelf<-readOGR(dsn="dfo_sf_sp_workshop\\data\\map_layers",layer="nafo_div_shelf")
+divisions<-readOGR(dsn="dfo_sf_sp_workshop\\data\\map_layers\\Divisions",layer="Divisions")
 
 # It is quite simple to look at the map layers...
 # nafo.div.shelf
@@ -123,7 +124,7 @@ mymarkers=cbind.data.frame(lat=fieldtemps$lat,lon=fieldtemps$lon,col=fieldtemp10
 # First step is to find your basemap. To do this, you need to know the extent of your data points e.g. make a bounding box...
 bb<-qbbox(lat=mymarkers[,"lat"],lon=mymarkers[,"lon"])
 # download the map
-mymap<-GetMap.bbox(bb$lonR,bb$latR,destfile="firstmap.png",maptype="satellite")
+mymap<-GetMap.bbox(bb$lonR,bb$latR,destfile="dfo_sf_sp_workshop\\data\\firstmap.png",maptype="satellite")
 tmp<-PlotOnStaticMap(mymap,lat=mymarkers[,"lat"],lon=mymarkers[,"lon"],cex=0.5,pch=19,col=mymarkers[,"col"])
 
 # what's gone wrong?
@@ -183,10 +184,15 @@ retrievepts<-cbind(retrievepts,pt.assign)
 
 # get the median water temp by polygon
 median.temp<-ddply(retrievepts,.(pt.assign),summarise,med.temp=median(temp_bottom,na.rm=TRUE))
-# need to divide these up into intervals for a figure we're going to make
-tempbrks<-classIntervals(median.temp$med.temp,n=6,style="fixed",fixedBreaks=seq(-2,4,1))
+median.temp2<-retrievepts %>% 
+  group_by(pt.assign) %>%
+  summarise(med.temp=median(temp_bottom, na.rm=TRUE)) %>%
+  ungroup()
 
-median.temp$colint<-findColours(tempbrks,palinv)
+# need to divide these up into intervals for a figure we're going to make
+tempbrks<-classIntervals(median.temp2$med.temp,n=6,style="fixed",fixedBreaks=seq(-2,4,1))
+
+median.temp2$colint<-findColours(tempbrks,palinv)
 
 # now the hard part... need to have a data.frame with the same number of rows and order as the original spatial polygon...
 # first get the polygon ID slots in order
@@ -198,9 +204,9 @@ newdf<-data.frame(id=polygonidvec)
 # also need a smaller data.frame with our median water temps. For this one, it's the median.temp data.frame from the ddply. The pt.assign column contains the index of the row.names that we want. We are going to use this to create a common column for merging the two...
 
 # creating the shared column
-median.temp$id<-polygonidvec[median.temp$pt.assign]
+median.temp2$id<-polygonidvec[median.temp2$pt.assign]
 # merging
-newdf<-merge(newdf,median.temp,all.x=TRUE)
+newdf<-merge(newdf,median.temp2,all.x=TRUE)
 # need to create a variable for the colour interval
 
 # create the row.names
