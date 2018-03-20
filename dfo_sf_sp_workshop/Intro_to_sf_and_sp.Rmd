@@ -78,10 +78,35 @@ options(htmltools.dir.version = FALSE)
 ---
 ![](figures/bike_ggplot.png)
 
---- 
+
+
+---
+
 #The very basics for GIS
+.large[
+Why do we need special packages for spatial data? It's all lat-long anyway, right? 
+]
+--
 
+.pull-left[
 
+.huge[ 
+1.Spatial objects are complex
+]
+
+![](figures/geometry_types.png)
+]
+
+--
+
+.pull-right[
+
+.huge[ 
+2.We live on a mishapen globe
+]
+
+![](figures/Earth_Gravitational_Model_1996.png)
+]
 
 ---
 
@@ -103,7 +128,7 @@ class: left, middle
 #Getting set up
 
 .center[
-```{r, eval=TRUE, echo=FALSE}
+```{r, eval=TRUE, echo=FALSE, cache=TRUE}
 library(sp)
 library(sf)
 library(raster)
