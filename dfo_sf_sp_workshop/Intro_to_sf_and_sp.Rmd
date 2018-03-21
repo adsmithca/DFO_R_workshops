@@ -117,10 +117,11 @@ library(sp)
 library(sf)
 library(raster)
 
-all_canada<-getData('GADM', country="CAN", level=1) # provinces
+all_canada_sp<-getData('GADM', country="CAN", level=1) # provinces
 
-nfld <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
-plot(nfld)
+nfld_sp <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
+nfld_sf <- st_as_sf(nfld_sp)
+plot(nfld_sp)
 ```
 ]
 ---
@@ -133,17 +134,18 @@ library(sp)
 library(sf)
 library(raster)
 
-all_canada<-getData('GADM', country="CAN", level=1) # provinces
+all_canada_sp<-getData('GADM', country="CAN", level=1) # provinces
 
-nfld <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
-plot(nfld)
+nfld_sp <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
+nfld_sf <- st_as_sf(nfld_sp)
+plot(nfld_sp)
 ```
 ]
 ---
 
 class: center, middle
 
-# Thanks!
+# Next: working with spatial data in sp
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
