@@ -114,14 +114,13 @@ Why do we need special packages for spatial data? It's all lat-long anyway, righ
 .huge[
 ```{r, eval=FALSE}
 library(sp)
+library(rgdal)
 library(sf)
 library(raster)
 
-all_canada_sp<-getData('GADM', country="CAN", level=1) # provinces
-
-nfld_sp <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
-nfld_sf <- st_as_sf(nfld_sp)
-plot(nfld_sp)
+atlantic_map_sp = readOGR("data/map_layers/atlantic_map.shp")
+atlantic_map_sf <- st_as_sf(atlantic_map_sp)
+plot(atlantic_map_sp)
 ```
 ]
 ---
@@ -129,16 +128,15 @@ class: left, middle
 #Getting set up
 
 .center[
-```{r, eval=TRUE, echo=FALSE, cache=TRUE}
+```{r, eval=TRUE, echo=FALSE, cache=TRUE,message=FALSE}
 library(sp)
+library(rgdal)
 library(sf)
 library(raster)
 
-all_canada_sp<-getData('GADM', country="CAN", level=1) # provinces
-
-nfld_sp <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
-nfld_sf <- st_as_sf(nfld_sp)
-plot(nfld_sp)
+atlantic_map_sp = readOGR("data/map_layers/atlantic_map.shp",verbose = F)
+atlantic_map_sf <- st_as_sf(atlantic_map_sp)
+plot(atlantic_map_sp)
 ```
 ]
 ---
