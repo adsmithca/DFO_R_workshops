@@ -7,6 +7,7 @@ require(classInt)
 require(RColorBrewer)
 require(RgoogleMaps)
 require(raster)
+require(plyr)
 require(dplyr)
 require(rgeos)
 
