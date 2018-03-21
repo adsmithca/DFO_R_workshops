@@ -11,8 +11,8 @@ require(dplyr)
 require(rgeos)
 
 # load the data
-abiotic<-read.csv("dfo_sf_sp_workshop\\data\\trawl_abiotic.csv")
-biomass<-read.csv("dfo_sf_sp_workshop\\data\\trawl_biomass.csv")
+abiotic<-read.csv("data\\trawl_abiotic.csv")
+biomass<-read.csv("data\\trawl_biomass.csv")
 
 # check out the abiotic and biomass data
 head(abiotic)
@@ -24,8 +24,8 @@ fielddata<-merge(abiotic,biomass,all.x=TRUE)
 # load the map layers
 # dsn is the data source name. This is typically the folder where the shapefile (and typically several other files with the same name, but different extension) are located
 # layer is the name of the shapefile before the file extension
-nafo.div.shelf<-readOGR(dsn="dfo_sf_sp_workshop\\data\\map_layers",layer="nafo_div_shelf")
-divisions<-readOGR(dsn="dfo_sf_sp_workshop\\data\\map_layers\\Divisions",layer="Divisions")
+nafo.div.shelf<-readOGR(dsn="data\\map_layers",layer="nafo_div_shelf")
+divisions<-readOGR(dsn="data\\map_layers\\Divisions",layer="Divisions")
 
 # It is quite simple to look at the map layers...
 # nafo.div.shelf
@@ -153,7 +153,7 @@ mymarkers=cbind.data.frame(lat=fieldtemps$lat,lon=fieldtemps$lon,col=fieldtemp10
 bb<-qbbox(lat=mymarkers[,"lat"],lon=mymarkers[,"lon"])
 
 # download the map - this step is commented out because most people here won't have access to the internet while working on this
-#mymap<-GetMap.bbox(bb$lonR,bb$latR,destfile="dfo_sf_sp_workshop\\data\\firstmap.png",maptype="satellite")
+#mymap<-GetMap.bbox(bb$lonR,bb$latR,destfile="data\\firstmap.png",maptype="satellite")
 
 # Saving the mapfile for later use offline
 #save(mymap,file="newfmap.Rdata")
