@@ -130,28 +130,35 @@ Why do we need special packages for spatial data? It's all lat-long anyway, righ
 ---
 #The sp package
 
+.large[
+* The original method of working with spatial data in R
+]
 
-* .large[The original method of working with spatial data in R]
+--
+
+.large[
+* Stores spatial information seperately from data, in the same object
+]
 
 --
 
-* .large[Stores spatial information seperately from data, in the same] object
-
---
-* .large[Different types of object for different types of spatial data:]
+.large[
+* Different types of object for different types of spatial data:
+]
   * e.g. "SpatialPolygons", "SpatialPoints", "SpatialPolygonsDataFrame"
 
 --
 
-* .large[Pros:] 
+.large[
+* Pros:] 
   * Stable
   * Lots of packages that support it
 
 
 --
 
-
-* .large[Cons:]
+.large[
+* Cons:]
   * Can be hard to access data
   * Slower than sf
   * Doesn't work with Tidyverse packages
@@ -198,24 +205,32 @@ plot(atlantic_map_sp)
 
 ---
 #The sf package
-* .large[A newer approach to dealing with spatial data ("simple features")]
+.large[
+* A newer approach to dealing with spatial data ("simple features")
+]
 
 --
-
-* .large[Stores spatial data as part of a modified ("sf") data frame]
-
---
-
-* .large[Different types of object ("sfg") for different data types, but all types can be combined in one column ("sfc") in one data frame ("sf") ]
+.large[
+* Stores spatial data as part of a modified ("sf") data frame
+]
 
 --
-* .large[Pros:]
+.large[
+* Different types of object ("sfg") for different data types, but all types can be combined in one column ("sfc") in one data frame ("sf") 
+]
+
+--
+.large[
+* Pros:
+]
   * Faster than sp (for most things)
   * Easier to understand objects, that works with Tidyverse
   * Simplier to specify projections and datum
   
 --
-* .large[Cons:]
+.large[
+* Cons:
+]
   * Currently less package support
   * Still actively in development; Not stable yet
 ---
