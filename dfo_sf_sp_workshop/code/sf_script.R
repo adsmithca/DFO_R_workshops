@@ -70,7 +70,7 @@ legend("topleft", fill = attr(temp10cols, "palette"),legend = names(attr(temp10c
 
 #Subsetting ####
 plot(nafo.div.shelf_sf$geometry)
-plot(field.spdf.trans,
+plot(trawl_sf,
      col=makeTransparent(temp10cols,50),
      pch=19,
      cex=0.5,
