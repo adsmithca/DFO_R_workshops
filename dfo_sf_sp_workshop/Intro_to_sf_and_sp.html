@@ -4,7 +4,7 @@
     <title>Working with spatial data and mapping in R</title>
     <meta charset="utf-8">
     <meta name="author" content="Eric Pedersen and Aaron Adamack" />
-    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/example.css" rel="stylesheet" />
     <link rel="stylesheet" href="custom.css" type="text/css" />
   </head>
   <body>
@@ -1483,7 +1483,7 @@ plot(atlantic_map_sf)
 ## epsg (SRID):    4326
 ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
 ##    pop_est                       geometry
-## 1 33487208 MULTIPOLYGON (((-60.6670057...
+## 1 33487208 MULTIPOLYGON (((-60.66701 4...
 ```
 ]
 
@@ -1508,15 +1508,8 @@ Slides created via the R package [**xaringan**](https://github.com/yihui/xaringa
 "highlightLines": true,
 "countIncrementalSlides": false
 });
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
-  window.dispatchEvent(new Event('resize'));
-});
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
-  if (!r) return;
-  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
-  d.head.appendChild(s);
-})();</script>
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {window.dispatchEvent(new Event('resize'));});
+(function() {var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler"); if (!r) return; s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }"; d.head.appendChild(s);})();</script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
