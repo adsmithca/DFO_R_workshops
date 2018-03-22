@@ -2,6 +2,8 @@
 
 # load required packages
 library(sf)
+library(sp)
+require(rgdal)
 library(dplyr)
 library(classInt)
 library(RColorBrewer)
@@ -16,10 +18,10 @@ trawl_data<- biomass %>%
   left_join(abiotic)
 
 #This is how you'd set the data up for using in sp:
-trawl_mat<-cbind(fielddata$long, fielddata$lat) # same command as used on line 33
-row.names(trawl_mat)<-fielddata$trawl_id
-trawl_clean<-fielddata[,which(!colnames(fielddata) %in% c("trawl_id","long","lat"))]
-row.names(trawl_clean)<-fielddata$trawl_id
+trawl_mat<-cbind(trawl_data$long, trawl_data$lat) # same command as used on line 33
+row.names(trawl_mat)<-trawl_data$trawl_id
+trawl_clean<-trawl_data[,which(!colnames(trawl_data) %in% c("trawl_id","long","lat"))]
+row.names(trawl_clean)<-trawl_data$trawl_id
 
 trawl_sp = SpatialPointsDataFrame(coords=trawl_mat, 
                                    data=trawl_clean, 
@@ -29,7 +31,7 @@ trawl_sp = SpatialPointsDataFrame(coords=trawl_mat,
 newfoundland_sp<-readOGR(dsn = "data/map_layers/atlantic_map.shp")
 
 #This is the sf version of the data
-trawl_sf = st_as_sf(fielddata, coords= c("long","lat")) %>%
+trawl_sf = st_as_sf(trawl_data, coords= c("long","lat")) %>%
   st_set_crs("+proj=longlat +datum=NAD83 +no_defs +ellps=GRS80 +towgs84=0,0,0")
 newfoundland_sf <- st_read(dsn = "data/map_layers/atlantic_map.shp")
 
