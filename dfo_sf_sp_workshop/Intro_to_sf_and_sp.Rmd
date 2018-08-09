@@ -109,41 +109,169 @@ Why do we need special packages for spatial data? It's all lat-long anyway, righ
 ]
 
 ---
+#What spatial packages do:
 
-#Getting set up
-.huge[
+* ### Keep track of spatial information:
+  * #### polygons, lines, etc.
+  * #### datum and projection
+
+--
+
+* ### Keep track of data associated with each spatial object
+
+--
+
+* ### Determine how data should be plotted
+
+--
+
+* ### Calculate spatial transformations and interactions between spatial datasets
+
+---
+#The sp package
+
+.large[
+* The original method of working with spatial data in R
+]
+
+--
+
+.large[
+* Stores spatial information seperately from data, in the same object
+]
+
+--
+
+.large[
+* Different types of object for different types of spatial data:
+]
+  * e.g. "SpatialPolygons", "SpatialPoints", "SpatialPolygonsDataFrame"
+
+--
+
+.large[
+* Pros:] 
+  * Stable
+  * Lots of packages that support it
+
+
+--
+
+.large[
+* Cons:]
+  * Can be hard to access data
+  * Slower than sf
+  * Doesn't work with Tidyverse packages
+
+
+---
+
+#The sp package
+
+
 ```{r, eval=FALSE}
 library(sp)
-library(sf)
-library(raster)
+library(rgdal)
 
-all_canada<-getData('GADM', country="CAN", level=1) # provinces
-
-nfld <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
-plot(nfld)
+atlantic_map_sp = readOGR("data/map_layers/atlantic_map.shp")
+print(atlantic_map_sp)
+plot(atlantic_map_sp)
 ```
-]
+
 ---
-class: left, middle
-#Getting set up
 
-.center[
-```{r, eval=TRUE, echo=FALSE, cache=TRUE}
+#The sp package
+
+.pull-left[
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
 library(sp)
-library(sf)
-library(raster)
+library(rgdal)
 
-all_canada<-getData('GADM', country="CAN", level=1) # provinces
+atlantic_map_sp = readOGR("data/map_layers/atlantic_map.shp")
+print(atlantic_map_sp)
 
-nfld <- all_canada[all_canada$NAME_1=="Newfoundland and Labrador",]
-plot(nfld)
 ```
 ]
+
+--
+
+.pull-right[
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+plot(atlantic_map_sp)
+
+```
+
+]
+
+---
+#The sf package
+.large[
+* A newer approach to dealing with spatial data ("simple features")
+]
+
+--
+.large[
+* Stores spatial data as part of a modified ("sf") data frame
+]
+
+--
+.large[
+* Different types of object ("sfg") for different data types, but all types can be combined in one column ("sfc") in one data frame ("sf") 
+]
+
+--
+.large[
+* Pros:
+]
+  * Faster than sp (for most things)
+  * Easier to understand objects, that works with Tidyverse
+  * Simplier to specify projections and datum
+  
+--
+.large[
+* Cons:
+]
+  * Currently less package support
+  * Still actively in development; Not stable yet
+---
+
+#The sf package
+
+
+```{r, eval=FALSE}
+library(sf)
+
+atlantic_map_sf = st_read("data/map_layers/atlantic_map.shp")
+print(atlantic_map_sf)
+plot(atlantic_map_sf)
+```
+
+---
+#The sf package
+
+.pull-left[
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+library(sf)
+
+atlantic_map_sf = st_read("data/map_layers/atlantic_map.shp")
+print(atlantic_map_sf)
+
+```
+]
+
+--
+
+.pull-right[
+```{r, eval=TRUE, echo=FALSE, message=FALSE}
+plot(atlantic_map_sf)
+```
+]
+
 ---
 
 class: center, middle
 
-# Thanks!
+# Next: working with spatial data in sp
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
