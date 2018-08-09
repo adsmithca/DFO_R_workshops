@@ -1,0 +1,139 @@
+---
+title: "Exploratory-Data-Analysis-template"
+author: "KeithLewis"
+date: "Thursday, October 16, 2014"
+output: pdf_document
+---
+# Exploratory Data Analysis
+The following is a template for exploratory data analysis in R following Zuuer et al 2010 (A protocol for data exploration to avoid common statistical problems, Methods in Ecology and Evolution 1:3-14).  This follows general principles.  Not all plots below will be appropriate for all analyses, some analyses may require further exploration, and all models should be examined with the appropriate diagnostics.  This is just the first step of getting to know the data, guiding the analyst towards the more appropriate conclusions.
+
+The data set is as follows: analysis of the effect of species density on nutrient generation in the marine benthos, they examined nutrient
+  # concentration with density of polycchaete  and nutrient type (3 levels)
+
+First, bring in the data set and check that the variables are the numbers and types that you think they are.
+
+```{r}
+Nereis <- read.table("P:/References/stats/R/Rcode/zuur_data/Nereis.txt", 
+                     header = TRUE, dec=".")
+str(Nereis) 
+head(Nereis, 20) 
+```
+
+
+## Step 1 Are there outliers in X and Y?
+## Step 2 Do we have homogeneity of data?
+### Test
+For 1, best approaches here are to do boxplots and Cleavland dotplots.  Do multipannel where required.  
+For 2, use boxplots if ANOVA; for regression, plot residsual v fitted values.  
+
+```{r, echo=FALSE}
+dotchart(Nereis$concentration, xlab = "Concentration",
+    ylab = "Order of observations",
+    main = "Cleveland dotplot")
+
+dotchart(Nereis$concentration, 
+         groups = factor(Nereis$nutrient),
+         xlab = "Concentration", ylab = "Order of observations",
+         main = "Cleveland dotplot", pc = Nereis$nutrient)
+
+boxplot(concentration ~ factor(nutrient),
+  varwidth = TRUE, xlab = "nutrient",
+    main = "Boxplot of concentration conditional on\
+    nutrient", ylab = "concentration", data = Nereis)
+```
+
+### Conclusion  
+No major outliers but may be a problem with heterogeneity.  
+
+### Course of action if required 
+1. Up to ecologist to decide what to do with outliers.  If outlier is do to poor exerimental design, then drop.  Transform the covariate if appropriate.  Consider observer or measurement errors. Detailed notes can help objectively decide if outlier is 'real'.  
+2. Ratio of largest to smallest variance > 4 is problematic. Transform response variable or apply techniques that don't require this assumption, i.e. generalized least squares.  
+
+##Step 3 Are the data normally distributed?
+##Step 4 Are there lots of zeros in the data
+### Test
+For 3, Note that the assumption of normality differs by test.  For linear models, we assume nomality of all the replicate observations at a particular covariate value.  Can assess for ANOVA but for linear regression, we must use histogram of resids or the QQ plot.
+Therefore, try a historgram or density plot, depending on sample size
+For 4, use same but can do a corrgram too.
+
+```{r, echo=FALSE}
+library(ggplot2)
+p <- ggplot(Nereis, aes(x=concentration))
+p + geom_histogram() +
+  facet_grid( ~ nutrient)
+
+#or density
+p <- ggplot(Nereis, aes(x=concentration))
+p + geom_density() +
+  facet_grid( ~ nutrient)
+```
+
+### Conclusion  
+In this case, the density plots are probably better because there are so few data.  Normality may be a problem but Zuur seems to make a bigger deal out of this than Schneider.  
+Zots of zeros not a problem with this data set.
+
+### Course of action if required 
+Transform the data for glm.  
+For lots of zeros, consider zero inflated glms.  
+
+##Step 5 Is their collinearity among covariates
+##Step 6 What are the relationships between Y and X variables
+### Test
+For 5, use a scatterplot matrix, preferably the one that gives the r value.  Also, look at VIF after analysis. Additionally, examine correlation coefficients or PCA biplot.  
+For 6, use a facet approach or lattice but not appropriate in this case.  However, this is a good place to determine if linear models will work.  Is a transformation required?  Would fitting a gamm be better?
+
+```{r, echo=FALSE}
+source("C:/Program Files/R/R-3.0.2/library/HighstatLibV6.R")
+library(AED)
+pairs(Nereis)
+
+scatterplotMatrix(~ concentration + biomass + nutrient, reg.line=lm, smooth=TRUE, spread=FALSE, span=0.5, diagonal = 'density', data=Nereis)
+
+source("C:/Program Files/R/R-3.0.2/library/HighstatLibV6.R")
+Mypairs(Nereis)
+
+```
+
+### Conclusion  
+There seem to be no problems with colinearity in this.  Concentration may vary by nutrient. No sign of outliers.
+
+### Course of action if required 
+Drop one of the colinear variables.  Choose which variables to drop based on the VIF or common sense/biological knowledge.  Can manipulte data via centering (see Zuur 2007 and 2009 pg 185)
+
+##Step 7 Are there interactions?  
+Look for trends but also structural gaps in the data - may not be ablet o examine outliers as desired.
+### Test
+Use coplots
+```{r, echo=FALSE}
+coplot(concentration ~ nutrient | factor(biomass), data=Nereis, 
+       panel = function(x, y, ...) {
+         tmp <- lm(y ~ x, na.action = na.omit)
+         abline(tmp)
+         points(x, y) })
+```
+
+### Conclusion  
+Possible interaction due to biomass 1.5
+
+### Course of action if required 
+
+
+## Step 8 Are the observations of the response variable independent?
+###Test
+
+Plot the response variable v time or spatial coordinates. For temporal, use plot v time or auto-correlation functions.  For spatial, see Zuur, chapter X.
+See code in RcodeZuurIenoElphick.r
+
+### Conclusion  
+NA
+
+### Course of action if required
+Often can be dealt with statistically (lagged response, mixed effects modelling, impose a residual correlation structure or allow regression parms to change over time).
+
+#Final thoughts
+Zuur et al give a great recipe for exploratory analysis.  Two caveats.  
+1. Advice is not always concrete - this is statistics afterall.
+2. There is a lot of overlap in the above but this is part of the flexible approach of getting to know your data and preparing for the more rigorous analysis.
+3. Zuur does not seem to rely alot on hypothesis testing or experimental design.  They are clearly used to dealing with ecological data from 'natural' experiments.  However, much of what they do can be streamlined with hypotheses and an understanding of the design (nested v crossed) and the nature of the variables (fixed or random) before hand.
+
+## Consider adding outliers and Zuur's approach for dealing with the violations of assumptoins.
