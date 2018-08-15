@@ -7,14 +7,12 @@ library(readr)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
-library(tidyselect)
 library(magrittr)
 library(car)
-library(rmarkdown)
 library(psych)
 
 
-# read in abiotic data set using readr
+## read in abiotic data set using readr----
 abiotic <- read_csv("data/trawl_abiotic.csv", guess_max = 5000)
 View(abiotic)
 
@@ -26,7 +24,7 @@ trawl <- biomass %>%
   left_join(abiotic, by = c("year", "trawl_id"))
 View(trawl)
 
-# Step 1 Are there outliers in X and Y?
+## Step 1 Are there outliers in X and Y?----
 filter(trawl, year > 2008) %>% 
   ggplot(aes(x = as.numeric(biomass))) + geom_dotplot() + facet_wrap(~species)
 
@@ -45,6 +43,11 @@ filter(trawl, species == "shrimp" & year > 2000) %>%
 # Step 3: Are the data normally distributed?
 filter(trawl, year > 2005 & species == "shrimp") %>% 
   ggplot(aes(x = biomass)) + geom_histogram() + facet_wrap(~year)
+
+# use QQ plots
+p <-  ggplot(data = trawl, aes(sample = biomass)) 
+p <- p + stat_qq() + stat_qq_line()
+p
 
 # Step 4: Are there lots of zeros in the data?
 p <- ggplot(trawl, aes(x=biomass))
@@ -74,7 +77,7 @@ ggplot(data = trawl) + geom_point(aes(x=depth, y = biomass))
 ## Step 6: What are the relationships betwen Y and X variables?
 ggplot(data=trawl) + geom_point(aes(x=depth, y = biomass, colour=nafo_div)) +  facet_wrap(~nafo_div)
 
-# Step 7: Should we consider interactions?  Think hard about this - they can seriously complicate the analysis!!!!!
+## Step 7: Should we consider interactions?  Think hard about this - they can seriously complicate the analysis!!!!!----
 
 ggplot(data = trawl, aes(x = depth, y = biomass)) + geom_point() + geom_smooth(method = lm, se = F) + facet_wrap(~ cut_number(temp_bottom, 3))
 
