@@ -67,11 +67,6 @@ levels(as.factor(df3$age))
 # abiotic data
 abiotic <- read_csv("data/trawl_abiotic.csv", guess_max = 5000)
 cape <- read_csv("data/all_data_a1.csv", guess_max = 5000)
-
-# Neries data
-source("D://Keith//R/zuur_rcode//TESA-Zuur//course material//HighstatLibV6.R")
-Nereis <- read_tsv("data/Nereis.txt")
-sp <- read_tsv("data/SparrowsElphick.txt")
 ```
 
 ## An R/RStudio safety moment
@@ -110,9 +105,9 @@ sp <- read_tsv("data/SparrowsElphick.txt")
   
 ## EDA: a brief history (Alain Zuur et al.) 
 - Alain Zuur - the ecologist's statistician
-- *"for a given analysis, spend 50% of your time on EDA"* - Zuur et al.(2010)
+- *"for a given analysis, spend 50% of your time on EDA"* - Zuur et al. (2010)
     - MEE 2010: 3-14
-    - Book: Ieno and Zuur (2015):
+    - Book: Ieno and Zuur (2015)
 ```{r, echo = F, out.width='25%', fig.align='right', fig.cap='...'}
 knitr::include_graphics('../figures/EDA_bookcover.jpg')
 ```    
@@ -122,6 +117,18 @@ knitr::include_graphics('../figures/EDA_bookcover.jpg')
 knitr::include_graphics('../figures/zuur2009_fig1.png')
 ```    
 
+## Tangent alert: R packages
+- 12,000+ packages!!
+    - Base R
+    - Others 
+- Packages – functions – arguments ----> objects
+    - model1 <- lm(y~x)
+    - package: stats
+    - function: lm
+    - arguments: y ~ x
+    - object: model1
+- Problem: with great power (and flexibility), comes great difficulty in finding the best path
+
 ## Tangent alert: What is the Tidyverse?
 ```{r, echo = F, out.width='50%', fig.align='center', fig.cap='...'}
 knitr::include_graphics('../figures/hadley.jpg')
@@ -130,7 +137,7 @@ knitr::include_graphics('../figures/hadley.jpg')
 (although Hadley $\ne$ tidyverse)
 
 ## Tangent alert: What is the Tidyverse?
-- R packages for working with "tidy"" data
+- R packages for working with "tidy" data
 - Workflow based on functions that:
     - Are all simple verbs that do one thing (arrange, mutate, summarize, etc.)
     - **Play well with each other**
@@ -325,4 +332,7 @@ http://highstat.com/index.php/beginner-s-guide-to-data-exploration-and-visualisa
 - Tukey. 1977. Exploratory Data Analysis. Reading (MA): Addison-Wesley
 - Yeager et al. 2007. Graphical methods for exploratory analysis of complex data sets. BioScience 57: 673-679.
 - Zuur et la. 2010. A protocol for data exploration to avoid common statistical problems. MEE 2010: 3-14 
+
+- Joining data sets:
+- https://twitter.com/grrrck/status/1029567123029467136
 
