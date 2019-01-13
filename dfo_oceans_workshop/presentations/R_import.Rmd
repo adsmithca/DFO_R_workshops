@@ -1,0 +1,190 @@
+---
+title: "Introduction to R"
+subtitle: "Import and tidy data"
+author: "Eric Pedersen, Keith Lewis & Paul Regular"
+date: "NAFC | Fisheries and Oceans Canada | 2019-01-16"
+output: 
+  ioslides_presentation:
+    logo: readxl_logo.png
+    incremental: true
+    widescreen: true
+---
+
+
+## Data import
+
+- Getting data into R is often the first hurdle to using R
+- "Messy" data often creates a second hurdle
+    - R life is much easier when dealing with "tidy" data, especially when using packages in the "tidyverse"
+    
+
+## What is tidy data? {.build .smaller}
+
+Data organized into tables where:
+
+1. Every column is a different variable
+2. Every row is a single observation
+3. Each type of observation is in its own table
+
+```{r, out.width = "100%", echo = FALSE, fig.cap = "Figure 12.1 from here: https://r4ds.had.co.nz/tidy-data.html"}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/6f1ddb544fc5c69a2478e444ab8112fb0eea23f8/91adc/images/tidy-1.png")
+```
+
+
+## What is the Tidyverse?
+
+- R packages for working with tidy data
+    - Includes popular packages such as `readr`, `dplyr` and `ggplot2`
+- Workflow based on functions that:
+    - Are all simple verbs that do one thing (arrange, mutate, summarize, etc.)
+    - Take a data frame as their first argument
+    - Let you refer to the columns in that data frame by name
+    - Return a data frame
+    - Play well with each other
+
+## Data import example {.build}
+
+- Here we'll use the package `readxl` to import data from excel
+    - Specifically, lobster movement data from our Eastport Marine Protected Area
+    - Data are split into two files: `Duck Islands Movement.xlsx` and `Round Island Movement.xlsx`
+
+```{r, eval = FALSE}
+library(readxl) # first step is to load the readxl package
+?read_excel     # access help file of key function
+```
+
+```{r, echo = FALSE}
+library(readxl)
+```
+
+
+## Data import example {.smaller}
+
+```{r}
+duck <- read_excel("data/Duck Islands Movement.xlsx")
+duck
+```
+
+
+## Data import example {.smaller}
+
+```{r}
+round <- read_excel("data/Round Island Movement.xlsx")
+round
+```
+
+## Data import example {.build}
+
+- As shown in the last two slides, typing the object name into the console prints a subset of the table
+- You can explore the full table in Rstudio using the `View` function
+
+```{r, eval = FALSE}
+View(duck)
+View(round)
+```
+
+## Data import example
+
+- Have a good look at these data
+- Do they fit the defnition of tidy data? In tidy data,
+
+    1. Every column is a different variable
+    2. Every row is a single observation
+    3. Each type of observation is in its own table
+
+## Data import example
+
+- Untidy aspects of these data
+    - There are empty rows
+    - There is one empty column
+    - Two tables could be one
+
+## Tidy up
+
+>- Next we will use a function from `dplyr` and `tidyr` to tidy these data
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr) # load the dplyr package
+library(tidyr) # load the tidyr package
+```
+
+## Stack the data {.build .smaller}
+
+- The `bind_rows` function from the `dplyr` package binds multiple data frames into one
+
+```{r}
+tags <- bind_rows(duck, round)
+tags
+```
+
+
+
+## Drop empty rows {.build}
+
+- The `drop_na` function from the `tidyr` package drops rows containing missing values (`NA`)
+
+```{r}
+tidy_tags <- drop_na(tags)
+tidy_tags
+```
+
+
+- Huh! What happened? Use `View(tags)` to try and spot the issue
+    - There is a `NA` in every row because of the empty column; `drop_na` therefore drops every row
+
+
+## Drop empty column and empty rows {.smaller .build}
+
+- Here we'll use the `select` function from `dplyr` to keep the main columns
+- We'll also use the pipe operator (`%>%`) to run a sequence of operations
+
+```{r}
+tidy_tags <- select(tags, SIDE:NOTCH) %>% # step 1: select columns between SIDE and NOTCH
+    drop_na() # step 2: take the data from step 1 and drop rows with NA's
+tidy_tags
+```
+
+
+## Drop empty column and empty rows
+
+- These data look good, but there is still a problem
+- Can you spot it given the output in the next two slides?
+
+
+## Drop empty column and empty rows
+
+```{r}
+select(tags, SIDE, YEAR, TAG, LENGTH, RECAP)
+```
+
+
+## Drop empty column and empty rows
+
+```{r}
+select(tidy_tags, SIDE, YEAR, TAG, LENGTH, RECAP)
+```
+
+
+## Drop empty column and empty rows {.build}
+
+- Entries in the RECAP column are sometimes missing
+- We need to drop rows using variables that should not be missing
+- We can specify columns to focus on using the `drop_na` function
+
+```{r}
+tidy_tags <- select(tags, SIDE:NOTCH) %>% 
+    drop_na(SIDE, ISLAND, YEAR, TAG)
+```
+
+## Tidy data
+
+```{r}
+select(tidy_tags, SIDE, YEAR, TAG, LENGTH, RECAP)
+```
+
+## Tidy data
+
+- Getting data into R can be easier than getting data into a workable format
+- While the table worked up here may look clean, plotting may reval outstanding issues
+
+
