@@ -18,7 +18,7 @@ output:
 | :------------- | ------------------------------------------------------------------------ |
 | 10:00 – 10:30  | Get Rstudio and R packages up and running, and set-up an R project       |
 | 10:30 – 11:00  | Some basics of R coding [objects, functions, common operations]          |
-| 11:00 – 12:00  | Import data [introduce data types and concept of tidy data]              |
+| 11:00 – 12:00  | Import and tidy data [introduce data types and concept of tidy data]     |
 | 12:00 – 13:00  | Lunch                                                                    |
 | 14:00 – 15:00  | Visualize data [plots and facet plots]                                   |
 | 13:00 – 14:00  | Transform data [filter, mutate, join and summarize data]                 |
@@ -27,6 +27,10 @@ output:
 ## Set-up
 
 - Do you have R and Rstudio installed?
+- Are the following packages installed?
+    - `readxl`, `tidyr`, `dplyr`, `ggplot2`
+- Do you have a copy of the data we'll use today?
+    - `Duck Islands Movement.xlsx`, `Round Island Movement.xlsx`
 - Are you happy with the layout of Rstudio?
 - Have you turned off the save working directory prompt?
 
@@ -39,6 +43,11 @@ output:
 ```{r message = FALSE, warning = FALSE}
 
 ## Packages used for this example
+
+### Remove hash and run this line once to install the packages
+# install.packages(c("readxl", "tidyr", "dplyr", "ggplot2"))
+
+### Run these lines to load the packages
 library(readxl)  # for reading excel data
 library(tidyr)   # for data tidying functions
 library(dplyr)   # for data manipulation functions
@@ -64,7 +73,8 @@ round
 ## Tidy: combine and clean-up these data
 tags <- bind_rows(duck, round) %>% 
     select(SIDE:NOTCH) %>%         
-    drop_na()  %>%                
+    drop_na(SIDE, ISLAND, YEAR, TAG)  %>%   
+    filter(SIDE != "s") %>% 
     rename_all(tolower) 
 tags
 
