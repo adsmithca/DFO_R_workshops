@@ -1,0 +1,346 @@
+---
+title: "A brief intro to R objects and functions"
+author: "Aaron Adamack"
+date: "January 14 2019"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Math in R
+
+Math in R is pretty much the same as what you'll see in most other computer programs. 
+
+Add:
+```{r add}
+10+17
+```
+Subtact:
+```{r subtract}
+10-17
+```
+
+Multiply:
+```{r multiply}
+10*17
+```
+
+Divide:
+```{r divide}
+10/17
+```
+
+Exponents:
+```{r exponents}
+10^17
+```
+If you want to use brackets to control the order of operations:
+```{r brackets}
+(5+8)*(2+3/8)
+```
+
+If you want to leave comments in your code you can use "#" to hide any text following the hash mark on a line. 
+```{r hashmarks}
+
+# 4*12 # this won't run
+3*12   # this will run
+```
+
+Some other math operations that are frequently used:
+```{r usefulmath}
+# the square root of a number
+sqrt(25)
+
+# the natural log of a number
+log(100)
+
+# the base 10 log of a number
+log10(100)
+
+# to get the quotient when dividing a number (note that you may get strange results if you use real numbers rather than intergers)
+35 %/% 3
+
+# to get remainder when dividing a number (note that you may get strange results if you use real numbers rather than intergers)
+35 %% 3
+```
+There are many other basic math functions for things line sine, cosine, tangent, etc. If you need them, they should be easy to find in any basic R guide. 
+
+
+## Objects
+
+Often you will want to store various types of information when working with data, numbers and files in R. Typically you will use the "<-" function to place information into an object. You're going to have to come up with a name for the object. There are basically two rules about naming an object:
+1.) A name can't start with a number or symbol
+2.) Names can't include the special symbols ^, !, $, @, +, -, /, ,, or *
+
+Some examples of good and bad names (ignoring style)
+```{r namesexample1, error=TRUE}
+cat<-5
+```
+```{r namesexample2, error=TRUE}
+Cat<-10
+```
+```{r namesexample3, error=TRUE}
+CAT<-9
+```
+```{r namesexample3, error=TRUE}
+C.A.T.<--53
+```
+```{r namesexample4, error=TRUE}
+cAt<-55
+```
+```{r namesexample5, error=TRUE}
+1cat<-5
+```
+```{r namesexample6, error=TRUE}
+cat!<-16
+```
+```{r namesexample7, error=TRUE}
+cat-15<-10
+```
+
+It is worth noting that when R is working with objects or making comparisons between text in various forms that it is case sensitive. Going back to our object examples just above...
+
+```{r casesensitive}
+cat
+Cat
+CAT
+cAt
+```
+
+This is particularly important when you get into things like merging objects, subsetting data sets, looking at numbers by a group name, etc. 
+
+##Vectors
+
+Often, you will have a bunch of values that you'd like to group together. For example, you might have ran an experiment where you made a measurement every 5 minutes for several hours. You could store these numbers in vectors. In R, you can place values into a vector using the function "c". As a quick aside, functions are generally followed by round parenthesis which are used to indicate the arguments going into a function. 
+
+As a basic example, here is a vector that contains the time (in minutes) of the first half hour of measurements:
+```{r firstvector}
+c(0,5,10,15,20,25,30)
+
+# note that you can use spaces if you want...
+c(0, 5, 10, 15, 20, 25, 30)
+```
+
+It usually isn't very useful to just place some numbers in a vector as you generally can't use it for very much. Vectors become a lot more useful if you place them into an object. 
+
+```{r vectorobject}
+# as these are experiment times, let's put the times from above into an object called times
+
+times<-c(0,5,10,15,20,25,30)
+
+# note that unlike above, after you fill the vector with numbers it doesn't repeat the numbers back. That's because when you don't put values into an object, R puts them onto the screen. When you put them into an object, the values are placed into the computer's memory instead. 
+
+# to view the values that you placed into the object times, simply type the objects name and run that line 
+times
+```
+
+Typing values into a vector is often an inefficient way of doing things. Imagine if you had to type in experiment measurement times for every 5 minutes for a 4 hour long experiment. It probably wouldn't be an enjoyable experience. R has a function that makes this easier...
+```{r sequence}
+# instead of doing something like
+#times<-c(0,5,10,15,20,25,30,...)
+
+# we can do the following:
+times<-seq(from=0,to=(4*60),by=5) # 4 hours * 60 minutes/hour
+
+# which produces the following
+times
+
+# So how would you figure out how the seq function works? To find out how a function works, you access the help file using any of the following commands:
+
+help(seq)
+
+?seq
+
+??seq 
+
+# I'd suggest using help or ? in most cases. The ?? command becomes useful if the first two are unsuccessful in finding the helpfile, perhaps because you haven't loaded the correct R package yet or if there are multiple functions with the same name. 
+```
+
+There are a few other ways of building vectors...
+```{r othervectors}
+# if your values are straight forward, you can do something like this to build a vector
+
+simpleseq<-0:250
+simpleseq
+
+# alternatively, if you want to create an empty vector (useful if you are going to run a loop and need somewhere to place your results)
+
+emptyvec<-rep(x=NA, length.out=20) # note that NA is often used to represent "no data"
+emptyvec
+
+# you may have a situation where you need a repeating sequence of numbers: say 1 to 4, five times:
+
+repeating<-rep(1:4,times=5)
+repeating
+
+#note that if we had used the function argument "length.out" we would produce a different vector:
+
+repeating2<-rep(1:4,length.out=5)
+repeating2
+
+# another scenario is that we might need to repeat each of the values a certain number of times (picture trying to create a results table for an experiment where we measure heights of male and female kids at 5 ages)
+
+repeating3<-rep(c("F","M"),each=5)
+repeating3
+
+# sometimes you may not care what the actual values are that are in your dataset or you simply need some random numbers. R has built in functions to generate random numbers from several distributions including the normal, Poisson, Student's t, uniform, binomial and Weibull distributions. 
+
+# to build a vector with 100 numbers drawn from a uniform distribution between 0 and 100 you would do the following:
+
+set.seed(1526) # note set.seed sets the starting seed for the pseudo-random number generator making it so we can all get the same set of random numbers. 
+uniformdist<-runif(n=100,min=0,max=100)  # n is the number of random numbers we want to generate min and max give the range
+
+# Similarly, to draw 100 numbers from a normal distribution with mean 50 and a standard deviation of 25 you would do the following:
+
+set.seed(2851)
+normaldist<-rnorm(n=100, mean=50, sd=25)
+
+# if you want the details on how to draw numbers from other distributions, check out the "See Also" for the help page for runif (accessed by running: help(runif))
+```
+
+##Functions for vectors...
+
+R has a plethora of functions that can be run on vectors. Below I will go through some of the ones that I use most frequently
+
+```{r vectorfun}
+# often you will want to know how many elements are in a vector (e.g. how long is the vector). To find out, simply use the length function
+length(uniformdist)
+
+# to find the maximum value of a vector, use the max function
+max(normaldist)
+
+# to find the minimum value of a vector, use the min function
+min(normaldist)
+
+# the mean can be found by using the mean function:
+mean(normaldist)
+
+# you can get the standard deviation using the sd function:
+sd(normaldist)
+
+# the median...
+median(normaldist)
+
+# I'll note that oftentimes you'll run into a vector where some elements are missing. This can cause some of these functions to "blow-up". For example, if I change one of the values in the normaldist vector to missing...
+mean(normaldist)
+storevalue<-normaldist[50]
+normaldist[50]<-NA
+mean(normaldist)
+
+# to solve this problem, you can tell mean (and many other functions) to ignore missing values. To do this, the mean function can be changed to:
+mean(normaldist,na.rm=TRUE)
+
+# just restoring the value I changed
+normaldist[50]<-storevalue
+mean(normaldist)
+
+# I would suggest that you don't do this as standard practice. If you are unexpectedly getting NA results from some of these functions it's a hint that you've made a mistake somewhere along your analysis pathway. By going backwards to see where the NA results start appearing, you can often figure out where things went wrong and the start working on fixing it. 
+
+# if you want to order the numbers in your vector, there are at least a couple of options. 
+# to just sort the numbers, use sort...
+sort(normaldist, decreasing = FALSE) # numbers sorted in increasing order
+sort(normaldist, decreasing = TRUE)  # numbers sorted in decreasing order
+
+# alternatively, if you want to see the ranking of the values, use order
+order(normaldist, decreasing = FALSE) # numbers ranked in increasing order
+order(normaldist, decreasing = TRUE)  # numbers ranked in decreasing order
+
+# the rankings from order can be used to produce results similar to sort...
+normaldist[order(normaldist, decreasing = FALSE)]
+sort(normaldist, decreasing = FALSE)
+
+# if you want to quickly look at the distribution of the data points, you can get a histogram using the hist function:
+hist(normaldist)
+```
+
+# as with most functions there are a number of options for modifying how a function works. Some examples of how you could change the histogram..
+```{r histfun}
+# change the number of breaks...
+
+hist(normaldist)
+
+hist(normaldist,breaks = 10)
+hist(normaldist,breaks=5)
+
+# instead of showing counts, you could show probability densities...
+hist(normaldist,breaks=8,freq=FALSE)
+```
+
+##Indexxing
+
+I briefly introduced indexxing before. This is basically a tool for selecting a subset of a vector (or a data.frame). You can use it to access a single vector element like I did before or you can use it to select a selection of vector elements. A **key detail** to note is that while functions use round brackets (), for indexxing you need to use square brackets[]!!! 
+```{r index1}
+normaldist[100]
+```
+To select a range of values or to select a mix of values
+```{r index2}
+# select the first 5 values of the normaldist distribution
+normaldist[1:5]
+
+# Alternatively, grab the first 5 values, the last 5 values, and observations 42, 64, and 89...
+normaldist[c(1:5,42,64,89,96:100)]
+```
+
+You can also use logical operations to select values from a vector...
+```{r index3}
+unif2<-runif(20,0,30)
+unif2
+
+# only get values greater than 10...
+unif2[unif2>10]
+
+# only get values less than 10...
+unif2[unif2<10]
+
+# only get values less than 5 or more than 15...
+unif2[unif2<5 | unif2>15] 
+# Note that | is an "OR" operator. That means if logical argument 1 is TRUE OR if logical argument 2 is TRUE then the final outcome is TRUE
+
+# only get values that are greater than 5 or less than 15...
+unif2[unif2>5 & unif2<15]
+# Note that & is an "AND" operator. That means if logical argument 1 is TRUE AND if logical argument 2 is TRUE then the final outcome is TRUE. If either of the arguments is FALSE then the final outcome is FALSE. 
+
+# Switching to a vector of integers...
+pois1<-rpois(20,10)
+pois1
+
+# when working with integer values (and characters and factors) you can use the equal option. So, to get all of the 6s in the vector you would do the following:
+pois1[pois1==6]
+
+# I would recommend against using the == fuction for real values (e.g. 6.5251, 6.00000000000001, 4.25, etc.) as the results can be a bit unpredictable due to how the computer stores these types of values. 
+
+test1<-c(6.111,6,6.000000000001,4.25,6.001)
+test1[test1==6]
+
+# If you have a situation where you need to identify vector elements that are "very close" to a value, but the vector elements are real numbers, there are <at least> a couple of ways you can do it...
+
+# Method 1
+threshold<-0.01 # basically, if the number is within 0.01 of 6 then it is close enough for us
+test1[test1>(6-threshold) & test1<(6+threshold)]
+
+# Method 2
+threshold<-0.01
+test1[abs(test1-6)<threshold]
+```
+
+Many times, it is actually more important to know which elements meet the requirements of a logical argument than what their actual values are. For example, we really don't need to know that the values of test1 equal 6 when we are searching for all values of test1 that equal 6. We already know that. What we actually want to know is which elements are equal to 6. To find those elements, we use the which function.
+
+```{r index4}
+equals6<-which(abs(test1-6)<threshold)
+test1
+equals6
+test1[equals6]
+```
+
+The final function I'll introduce you to is the table function. This function is a quick way of getting a summary count of the number of values in a category. It generally works best when you're looking at two or more columns of data, but you can run it on a single column of data if you want. 
+
+```{r tableex.}
+# example with a vector of integers
+table(pois1)
+
+# example with a vector of reals
+table(normaldist)
+
+```
