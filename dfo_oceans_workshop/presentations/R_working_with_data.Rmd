@@ -1,0 +1,112 @@
+---
+title: "Introduction to R"
+subtitle: "Working with tidy data: mutating, grouping, and summarizing"
+author: "Eric Pedersen, Keith Lewis & Paul Regular"
+date: "NAFC | Fisheries and Oceans Canada | 2019-01-16"
+output: 
+  ioslides_presentation:
+    logo: dplyr_logo.png
+    incremental: true
+    widescreen: true
+---
+
+## What we hope you'll be able to do by the end of this presentation:
+
+```{r setup_run, echo = FALSE, eval = TRUE,include=FALSE}
+library(readxl)
+library(tidyr)
+library(dplyr)
+library(ggplot2) 
+
+duck <- read_excel("data/Duck Islands Movement.xlsx")
+round <- read_excel("data/Round Island Movement.xlsx")
+
+tags <- bind_rows(duck, round)
+tags
+
+tidy_tags <- select(tags, SIDE:NOTCH) %>% 
+    drop_na(SIDE, ISLAND, YEAR, TAG)
+```
+
+```{r length_full_plot, echo = FALSE, eval = TRUE}
+legal_lobsters <- tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH > 82.5) %>%
+    filter(LEGAL_SIZE == TRUE) %>%
+    group_by(TAG,SEX, ISLAND)%>%
+    mutate(YEARS_OBS = max(YEAR)-min(YEAR))%>%
+    filter(YEARS_OBS >0)%>%
+    ungroup()
+
+longest_observed_lobsters <- legal_lobsters %>%
+    group_by(SEX,ISLAND)%>%
+    filter(YEARS_OBS == max(YEARS_OBS))%>%
+    ungroup()
+
+size_plot <- legal_lobsters %>%
+    ggplot(aes(x = YEAR, y = LENGTH, color = SEX))+
+    facet_grid(SEX~ISLAND)+
+    geom_line(aes(group = TAG),alpha=0.25)+
+    geom_line(data= longest_observed_lobsters, 
+              aes(group = TAG),
+              size=2)+
+    scale_color_brewer(palette = "Set1")+
+    theme_bw()+
+    theme(panel.grid = element_blank())
+
+
+print(size_plot)
+
+```
+
+## What we hope you'll be able to do by the end of this presentation:
+
+```{r growth_full_plot, echo = FALSE, eval = TRUE}
+
+
+
+growth_rate_summary = legal_lobsters %>%
+    group_by(TAG, SEX, ISLAND)%>%
+    filter(max(YEAR)>min(YEAR))%>%
+    summarize(LENGTH_START = min(LENGTH),
+              GROWTH_RATE = (max(LENGTH)-min(LENGTH))/(max(YEAR)-min(YEAR)))%>%
+    ungroup()
+
+
+growth_plot = growth_rate_summary %>%
+    ggplot(aes(x = LENGTH_START, GROWTH_RATE,color = SEX))+
+    facet_grid(SEX~ISLAND)+
+    geom_point()+
+    scale_color_brewer(palette = "Set1")+
+    theme_bw()+
+    theme(panel.grid = element_blank())
+
+print(growth_plot)
+
+```
+
+## dplyr is:
+
+* A tool for working with tidy data
+* Works by using simple verbs: 
+    * `select(data, <other arguments>)`
+    * `mutate(data, <other arguments>)`
+    * `arrange(data, <other arguments>)`
+    * `group_by(data, <other arguments>)`
+    * `summarize(data, <other arguments>)`
+    * ...
+* Lets you apply these verbs in order to create new tidy dataframes:
+
+* `new_data <- old_data %>%
+     select(<something>)%>%
+     mutate(<something else>)%>%
+     ...`
+
+## First make sure we're on the same page:
+
+```{r setup, echo = TRUE, eval=FALSE}
+<<setup_run>>
+```
+
+
+
+
