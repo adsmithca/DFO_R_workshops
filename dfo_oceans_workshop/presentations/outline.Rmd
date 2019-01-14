@@ -1,0 +1,159 @@
+---
+title: "Introduction to R"
+subtitle: "Outline and set-up"
+author: "Paul Regular, Eric Pedersen & Aaron Adamack"
+date: "NAFC | Fisheries and Oceans Canada | 2019-01-16"
+output: 
+  ioslides_presentation:
+    logo: Rlogo.png
+    incremental: true
+    widescreen: true
+---
+
+
+
+## Outline
+
+| Time           | Topic                                                                    |
+| :------------- | ------------------------------------------------------------------------ |
+| 10:00 – 10:30  | Get Rstudio and R packages up and running, and set-up an R project       |
+| 10:30 – 11:00  | Some basics of R coding [objects, functions, common operations]          |
+| 11:00 – 12:00  | Import and tidy data [introduce data types and concept of tidy data]     |
+| 12:00 – 13:00  | Lunch                                                                    |
+| 14:00 – 15:00  | Visualize data [plots and facet plots]                                   |
+| 13:00 – 14:00  | Transform data [filter, mutate, join and summarize data]                 |
+
+
+## Set-up
+
+- Do you have R and Rstudio installed?
+- Are the following packages installed?
+    - `readxl`, `tidyr`, `dplyr`, `ggplot2`
+- Do you have a copy of the data we'll use today?
+    - `Duck Islands Movement.xlsx`, `Round Island Movement.xlsx`
+- Are you happy with the layout of Rstudio?
+- Have you turned off the save working directory prompt?
+
+
+## Outcome
+
+>- We hope you'll be able to write code to explore your data using R
+>- A quick example of the work flow is shown in the next few slides
+
+```{r message = FALSE, warning = FALSE}
+
+## Packages used for this example
+
+### Remove hash and run this line once to install the packages
+# install.packages(c("readxl", "tidyr", "dplyr", "ggplot2"))
+
+### Run these lines to load the packages
+library(readxl)  # for reading excel data
+library(tidyr)   # for data tidying functions
+library(dplyr)   # for data manipulation functions
+library(ggplot2) # for plotting
+
+```
+
+## Import {.smaller}
+
+```{r}
+
+## Import: get excel data into R
+duck <- read_excel("data/Duck Islands Movement.xlsx")
+round <- read_excel("data/Round Island Movement.xlsx")
+round
+
+```
+
+## Tidy {.smaller}
+
+```{r}
+
+## Tidy: combine and clean-up these data
+tags <- bind_rows(duck, round) %>% 
+    select(SIDE:NOTCH) %>%         
+    drop_na(SIDE, ISLAND, YEAR, TAG)  %>%   
+    filter(SIDE != "s") %>% 
+    rename_all(tolower) 
+tags
+
+```
+
+## Explore {.smaller}
+
+```{r, fig.width = 10, fig.height = 4}
+
+## Visualize: take an initial quick look at the data
+ggplot(tags, aes(x = year, y = length, group = tag, color = side)) +
+    geom_line() + facet_grid(sex ~ island)
+
+```
+
+## Explore {.smaller}
+
+```{r}
+
+## Transform: calculate growth rates of each tagged individual
+rates <- tags %>% 
+    group_by(tag, sex, island) %>% 
+    arrange(tag, year) %>% 
+    summarise(first_year = first(year), 
+              last_year = last(year),
+              first_length = first(length), 
+              last_length = last(length)) %>% 
+    filter(last_year > first_year, last_length > first_length) %>% 
+    mutate(growth_rate = (last_year - first_year) / (last_length - first_length))
+head(rates, 5)
+
+```
+
+## Explore {.smaller}
+
+```{r, fig.width = 10, fig.height = 4}
+
+## Visualize: plot raw growth rates
+ggplot(rates, aes(x = sex, y = growth_rate, color = island)) +
+    geom_jitter()
+
+```
+
+## Explore {.smaller}
+
+```{r}
+
+## Transform: calculate mean growth rates
+mean_rates <- rates %>% 
+    group_by(sex, island) %>% 
+    summarise(mean = mean(growth_rate), sd = sd(growth_rate), 
+              se = sd(growth_rate) / sqrt(n()), n = n())
+mean_rates
+
+```
+
+## Explore {.smaller}
+
+```{r}
+
+## Visualize: produce a publication quality plot
+dodge <- position_dodge(width = 0.9)
+p <- ggplot(mean_rates, aes(x = sex, y = mean, fill = island)) + 
+    geom_col(position = dodge, color = "black") +
+    geom_errorbar(aes(ymin = mean - 2 * se, ymax = mean + 2 * se),
+                  position = dodge, width = 0.1) +
+    scale_fill_manual(values = c("grey50", "grey75"), 
+                      name = "Island", labels = c("Duck", "Round")) +
+    scale_y_continuous(expand = c(0, 0)) +
+    scale_x_discrete(labels = c("Female", "Male")) +
+    xlab("") + ylab("Mean growth rate (cm / year)") +
+    theme_classic()
+
+```
+
+
+## Explore {.smaller}
+
+```{r, fig.width = 7, fig.height = 4.5}
+p # print plot
+```
+

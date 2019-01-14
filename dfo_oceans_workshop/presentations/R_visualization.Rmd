@@ -1,0 +1,325 @@
+---
+title: "Introduction to R"
+subtitle: "Plotting in the tidyverse: ggplot2"
+author: "Paul Regular & Keith Lewis"
+date: "NAFC | Fisheries and Oceans Canada | 2019-01-16"
+output:
+  ioslides_presentation:
+    logo: ggplot2_logo.png
+    incremental: yes
+    widescreen: yes
+---
+
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(fig.align = "center", 
+                      fig.height = 4.5, 
+                      fig.width = 8,
+                      dev = "svg",
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+
+
+## Outline
+
+>- Plotting options
+>- Grammar of graphics
+>- ggplot2: the basics
+>- ggplot2: intermediate
+>- Summary
+
+
+## Plotting options
+
+*"The greatest value of a picture is when it forces us to notice what we never expected to see."* — John Tukey
+
+- Spreadsheets (e.g., Excel)
+- Stand alone program (e.g., Sigma Plot)
+- Other stats programs (e.g., SAS)
+- R
+    - Base
+    - Various functions
+    - ggplot2 (part of the tidyverse)
+
+## Grammar of graphics
+
+- ggplot2 is based on the **grammar of graphics**: the idea that you can build every graph from a few components:
+   - **Data**
+       - Variables mapped to aesthetic properties (e.g. x, y, size, colour)
+   - **Geometry**
+       - Visual markers (e.g. points, lines, polygons)
+   - **Coordinates**
+       - A coordinate system (e.g. Cartesian, polar)
+
+## ggplot2: the basics
+
+>- Data
+>- Syntax
+>- Scatterplot
+>- Line plot
+>- Boxplot
+>- Stacked bar
+>- Exercise
+
+## ggplot2: the basics - data {.build}
+
+>- ggplot2 is built for tidy data
+>- Below we import and tidy up lobster movement data
+
+```{r}
+
+library(readxl)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+duck <- read_excel("data/Duck Islands Movement.xlsx")
+round <- read_excel("data/Round Island Movement.xlsx")
+tags <- bind_rows(duck, round) %>%   # stack both data sets
+    select(SIDE:NOTCH) %>%           # select main columns
+    drop_na(SIDE, ISLAND, YEAR, TAG) # drop empty rows
+
+```
+
+
+## ggplot2: the basics - syntax {.build .smaller}
+
+```{r, eval = FALSE}
+ggplot(data = tags, mapping = aes(x = YEAR, y = LENGTH)) + # Data
+    geom_point() +                                         # Geometry
+    coord_cartesian()                                      # Coordinates
+```
+
+- **Data**
+    - Here the `ggplot` function starts the plot
+        - `data` is supplied first
+        - `mapping` is specified second using the `aes` (aesthetics) function
+- **Geometry**
+    - The function `geom_point` adds points to the base layer
+- **Goordinates**
+    - Finally, `coord_cartesian` defines the coordinate system
+        - This is the default so it is not usually specified
+
+> *Note that the pipe operator (`%>%`) is not used here, rather you add items (`+`)*
+    
+
+## ggplot2: the basics - scatterplot  {.build}
+
+```{r}
+ggplot(tags, aes(x = YEAR, y = LENGTH)) + 
+    geom_point()
+```
+
+## ggplot2: the basics - line plot  {.build}
+
+```{r}
+ggplot(tags, aes(x = YEAR, y = LENGTH, group = TAG)) + 
+    geom_line()
+```
+
+## ggplot2: the basics - box-whisker plot  {.build}
+
+```{r}
+ggplot(tags, aes(x = SEX, y = LENGTH)) + 
+    geom_boxplot()
+```
+
+## ggplot2: the basics - stacked bargraph  {.build}
+
+```{r}
+ggplot(tags, aes(x = YEAR, fill = ISLAND)) +
+  geom_bar() 
+```
+
+## ggplot2: the basics - exercises 
+
+```{r, eval = FALSE}
+ggplot(tags, aes(x = YEAR, y = LENGTH, group = TAG)) + 
+    geom_line()
+```
+
+Add the `colour` aesthetic to the above code make the plot below
+
+```{r, echo = FALSE, fig.height = 3.5}
+ggplot(tags, aes(x = YEAR, y = LENGTH, group = TAG, colour = SEX)) + 
+    geom_line()
+```
+
+
+## ggplot2: intermediate
+
+Move away from defaults to publication quality
+
+>- Build upon an object
+>- Change size and colour
+>- Facets
+>- Axes
+>- Legends
+>- Themes
+
+## ggplot2: intermediate - object + geom {.build}
+
+```{r}
+p <- ggplot(tags)
+p + geom_line(aes(x = YEAR, y = LENGTH, group = TAG, colour = SEX))
+```
+
+## ggplot2: intermediate - object + alternate aes {.build}
+
+```{r}
+p + geom_line(aes(x = YEAR, y = LENGTH, group = TAG, color = ISLAND))
+```
+
+## ggplot2: intermediate - object + alternate aes {.build}
+
+```{r}
+p + geom_line(aes(x = YEAR, y = LENGTH, group = TAG, color = SIDE))
+```
+
+
+## ggplot2: intermediate - object + alternate geom {.build}
+
+```{r}
+p + geom_bar(aes(x = YEAR, fill = ISLAND), stat = "count")
+```
+
+
+## ggplot2: intermediate - object + geom + facet {.smaller .build}
+
+```{r}
+p + geom_bar(aes(x = YEAR)) +
+    facet_grid(~ ISLAND) # split plots by island
+```
+
+## ggplot2: intermediate - object + geom + facet {.smaller .build}
+
+```{r}
+p + geom_bar(aes(x = YEAR)) +
+    facet_grid(SEX ~ ISLAND) # split plots by sex and island
+```
+
+## ggplot2: intermediate - object + geom + facet {.smaller .build}
+
+```{r}
+p + geom_bar(aes(x = YEAR, fill = factor(MONTH))) +
+    facet_grid(SEX ~ ISLAND)
+```
+
+## ggplot2: intermediate - object + more grammar {.build}
+
+- Let's move away from the defaults by iteratively modifying the plot in the previous slide 
+
+```{r}
+## Save the first step into an object called p1
+p1 <- ggplot(tags) + 
+    geom_bar(aes(x = YEAR, fill = factor(MONTH))) +
+    facet_grid(SEX ~ ISLAND)
+```
+
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+## Here's what the defaults look like
+p1
+```
+
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p2 <- p1 + xlab("Year") + ylab("Number of records") # change x and y labels
+p2
+```
+
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p3 <- p2 + scale_fill_brewer(palette = "RdBu", name = "Month")  # name legend and use greyscale
+p3
+```
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p4 <- p3 + coord_cartesian(ylim = c(0, 700), expand = FALSE) # set y limits and remove buffer
+p4
+```
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p5 <- p4 + theme_bw() # use the black and white theme
+p5
+```
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p6 <- p5 + theme(panel.grid.major = element_blank()) # remove major grid lines
+p6
+```
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p7 <- p6 + theme(panel.grid.minor = element_blank()) # remove minor grid lines
+p7
+```
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p8 <- p7 + theme(strip.background = element_blank()) # remove facet strip background
+p8
+```
+
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+>- All together plus an option for changing the facet labels
+
+```{r}
+
+## Set-up nice island and sex labels
+island_names <- c("duck" = "Duck",
+                  "round" = "Round")
+sex_names <- c("F" = "Female",
+               "M" = "Male")
+
+## Store the plot in an object
+p <- ggplot(tags) +                                                 # set-up base layer
+    geom_bar(aes(x = YEAR, fill = factor(MONTH)), stat = "count") + # add bars by year and filled by month
+    facet_grid(SEX ~ ISLAND,                                        # facet by sex and island
+               labeller = labeller(SEX = sex_names,                 # edit facet labels
+                                   ISLAND = island_names)) +        
+    xlab("Year") + ylab("Number of records") +                      # change x and y labels
+    scale_fill_brewer(palette = "RdBu", name = "Month") +         # name legend and use greyscale
+    coord_cartesian(ylim = c(0, 700), expand = FALSE) +             # set y limits and remove buffer
+    theme_bw() +                                                    # use the black and white theme
+    theme(panel.grid.major = element_blank(),                       # remove major grid lines
+          panel.grid.minor = element_blank(),                       # remove minor grid lines
+          strip.background = element_blank())                       # remove facet strip background
+
+```
+
+## ggplot2: intermediate - object + more grammar {.smaller}
+
+```{r}
+p
+```
+
+## Summary
+
+- ggplot2 is a very flexible visualization tool
+    - Have only shown a small subset of what it can do
+- Plots can help you discover patterns in your data
+    - They can also uncover issues in the data
+- Your ability to explore your data will expand when you pair `ggplot2` and `dplyr`
+
+
+
+
+

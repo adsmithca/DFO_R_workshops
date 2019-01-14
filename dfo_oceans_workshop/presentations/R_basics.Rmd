@@ -1,0 +1,90 @@
+---
+title: "Introduction to R"
+subtitle: "The basics"
+author: "Paul Regular & Alejandro Buren"
+date: "NAFC | Fisheries and Oceans Canada | 2019-01-16"
+output: 
+  ioslides_presentation:
+    logo: Rlogo.png
+    incremental: true
+    widescreen: true
+---
+
+
+## What is R?
+
+- A language and environment for statistical computing and graphics
+- Free, open source, and available on Windows, Mac and Linux
+- Flexible, expansive and cutting-edge
+- While the learning curve is steep, there is a great community of users willing to help
+
+## R Basics
+
+- R holds **functions** and **data** in named **objects**
+- Objects may be created by the user or loaded from a **package**
+
+
+## Objects
+
+- R has symbolic objects which can be assigned values
+- The traditional way to do this in R is the `<-` operator
+- Possible vector names flexible
+- Vector names cannot start with a digit
+- Names are case-sensitive
+- Some common names are already used by R, so it's best not to use these
+    - `c, q, t, C, D, F, I, T`
+
+## Functions
+
+- Functions are objects that do something
+- There are many built in functions in `base` R
+    - `log(), exp(), sin(), sqrt(), mean(), max(), ...`
+- There are help files for most functions
+    - Access help by entering `?fun_name`
+
+## Data
+
+- Data are also held in objects
+- There are many ways to structure data
+    - Vectors (numeric, character, logical, factor)
+    - Matrix
+        - All columns in a matrix must have same mode
+    - Array
+        - N-dimensional matrix
+    - Data frame
+        - Columns in a data frame can have different modes
+    - Lists
+        - Collection of objects, can be different modes and dimensions
+
+## Packages
+
+- Collections of R functions, data, and compiled code
+- Custom built to for solving specific problems
+- R comes with a standard set of packages
+- Thousands are available on the Comprehensive R Archive Network (CRAN)
+
+
+## Basic exercise {.smaller}
+
+Use R as a calculator
+
+```{r, eval = FALSE}
+sqrt(80 / 20) * 3 # use R as a calculator
+```
+
+Create an object
+
+```{r, eval = FALSE}
+my_object <- sqrt(80 / 20)
+my_object * 3
+```
+
+Why doesn't this work?
+
+```{r, eval = FALSE}
+x <- 17
+X * 20
+```
+
+`## Error: object 'X' not found`
+
