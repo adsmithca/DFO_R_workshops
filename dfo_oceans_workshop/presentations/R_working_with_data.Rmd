@@ -108,7 +108,7 @@ print(growth_plot)
 <<setup_run>>
 ```
 
-## `mutate()`: Creating and altering exisiting variables {.build}
+## `mutate()`: Creating and altering exisiting variables
 
 * `mutate()` lets you change columns, or create new columns
 * You can add as many columns as you want in one `mutate` statement
@@ -116,37 +116,42 @@ print(growth_plot)
 
 ## `mutate()`: Creating and altering exisiting variables 
 
-```{r mutate_demo, eval = TRUE, echo=TRUE, purl=TRUE}
-#Let's say we want to just look at legal size (82.5 mm+) lobsters:
+```{r mutate_demo, eval = FALSE, echo=TRUE, purl=TRUE}
+#Let's say we want to see how catches of legal (82.5 mm+) and non-legal size 
+#have changed over time in the tagging data, compared to the average size of all
+#lobsters caught:
 tidy_tags <- tidy_tags %>%
     mutate(LEGAL_SIZE = LENGTH > 82.5,
+           LENGTH_AVERAGE = mean(LENGTH),
            #We can also change an existing variable: 
            SIDE = tolower(SIDE)
            )
 
-
+tidy_tags
 ```
 
 ## `mutate()`: Creating and altering exisiting variables 
 
-```{r mutate_demo2, eval = TRUE, echo=TRUE}
-#Let's say we want to just look at legal size (82.5 mm+) lobsters:
-tidy_tags <- tidy_tags %>%
-    mutate(LEGAL_SIZE = LENGTH > 82.5,
-           #We can also change an existing variable: 
-           SIDE = tolower(SIDE)
-           )
+```{r mutate_demo_eval, eval = TRUE, echo=FALSE, purl=FALSE}
+<<mutate_demo>>
+```
 
+## `mutate()`: Creating and altering exisiting variables 
+
+```{r mutate_demo2, eval = FALSE, echo=TRUE, purl=TRUE}
 #Now we can plot this:
 legal_size_plot <- ggplot(tidy_tags, aes(x=YEAR, y= LENGTH, color = LEGAL_SIZE))+
     facet_grid(ISLAND~SIDE)+
-    geom_point()
+    geom_point()+
+    geom_hline(aes(yintercept = LENGTH_AVERAGE))
+
+print(legal_size_plot)
 ```
 
 ## `mutate()`: Creating and altering exisiting variables 
 
 ```{r mutate_demo_plot, eval = TRUE, echo=FALSE}
-print(legal_size_plot)
+<<mutate_demo2>>
 ```
 
 ## Exercise: working with tidyr
