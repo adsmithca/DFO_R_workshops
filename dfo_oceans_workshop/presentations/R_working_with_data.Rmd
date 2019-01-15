@@ -12,13 +12,17 @@ output:
 
 ## What we hope you'll be able to do by the end of this presentation:
 
-```{r setup_run, echo = FALSE, eval = TRUE,include=FALSE}
+```{r knitr_options, echo = FALSE, eval = TRUE, include = FALSE, purl = FALSE}
 library(knitr)
+opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
+
+```{r setup_run, echo = FALSE, eval = TRUE,include=FALSE, purl = FALSE}
 library(readxl)
 library(tidyr)
 library(dplyr)
 library(ggplot2) 
-opts_chunk$set(cache = TRUE, autodep = TRUE)
+
 
 duck <- read_excel("data/Duck Islands Movement.xlsx")
 round <- read_excel("data/Round Island Movement.xlsx")
