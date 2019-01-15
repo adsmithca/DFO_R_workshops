@@ -72,7 +72,7 @@ print(size_plot)
 
 
 
-growth_rate_summary = legal_tags %>%
+lobster_growth_rates = legal_tags %>%
     group_by(TAG, SEX, ISLAND)%>%
     filter(max(YEAR)>min(YEAR))%>%
     summarize(LENGTH_START = min(LENGTH),
@@ -80,11 +80,13 @@ growth_rate_summary = legal_tags %>%
     ungroup()
 
 
-growth_plot = growth_rate_summary %>%
+growth_plot = lobster_growth_rates %>%
     ggplot(aes(x = LENGTH_START, GROWTH_RATE,color = SEX))+
     facet_grid(SEX~ISLAND)+
     geom_point()+
+    #This tweaks the colors into something nicer
     scale_color_brewer(palette = "Set1")+
+    #These change the elements of the theme
     theme_bw()+
     theme(panel.grid = element_blank())
 
