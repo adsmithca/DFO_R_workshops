@@ -25,24 +25,26 @@ tags <- bind_rows(duck, round)
 tags
 
 tidy_tags <- select(tags, SIDE:NOTCH) %>% 
-    drop_na(SIDE, ISLAND, YEAR, TAG)
+    drop_na(SIDE, ISLAND, YEAR, TAG)%>%
+    filter(SIDE!="s")
 ```
 
-```{r length_full_plot, echo = FALSE, eval = TRUE}
-legal_lobsters <- tidy_tags %>%
-    mutate(LEGAL_SIZE = LENGTH > 82.5) %>%
+```{r length_full_plot, echo = FALSE, eval = TRUE ,purl=FALSE}
+legal_tags <- tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH > 82.5,
+           SIDE = tolower(SIDE)) %>%
     filter(LEGAL_SIZE == TRUE) %>%
     group_by(TAG,SEX, ISLAND)%>%
     mutate(YEARS_OBS = max(YEAR)-min(YEAR))%>%
     filter(YEARS_OBS >0)%>%
     ungroup()
 
-longest_observed_lobsters <- legal_lobsters %>%
+longest_observed_lobsters <- legal_tags %>%
     group_by(SEX,ISLAND)%>%
     filter(YEARS_OBS == max(YEARS_OBS))%>%
     ungroup()
 
-size_plot <- legal_lobsters %>%
+size_plot <- legal_tags %>%
     ggplot(aes(x = YEAR, y = LENGTH, color = SEX))+
     facet_grid(SEX~ISLAND)+
     geom_line(aes(group = TAG),alpha=0.25)+
@@ -60,11 +62,11 @@ print(size_plot)
 
 ## What we hope you'll be able to do by the end of this presentation:
 
-```{r growth_full_plot, echo = FALSE, eval = TRUE}
+```{r growth_full_plot, echo = FALSE, eval = TRUE,purl=FALSE}
 
 
 
-growth_rate_summary = legal_lobsters %>%
+growth_rate_summary = legal_tags %>%
     group_by(TAG, SEX, ISLAND)%>%
     filter(max(YEAR)>min(YEAR))%>%
     summarize(LENGTH_START = min(LENGTH),
@@ -87,8 +89,7 @@ print(growth_plot)
 ## dplyr is:
 
 * A tool for working with tidy data
-* Works by using simple verbs: 
-    * `select(data, <other arguments>)`
+* Works by using simple verbs, that each do one thing well: 
     * `mutate(data, <other arguments>)`
     * `arrange(data, <other arguments>)`
     * `group_by(data, <other arguments>)`
@@ -107,6 +108,78 @@ print(growth_plot)
 <<setup_run>>
 ```
 
+## `mutate()`: Creating and altering exisiting variables {.build}
+
+* `mutate()` lets you change columns, or create new columns
+* You can add as many columns as you want in one `mutate` statement
+* it does not add or remove rows, change the order of the data, or not remove columns
+
+## `mutate()`: Creating and altering exisiting variables 
+
+```{r mutate_demo, eval = TRUE, echo=TRUE, purl=TRUE}
+#Let's say we want to just look at legal size (82.5 mm+) lobsters:
+tidy_tags <- tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH > 82.5,
+           #We can also change an existing variable: 
+           SIDE = tolower(SIDE)
+           )
+
+
+```
+
+## `mutate()`: Creating and altering exisiting variables 
+
+```{r mutate_demo2, eval = TRUE, echo=TRUE}
+#Let's say we want to just look at legal size (82.5 mm+) lobsters:
+tidy_tags <- tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH > 82.5,
+           #We can also change an existing variable: 
+           SIDE = tolower(SIDE)
+           )
+
+#Now we can plot this:
+legal_size_plot <- ggplot(tidy_tags, aes(x=YEAR, y= LENGTH, color = LEGAL_SIZE))+
+    facet_grid(ISLAND~SIDE)+
+    geom_point()
+```
+
+## `mutate()`: Creating and altering exisiting variables 
+
+```{r mutate_demo_plot, eval = TRUE, echo=FALSE}
+print(legal_size_plot)
+```
+
+## Exercise: working with tidyr
+
+Create a new data frame called `legal_size_tags`, that takes the `tidy_tags` data frame, creates the new `LEGAL_SIZE` column, and then use the `filter` command to exclude all of the lobsters than are less than legal size.
+
+```{r mutate_exercise, eval = TRUE, echo=FALSE}
+#Exercise 1####
+
+#Create a new data frame called `legal_size_tags`, that takes the `tidy_tags`
+#data frame, creates the new `LEGAL_SIZE` column, and then use the `filter`
+#command to exclude all of the lobsters than are less than legal size.
+```
+
+## Exercise: working with tidyr
+
+Create a new data frame called `legal_size_tags`, that takes the `tidy_tags` data frame, creates the new `LEGAL_SIZE` column, and then use the `filter` command to exclude all of the lobsters than are less than legal size.
+```{r mutate_exercise_results, eval = TRUE, echo=TRUE, purl = FALSE}
+legal_tags <- tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH > 82.5,
+           SIDE = tolower(SIDE)) %>%
+    filter(LEGAL_SIZE == TRUE) 
+
+legal_tags
+```
 
 
 
+
+
+
+
+
+## To do for tomorrow:
+* `group_by`
+* `summarize`
