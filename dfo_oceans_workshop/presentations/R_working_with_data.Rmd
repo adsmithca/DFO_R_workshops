@@ -156,7 +156,7 @@ print(legal_size_plot)
 <<mutate_demo2>>
 ```
 
-## Exercise: working with tidyr
+## Exercise: working with `mutate`
 
 Create a new data frame called `legal_size_tags`, that takes the `tidy_tags` data frame, creates the new `LEGAL_SIZE` column, and then use the `filter` command to exclude all of the lobsters than are less than legal size.
 
@@ -168,7 +168,7 @@ Create a new data frame called `legal_size_tags`, that takes the `tidy_tags` dat
 #command to exclude all of the lobsters than are less than legal size.
 ```
 
-## Exercise: working with tidyr
+## Exercise: working with `mutate`
 
 Create a new data frame called `legal_size_tags`, that takes the `tidy_tags` data frame, creates the new `LEGAL_SIZE` column, and then use the `filter` command to exclude all of the lobsters than are less than legal size.
 ```{r mutate_exercise_results, eval = TRUE, echo=TRUE, purl = FALSE}
