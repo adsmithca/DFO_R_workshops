@@ -329,3 +329,97 @@ print(size_plot)
 (There's code at the end of the script file we sent you that shows how to make this figure even prettier)
 
 
+## `summarize()`: Summarizing your data into a single row 
+
+The last function we'll look at today is `summarize()`
+
+* reduces the data down to a single row (if ungrouped) or one row per group (if you've used `group_by()`
+* You need to use functions that return a single value (like `mean()`, max()`, etc)
+* You can make as many summary statistics as you want
+
+
+## `summarize()`: Summarizing your data into a single row 
+
+As an example, let's get the minimum, average, and maximum length for lobsters inside and outside each protected area:
+
+```{r summarize_demo, eval = FALSE, echo=TRUE, purl = TRUE}
+average_lengths <- tidy_tags %>%
+    group_by(ISLAND,SIDE ) %>%
+    summarize(LENGTH_AVG = mean(LENGTH),
+              LENGTH_MIN = min(LENGTH),
+              LENGTH_MAX = max(LENGTH))%>%
+    #It's always important to use ungroup after doing the grouped action
+    ungroup()
+
+average_lengths
+```
+
+## `summarize()`: Summarizing your data into a single row 
+
+```{r summarize_demo_eval, eval = TRUE, echo=FALSE, purl = FALSE}
+# Using summerize() ####
+
+<<summarize_demo>>
+```
+
+
+## Using `summarize()` to learn about your data:
+
+`summarize` can also be used to do some pretty useful data sorting, when combined with different verbs:
+
+
+```{r summarize_demo_advanced, eval = FALSE, echo=TRUE, purl = TRUE}
+lobster_growth_rates = legal_tags %>%
+    group_by(TAG, SEX, ISLAND)%>%
+    filter(max(YEAR)>min(YEAR))%>%
+    summarize(LENGTH_START = min(LENGTH),
+              GROWTH_RATE = (max(LENGTH)-min(LENGTH))/(max(YEAR)-min(YEAR)))%>%
+    ungroup()
+
+lobster_growth_rates
+```
+
+## Using `summarize()` to learn about your data:
+
+`summarize` can also be used to do some pretty useful data sorting, when combined with different verbs:
+
+
+```{r summarize_demo_advanced_eval, eval = TRUE, echo= FALSE, purl = FALSE}
+<<summarize_demo_advanced>>
+```
+
+## Using `summarize()` to learn about your data:
+
+This can all be combined into a new plot: 
+
+
+```{r summarize_demo_plot, eval = FALSE, echo= TRUE, purl = TRUE}
+
+growth_plot = lobster_growth_rates %>%
+    ggplot(aes(x = LENGTH_START, GROWTH_RATE,color = SEX))+
+    facet_grid(SEX~ISLAND)+
+    geom_point()
+
+growth_plot
+```
+
+## Using `summarize()` to learn about your data:
+
+This can all be combined into a new plot: 
+
+
+```{r summarize_demo_plot2, eval = TRUE, echo= FALSE, purl = FALSE}
+<<summarize_demo_plot>>
+```
+
+## Useful resources: 
+
+The intro to `dplyr`:
+
+https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html
+
+The `dplyr` website on tidyverse.org:
+
+https://dplyr.tidyverse.org/
+
+
