@@ -112,7 +112,7 @@ print(growth_plot)
 
 ## First make sure we're on the same page:
 
-```{r setup, echo = TRUE, eval=FALSE}
+```{r setup, echo = TRUE, eval=FALSE, purl = TRUE}
 <<setup_run>>
 ```
 
@@ -287,7 +287,7 @@ legal_tags <- tidy_tags %>%
     ungroup()
 ```
 
-## Now we can create the first plot we saw:
+## Now we can (almost) create the first plot we saw:
 
 ```{r groupby_data, eval = TRUE, echo=TRUE, purl = TRUE}
 legal_tags <- tidy_tags %>%
@@ -320,7 +320,7 @@ size_plot <- legal_tags %>%
 print(size_plot)
 ```
 
-## Now we can almost create the first plot we saw:
+## Now we can (almost) create the first plot we saw:
 
 ```{r groupby_plot3, eval = TRUE, echo=FALSE, purl = FALSE}
 <<groupby_plot2>>
