@@ -17,7 +17,7 @@ library(knitr)
 opts_chunk$set(cache = TRUE, autodep = TRUE)
 ```
 
-```{r setup_run, echo = FALSE, eval = TRUE,include=FALSE, purl = FALSE}
+```{r setup_run, echo = FALSE, eval = TRUE,include=FALSE, purl = TRUE}
 library(readxl)
 library(tidyr)
 library(dplyr)
@@ -57,7 +57,9 @@ size_plot <- legal_tags %>%
     geom_line(data= longest_observed_lobsters, 
               aes(group = TAG),
               size=2)+
+    #This tweaks the colors into something nicer
     scale_color_brewer(palette = "Set1")+
+    #These change the elements of the theme
     theme_bw()+
     theme(panel.grid = element_blank())
 
@@ -69,16 +71,12 @@ print(size_plot)
 ## What we hope you'll be able to do by the end of this presentation:
 
 ```{r growth_full_plot, echo = FALSE, eval = TRUE,purl=FALSE}
-
-
-
 lobster_growth_rates = legal_tags %>%
     group_by(TAG, SEX, ISLAND)%>%
     filter(max(YEAR)>min(YEAR))%>%
     summarize(LENGTH_START = min(LENGTH),
               GROWTH_RATE = (max(LENGTH)-min(LENGTH))/(max(YEAR)-min(YEAR)))%>%
     ungroup()
-
 
 growth_plot = lobster_growth_rates %>%
     ggplot(aes(x = LENGTH_START, GROWTH_RATE,color = SEX))+
@@ -91,7 +89,6 @@ growth_plot = lobster_growth_rates %>%
     theme(panel.grid = element_blank())
 
 print(growth_plot)
-
 ```
 
 ## dplyr is:
@@ -112,7 +109,7 @@ print(growth_plot)
 
 ## First make sure we're on the same page:
 
-```{r setup, echo = TRUE, eval=FALSE, purl = TRUE}
+```{r setup, echo = TRUE, eval=FALSE, purl = FALSE}
 <<setup_run>>
 ```
 
@@ -124,7 +121,7 @@ print(growth_plot)
 
 ## `mutate()`: Creating and altering exisiting variables 
 
-```{r mutate_demo, eval = FALSE, echo=TRUE, purl=TRUE}
+```{r mutate_demo, eval = FALSE, echo=TRUE, purl=FALSE}
 #Let's say we want to see how catches of legal (82.5 mm+) and non-legal size 
 #have changed over time in the tagging data, compared to the average size of all
 #lobsters caught:
@@ -140,13 +137,13 @@ tidy_tags
 
 ## `mutate()`: Creating and altering exisiting variables 
 
-```{r mutate_demo_eval, eval = TRUE, echo=FALSE, purl=FALSE}
+```{r mutate_demo_eval, eval = TRUE, echo=FALSE, purl=TRUE}
 <<mutate_demo>>
 ```
 
 ## `mutate()`: Creating and altering exisiting variables 
 
-```{r mutate_demo2, eval = FALSE, echo=TRUE, purl=TRUE}
+```{r mutate_demo2, eval = FALSE, echo=TRUE, purl=FALSE}
 #Now we can plot this:
 legal_size_plot <- ggplot(tidy_tags, aes(x=YEAR, y= LENGTH, color = LEGAL_SIZE))+
     facet_grid(ISLAND~SIDE)+
@@ -158,7 +155,7 @@ print(legal_size_plot)
 
 ## `mutate()`: Creating and altering exisiting variables 
 
-```{r mutate_demo_plot, eval = TRUE, echo=FALSE}
+```{r mutate_demo_plot, eval = TRUE, echo=FALSE, purl = TRUE}
 <<mutate_demo2>>
 ```
 
@@ -166,12 +163,15 @@ print(legal_size_plot)
 
 Create a new data frame called `legal_size_tags`, that takes the `tidy_tags` data frame, creates the new `LEGAL_SIZE` column, and then use the `filter` command to exclude all of the lobsters than are less than legal size.
 
-```{r mutate_exercise, eval = TRUE, echo=FALSE}
-#Exercise 1####
+```{r mutate_exercise, eval = TRUE, echo=FALSE, purl = TRUE, tidy = FALSE}
+
+
+#Exercise 1 ####
 
 #Create a new data frame called `legal_size_tags`, that takes the `tidy_tags`
 #data frame, creates the new `LEGAL_SIZE` column, and then use the `filter`
 #command to exclude all of the lobsters than are less than legal size.
+
 ```
 
 ## Exercise: working with `mutate`
@@ -200,21 +200,26 @@ legal_tags
 
 ## `group_by()`: breaking data into groups 
 
-```{r groupby_intro, eval = FALSE, echo=TRUE, purl = TRUE}
+```{r groupby_intro, eval = FALSE, echo=TRUE, purl = FALSE}
 tidy_tags <- tidy_tags %>%
     group_by(SEX)
 
 tidy_tags
+
 ```
 
 ## `group_by()`: breaking data into groups 
-```{r groupby_intro_eval, eval = TRUE, echo=TRUE, purl = FALSE}
+```{r groupby_intro_eval, eval = TRUE, echo=TRUE, purl = TRUE, tidy = FALSE}
+
+
+#`group_by()`: breaking data into groups ####
+
 <<groupby_intro>>
 ```
 
 ## `group_by()`: breaking data into groups 
 
-```{r groupby_intro2, eval = FALSE, echo=TRUE, purl = TRUE}
+```{r groupby_intro2, eval = FALSE, echo=TRUE, purl = FALSE}
 #Here's how you group with multiple different variables
 tidy_tags <- tidy_tags %>%
     group_by(SIDE, ISLAND)
@@ -223,13 +228,14 @@ tidy_tags
 ```
 
 ## `group_by()`: breaking data into groups 
-```{r groupby_intro2_eval, eval = TRUE, echo=TRUE, purl = FALSE}
+```{r groupby_intro2_eval, eval = TRUE, echo=TRUE, purl = TRUE,tidy = FALSE}
 <<groupby_intro2>>
+    
 ```
 
 ## `group_by()`: breaking data into groups 
 `group_by() is not that useful alone, but is incredibly powerful when combined with other commands:
-```{r groupby_plot, eval = FALSE, echo=TRUE, purl = TRUE}
+```{r groupby_plot, eval = FALSE, echo=TRUE, purl = FALSE}
 tidy_tags <- tidy_tags %>%
     group_by(SIDE, ISLAND) %>%
     mutate(LENGTH_AVG = mean(LENGTH))%>%
@@ -247,28 +253,33 @@ print(legal_size_plot)
 
 ## `group_by()`: breaking data into groups 
 
-```{r  groupby_plot_eval, eval = TRUE, echo=FALSE}
+```{r  groupby_plot_eval, eval = TRUE, echo=FALSE, purl = TRUE, tidy = FALSE}
+
+#`group_by() is not that useful alone, but is incredibly powerful when combined with other commands: 
 <<groupby_plot>>
+    
 ```
 
 ## Exercise: working with `group_by`
 
 Modify the following code so that you are calculating the length of time that each tag value has been observed for each sex and each island (remember to use ungroup at the end!)
 
-```{r groupby_exercise_comments, eval = TRUE, echo=FALSE}
+```{r groupby_exercise_comments, eval = TRUE, echo=FALSE, purl = TRUE, tidy= FALSE}
 #Exercise 2####
 
 # Modify the following code so that you are calculating the length of time that 
 # each tag value has been observed for each sex and each island (remember to use ungroup at the end!)
+
 ```
 
-```{r groupby_exercise, eval = FALSE, echo=TRUE, purl  = TRUE}
+```{r groupby_exercise, eval = TRUE, echo=TRUE, purl  = TRUE, tidy= FALSE}
 legal_tags <- tidy_tags %>%
     mutate(LEGAL_SIZE = LENGTH > 82.5,
            SIDE = tolower(SIDE)) %>%
     filter(LEGAL_SIZE == TRUE) %>%
     mutate(YEARS_OBS = max(YEAR)-min(YEAR))%>%
     filter(YEARS_OBS >0)
+
 ```
 
 
@@ -289,7 +300,7 @@ legal_tags <- tidy_tags %>%
 
 ## Now we can (almost) create the first plot we saw:
 
-```{r groupby_data, eval = TRUE, echo=TRUE, purl = TRUE}
+```{r groupby_data, eval = FALSE, echo=TRUE, purl = FALSE, tidy=TRUE}
 legal_tags <- tidy_tags %>%
     mutate(LEGAL_SIZE = LENGTH > 82.5,
            SIDE = tolower(SIDE)) %>%
@@ -307,8 +318,15 @@ longest_observed_lobsters <- legal_tags %>%
 
 
 
+```{r groupby_data_eval, eval = TRUE, echo=FALSE, purl = TRUE, tidy=FALSE}
+
+# Now we can (almost) create the first plot we saw:
+<<groupby_data>>
+```
+
+
 ## Now we can (almost) create the first plot we saw:
-```{r groupby_plot2, eval = FALSE, echo=TRUE, purl = TRUE}
+```{r groupby_plot2, eval = FALSE, echo=TRUE, purl = FALSE}
 size_plot <- legal_tags %>%
     ggplot(aes(x = YEAR, y = LENGTH, color = SEX))+
     facet_grid(SEX~ISLAND)+
@@ -322,8 +340,10 @@ print(size_plot)
 
 ## Now we can (almost) create the first plot we saw:
 
-```{r groupby_plot3, eval = TRUE, echo=FALSE, purl = FALSE}
+```{r groupby_plot3, eval = TRUE, echo=FALSE, purl = TRUE, tidy = FALSE}
+
 <<groupby_plot2>>
+    
 ```
 
 (There's code at the end of the script file we sent you that shows how to make this figure even prettier)
@@ -342,7 +362,7 @@ The last function we'll look at today is `summarize()`
 
 As an example, let's get the minimum, average, and maximum length for lobsters inside and outside each protected area:
 
-```{r summarize_demo, eval = FALSE, echo=TRUE, purl = TRUE}
+```{r summarize_demo, eval = FALSE, echo=TRUE, purl = FALSE}
 average_lengths <- tidy_tags %>%
     group_by(ISLAND,SIDE ) %>%
     summarize(LENGTH_AVG = mean(LENGTH),
@@ -356,7 +376,7 @@ average_lengths
 
 ## `summarize()`: Summarizing your data into a single row 
 
-```{r summarize_demo_eval, eval = TRUE, echo=FALSE, purl = FALSE}
+```{r summarize_demo_eval, eval = TRUE, echo=FALSE, purl = TRUE}
 # Using summerize() ####
 
 <<summarize_demo>>
@@ -368,7 +388,7 @@ average_lengths
 `summarize` can also be used to do some pretty useful data sorting, when combined with different verbs:
 
 
-```{r summarize_demo_advanced, eval = FALSE, echo=TRUE, purl = TRUE}
+```{r summarize_demo_advanced, eval = FALSE, echo=TRUE, purl = FALSE}
 lobster_growth_rates = legal_tags %>%
     group_by(TAG, SEX, ISLAND)%>%
     filter(max(YEAR)>min(YEAR))%>%
@@ -384,8 +404,10 @@ lobster_growth_rates
 `summarize` can also be used to do some pretty useful data sorting, when combined with different verbs:
 
 
-```{r summarize_demo_advanced_eval, eval = TRUE, echo= FALSE, purl = FALSE}
+```{r summarize_demo_advanced_eval, eval = TRUE, echo= FALSE, purl = TRUE, tidy=FALSE}
+
 <<summarize_demo_advanced>>
+
 ```
 
 ## Using `summarize()` to learn about your data:
@@ -393,7 +415,7 @@ lobster_growth_rates
 This can all be combined into a new plot: 
 
 
-```{r summarize_demo_plot, eval = FALSE, echo= TRUE, purl = TRUE}
+```{r summarize_demo_plot, eval = FALSE, echo= TRUE, purl = FALSE}
 
 growth_plot = lobster_growth_rates %>%
     ggplot(aes(x = LENGTH_START, GROWTH_RATE,color = SEX))+
@@ -408,8 +430,9 @@ growth_plot
 This can all be combined into a new plot: 
 
 
-```{r summarize_demo_plot2, eval = TRUE, echo= FALSE, purl = FALSE}
+```{r summarize_demo_plot2, eval = TRUE, echo= FALSE, purl = TRUE, tidy= FALSE}
 <<summarize_demo_plot>>
+    
 ```
 
 ## Useful resources: 
@@ -422,4 +445,16 @@ The `dplyr` website on tidyverse.org:
 
 https://dplyr.tidyverse.org/
 
+
+
+```{r pretty_code_at_the_end, eval = TRUE,include = FALSE, echo= FALSE, purl = TRUE, tidy= FALSE}
+
+# This is the full code to generate the clean versions of the figures we showed at the start ####
+
+#This shows how to make the year-versus length plot
+<<length_full_plot>>
+    
+#This shows how to make the growth-by-area plot:
+<<growth_full_plot>>
+```
 
