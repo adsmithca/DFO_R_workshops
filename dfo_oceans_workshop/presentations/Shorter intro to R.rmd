@@ -84,19 +84,19 @@ Cat<-10
 ```{r namesexample3, error=TRUE}
 CAT<-9
 ```
-```{r namesexample3, error=TRUE}
+```{r namesexample4, error=TRUE}
 C.A.T.<--53
 ```
-```{r namesexample4, error=TRUE}
+```{r namesexample5, error=TRUE}
 cAt<-55
 ```
-```{r namesexample5, error=TRUE}
+```{r namesexample6, error=TRUE}
 1cat<-5
 ```
-```{r namesexample6, error=TRUE}
+```{r namesexample7, error=TRUE}
 cat!<-16
 ```
-```{r namesexample7, error=TRUE}
+```{r namesexample8, error=TRUE}
 cat-15<-10
 ```
 

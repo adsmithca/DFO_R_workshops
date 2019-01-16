@@ -25,7 +25,7 @@ ggplot(tags, aes(x = SEX, y = LENGTH)) +
 
 ## Barplot
 ggplot(tags, aes(x = YEAR, fill = ISLAND)) +
-  geom_bar() 
+  geom_bar(color = "black") 
 
 ## Exercise - modify this code to color the lines by sex
 ggplot(tags, aes(x = YEAR, y = LENGTH, group = TAG)) +
@@ -53,7 +53,7 @@ p + geom_bar(aes(x = YEAR)) +
     facet_grid(SEX ~ ISLAND) # split plots by sex and island
 
 ## Object + geom + facet
-p + geom_bar(aes(x = YEAR, fill = factor(MONTH))) +
+p + geom_bar(aes(x = YEAR, fill = factor(MONTH), group = MONTH)) +
     facet_grid(SEX ~ ISLAND)
 
 ## Save the first step into an object called p1

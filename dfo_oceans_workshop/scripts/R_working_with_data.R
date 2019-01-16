@@ -39,8 +39,14 @@ print(legal_size_plot)
 #data frame, creates the new `LEGAL_SIZE` column, and then use the `filter`
 #command to exclude all of the lobsters than are less than legal size.
 
+legal_size_tags = tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH>82.5)%>%
+    filter(LEGAL_SIZE == TRUE)
 
 
+legal_size_tags = tidy_tags %>%
+    mutate(LEGAL_SIZE = LENGTH>82.5)%>%
+    filter(LENGTH > 82.5)
 #`group_by()`: breaking data into groups ####
 
 tidy_tags <- tidy_tags %>%
@@ -57,16 +63,16 @@ tidy_tags
 
 #`group_by() is not that useful alone, but is incredibly powerful when combined with other commands: 
 tidy_tags <- tidy_tags %>%
-    group_by(SIDE, ISLAND) %>%
+    group_by(SIDE, ISLAND,SEX) %>%
     mutate(LENGTH_AVG = mean(LENGTH))%>%
     #It's always important to use ungroup after doing the grouped action
     ungroup()
 
 #Now we can plot this:
-legal_size_plot <- ggplot(tidy_tags, aes(x=YEAR, y= LENGTH, color = LEGAL_SIZE))+
+legal_size_plot <- ggplot(tidy_tags, aes(x=YEAR, y= LENGTH, color = SEX))+
     facet_grid(ISLAND~SIDE)+
     geom_point()+
-    geom_hline(aes(yintercept = LENGTH_AVG))
+    geom_hline(aes(yintercept = LENGTH_AVG,color=SEX),size=2)
 
 print(legal_size_plot)
     
@@ -111,7 +117,7 @@ print(size_plot)
 # Using summerize() ####
 
 average_lengths <- tidy_tags %>%
-    group_by(ISLAND,SIDE ) %>%
+    group_by(ISLAND,SIDE ,cut(LENGTH,breaks = c(80,90,100))) %>%
     summarize(LENGTH_AVG = mean(LENGTH),
               LENGTH_MIN = min(LENGTH),
               LENGTH_MAX = max(LENGTH))%>%
