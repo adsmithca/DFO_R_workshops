@@ -86,7 +86,7 @@ View(round)
 ## Data import example
 
 - Have a good look at these data
-- Do they fit the defnition of tidy data? In tidy data,
+- Do they fit the definition of tidy data? In tidy data,
 
     1. Every column is a different variable
     2. Every row is a single observation
@@ -185,6 +185,6 @@ select(tidy_tags, SIDE, YEAR, TAG, LENGTH, RECAP)
 ## Tidy data
 
 - Getting data into R can be easier than getting data into a workable format
-- While the table worked up here may look clean, plotting may reval outstanding issues
+- While the table worked up here may look clean, plotting may reveal outstanding issues
 
 

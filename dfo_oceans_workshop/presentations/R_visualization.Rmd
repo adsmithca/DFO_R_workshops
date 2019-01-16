@@ -14,7 +14,7 @@ output:
 knitr::opts_chunk$set(fig.align = "center", 
                       fig.height = 4.5, 
                       fig.width = 8,
-                      dev = "svg",
+                      dev = "png",
                       warning = FALSE,
                       message = FALSE)
 ```
@@ -97,7 +97,7 @@ ggplot(data = tags, mapping = aes(x = YEAR, y = LENGTH)) + # Data
         - `mapping` is specified second using the `aes` (aesthetics) function
 - **Geometry**
     - The function `geom_point` adds points to the base layer
-- **Goordinates**
+- **Coordinates**
     - Finally, `coord_cartesian` defines the coordinate system
         - This is the default so it is not usually specified
 
